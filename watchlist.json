@@ -107,6 +107,18 @@
         "position": "Central Midfield",
         "foot": "right",
         "height": 176
+      },
+      {
+        "id": "607854",
+        "name": "Éderson José dos Santos Lourenço da Silva",
+        "club": "Atalanta",
+        "clubCountry": "Italy",
+        "nascimento": "1999-07-07",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/607854-1646648856.jpg?lm=1",
+        "marketValue": 45000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 183
       }
     ],
     "Pontas Esquerdas": [
