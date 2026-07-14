@@ -448,14 +448,20 @@ with tab_topteam:
     wl = get_watchlist()
     jogadores = wl.get("_jogadores", {})
 
-    st.subheader("Convocação — 26 jogadores")
-
     total_convocados = 0
+    idades = []
     for posicao in POSICOES_DEFAULT:
         lista = jogadores.get(posicao, [])
         convocados = [j for j in lista if j.get("top_team")]
         total_convocados += len(convocados)
+        for j in convocados:
+            nasc = j.get("nascimento")
+            if nasc:
+                idade, _, _ = calcular_idades(nasc)
+                idades.append(idade)
 
+    media_str = f" | Média de idade: {sum(idades) / len(idades):.1f} anos" if idades else ""
+    st.subheader(f"Convocação — 26 jogadores{media_str}")
     st.caption(f"Convocados: {total_convocados}/26")
     st.divider()
 
