@@ -316,6 +316,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 192
+      },
+      {
+        "id": "984096",
+        "name": "Jair Cunha",
+        "club": "Nott'm Forest",
+        "clubCountry": "England",
+        "nascimento": "2005-03-07",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/984096-1770845001.jpg?lm=1",
+        "marketValue": 15000000,
+        "position": "Centre-Back",
+        "foot": "both",
+        "height": 198
       }
     ]
   }
