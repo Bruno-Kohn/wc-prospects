@@ -149,6 +149,18 @@
         "position": "Defensive Midfield",
         "foot": "right",
         "height": 176
+      },
+      {
+        "id": "1398433",
+        "name": "Arthur Alves Novaes",
+        "club": "Botafogo U20",
+        "clubCountry": "",
+        "nascimento": "2008-09-16",
+        "imageUrl": null,
+        "marketValue": null,
+        "position": "Defensive Midfield",
+        "foot": "left",
+        "height": null
       }
     ],
     "Pontas Esquerdas": [
