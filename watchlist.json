@@ -207,6 +207,20 @@
         "foot": "right",
         "height": 197
       }
+    ],
+    "Zagueiros": [
+      {
+        "id": "401530",
+        "name": "Éder Militão",
+        "club": "Real Madrid",
+        "clubCountry": "Spain",
+        "nascimento": "1998-01-18",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/401530-1719653438.jpg?lm=1",
+        "marketValue": 20000000,
+        "position": "Centre-Back",
+        "foot": "right",
+        "height": 186
+      }
     ]
   }
 }
