@@ -609,6 +609,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 172
+      },
+      {
+        "id": "743591",
+        "name": "Sávio Moreira de Oliveira",
+        "club": "Man City",
+        "clubCountry": "England",
+        "nascimento": "2004-04-10",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/743591-1751367497.jpg?lm=1",
+        "marketValue": 35000000,
+        "position": "Left Winger",
+        "foot": "left",
+        "height": 176
       }
     ],
     "Laterais Esquerdos": [
