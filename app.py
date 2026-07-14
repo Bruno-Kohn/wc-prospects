@@ -314,6 +314,48 @@ with tab_watchlist:
     if not jogadores:
         st.info("Nenhum jogador salvo ainda. Use a aba Buscar para adicionar.")
     else:
+        @st.dialog("Atualizar dados dos jogadores")
+        def modal_atualizar():
+            st.write("Esta ação irá buscar os dados mais recentes de todos os jogadores salvos na sua Watchlist (clube, valor de mercado, etc).")
+            st.write("Dependendo da quantidade de jogadores, isso pode levar alguns segundos.")
+            col_cancel, col_confirm = st.columns(2)
+            with col_cancel:
+                if st.button("Cancelar", use_container_width=True):
+                    st.rerun()
+            with col_confirm:
+                if st.button("Atualizar", use_container_width=True, type="primary"):
+                    total = sum(len(v) for v in jogadores.values())
+                    progress = st.progress(0, text="Atualizando...")
+                    count = 0
+                    for pos, lista in jogadores.items():
+                        for j in lista:
+                            perfil = buscar_perfil(j["id"])
+                            if perfil:
+                                nascimento = extrair_nascimento(perfil.get("description"))
+                                j["name"] = perfil.get("fullName") or perfil.get("name") or j["name"]
+                                j["club"] = perfil.get("club", {}).get("name", "N/A")
+                                j["imageUrl"] = perfil.get("imageUrl")
+                                j["marketValue"] = perfil.get("marketValue")
+                                j["position"] = perfil.get("position", {}).get("main", "N/A")
+                                j["foot"] = perfil.get("foot", "N/A")
+                                j["height"] = perfil.get("height")
+                                if nascimento:
+                                    j["nascimento"] = nascimento
+                                club_id = perfil.get("club", {}).get("id")
+                                if club_id:
+                                    club_data = buscar_clube(str(club_id))
+                                    if club_data:
+                                        j["clubCountry"] = club_data.get("league", {}).get("countryName", "")
+                            count += 1
+                            progress.progress(count / total, text=f"Atualizando {count}/{total}...")
+                    salvar_watchlist()
+                    st.session_state["watchlist"] = wl
+                    st.success("Dados atualizados com sucesso!")
+                    st.rerun()
+
+        if st.button("Atualizar dados", use_container_width=True):
+            modal_atualizar()
+
         for posicao in POSICOES_DEFAULT:
             lista = jogadores.get(posicao, [])
             if not lista:
