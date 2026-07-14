@@ -388,12 +388,15 @@ with tab_watchlist:
         if st.button("Atualizar dados", use_container_width=True):
             modal_atualizar()
 
+        total_geral = sum(len(jogadores.get(p, [])) for p in POSICOES_DEFAULT)
+        st.caption(f"Total de jogadores na Watchlist: {total_geral}")
+
         for posicao in POSICOES_DEFAULT:
             lista = jogadores.get(posicao, [])
             if not lista:
                 continue
 
-            st.subheader(posicao)
+            st.subheader(f"{posicao} ({len(lista)})")
 
             for j_idx, j in enumerate(lista):
                 nascimento = j.get("nascimento")
