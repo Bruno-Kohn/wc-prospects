@@ -621,6 +621,18 @@
         "position": "Left Winger",
         "foot": "left",
         "height": 176
+      },
+      {
+        "id": "1082631",
+        "name": "Allan Andrade Elias",
+        "club": "Palmeiras",
+        "clubCountry": "Brazil",
+        "nascimento": "2004-04-19",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1082631-1670979249.jpg?lm=1",
+        "marketValue": 20000000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 174
       }
     ],
     "Laterais Esquerdos": [
