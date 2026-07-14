@@ -46,7 +46,8 @@
         "marketValue": 22000000,
         "position": "Centre-Back",
         "foot": "left",
-        "height": 186
+        "height": 186,
+        "top_team": true
       },
       {
         "id": "808509",
