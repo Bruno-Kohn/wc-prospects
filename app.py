@@ -406,7 +406,7 @@ with tab_watchlist:
                     format_func=lambda x: f"€{x}M" if x > 0 else "Sem mínimo",
                     key="f_valor",
                 )
-                filtro_posicao = st.selectbox("Posição", ["Todas"] + POSICOES_DEFAULT, key="f_posicao")
+                filtro_posicao = st.multiselect("Posição", options=POSICOES_DEFAULT, default=[], key="f_posicao")
             # Coletar clubes únicos dos jogadores
             clubes_unicos = sorted(set(
                 j.get("club", "")
@@ -414,7 +414,7 @@ with tab_watchlist:
                 for j in jogadores.get(pos, [])
                 if j.get("club")
             ))
-            filtro_clube = st.selectbox("Clube", ["Todos"] + clubes_unicos, key="f_clube")
+            filtro_clube = st.multiselect("Clube", options=clubes_unicos, default=[], key="f_clube")
             filtro_top = st.checkbox("Apenas jogadores do Top Team", key="f_top")
 
             col_btn_f, col_btn_c = st.columns(2)
@@ -453,13 +453,13 @@ with tab_watchlist:
                 pe_jogador = pe_map.get((jogador.get("foot") or "").lower(), "")
                 if pe_jogador != filtros["pe"]:
                     return False
-            if filtros["clube"] != "Todos" and jogador.get("club") != filtros["clube"]:
+            if filtros["clube"] and jogador.get("club") not in filtros["clube"]:
                 return False
             if filtros["top"] and not jogador.get("top_team"):
                 return False
             return True
 
-        posicoes_exibir = [filtros["posicao"]] if filtros and filtros["posicao"] != "Todas" else POSICOES_DEFAULT
+        posicoes_exibir = filtros["posicao"] if filtros and filtros["posicao"] else POSICOES_DEFAULT
         total_filtrado = 0
         for pos in posicoes_exibir:
             lista_filtrada = [j for j in jogadores.get(pos, []) if aplicar_filtros(j)]
