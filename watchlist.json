@@ -292,6 +292,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 188
+      },
+      {
+        "id": "380350",
+        "name": "Igor Julio dos Santos de Paulo",
+        "club": "Brighton",
+        "clubCountry": "England",
+        "nascimento": "1998-02-07",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/380350-1700737326.jpg?lm=1",
+        "marketValue": 10000000,
+        "position": "Centre-Back",
+        "foot": "left",
+        "height": 188
       }
     ]
   }
