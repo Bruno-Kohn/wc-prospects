@@ -381,29 +381,30 @@ with tab_watchlist:
 
             st.subheader(posicao)
 
-            # Tabela com zebra striping
-            header = "| Foto | Jogador | Clube | Pos. | Altura | Valor | Idade | 2030 | 2034 |"
-            separator = "|:---:|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|"
-            rows = []
-            for j in lista:
+            for j_idx, j in enumerate(lista):
                 nascimento = j.get("nascimento")
                 if nascimento:
                     idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
                 else:
                     idade_atual = idade_2030 = idade_2034 = "?"
-                img = f"<img src='{j.get('imageUrl', '')}' width='35'/>" if j.get("imageUrl") else ""
+
                 pos_traduzida = traduzir_posicao(j.get("position", ""))
                 country = f" ({j.get('clubCountry', '')})" if j.get("clubCountry") else ""
-                rows.append(
-                    f"| {img} | **{j['name']}** | {j.get('club', 'N/A')}{country} | {pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))} | {idade_atual} | {idade_2030} | {idade_2034} |"
+                img_tag = f"<img src='{j.get('imageUrl', '')}' width='40' style='border-radius:50%;vertical-align:middle;margin-right:8px;'/>" if j.get("imageUrl") else ""
+                bg = "#f0f2f6" if j_idx % 2 == 0 else "#ffffff"
+
+                st.markdown(
+                    f"""<div style="background-color:{bg};padding:8px 12px;border-radius:6px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+                    {img_tag}
+                    <div style="flex:1;font-size:0.85rem;line-height:1.4;">
+                        <b>{j['name']}</b> — {j.get('club', 'N/A')}{country}<br/>
+                        {pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}<br/>
+                        Idade: {idade_atual} | 2030: {idade_2030} | 2034: {idade_2034}
+                    </div>
+                    </div>""",
+                    unsafe_allow_html=True,
                 )
-
-            table_md = "\n".join([header, separator] + rows)
-            st.markdown(table_md, unsafe_allow_html=True)
-
-            # Botões de remoção abaixo da tabela
-            for j_idx, j in enumerate(lista):
-                if st.button(f"Apagar {j['name']}", key=f"rm_{posicao}_{j['id']}", type="primary"):
+                if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
                     lista.pop(j_idx)
                     if not lista:
                         del jogadores[posicao]
