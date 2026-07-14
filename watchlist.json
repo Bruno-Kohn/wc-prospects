@@ -845,6 +845,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 177
+      },
+      {
+        "id": "1500420",
+        "name": "Bruno Braga Ramos",
+        "club": "Athletico-PR",
+        "clubCountry": "Brazil",
+        "nascimento": "2008-08-16",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1500420-1768832842.jpg?lm=1",
+        "marketValue": 7000000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 175
       }
     ],
     "Laterais Esquerdos": [
