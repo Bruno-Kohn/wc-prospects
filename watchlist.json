@@ -110,6 +110,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 192
+      },
+      {
+        "id": "712107",
+        "name": "Luiz Lúcio Reis Júnior",
+        "club": "Villarreal",
+        "clubCountry": "Spain",
+        "nascimento": "2001-01-14",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/712107-1758058969.jpg?lm=1",
+        "marketValue": 12000000,
+        "position": "Goalkeeper",
+        "foot": "left",
+        "height": 192
       }
     ]
   }
