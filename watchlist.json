@@ -1093,6 +1093,18 @@
         "position": "Right-Back",
         "foot": "right",
         "height": 180
+      },
+      {
+        "id": "468249",
+        "name": "Victor Alexander da Silva",
+        "club": "Botafogo",
+        "clubCountry": "Brazil",
+        "nascimento": "1999-07-23",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/468249-1626767682.jpg?lm=1",
+        "marketValue": 9000000,
+        "position": "Right-Back",
+        "foot": "right",
+        "height": 174
       }
     ],
     "Meias": [
