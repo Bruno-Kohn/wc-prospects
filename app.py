@@ -223,6 +223,11 @@ def traduzir_posicao(pos: str) -> str:
     return POSICAO_MAP.get(pos, pos)
 
 
+def traduzir_pe(foot: str) -> str:
+    foot_map = {"left": "Canhoto", "right": "Destro", "both": "Ambidestro"}
+    return foot_map.get((foot or "").lower(), foot or "N/A")
+
+
 def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
     idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
 
@@ -240,7 +245,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
         st.markdown(
             f"**Clube:** {clube.get('name', 'N/A')} | "
             f"**Posição:** {pos_traduzida} | "
-            f"**Pé:** {perfil.get('foot', 'N/A')}  \n"
+            f"**Pé:** {traduzir_pe(perfil.get('foot'))}  \n"
             f"**Altura:** {perfil.get('height', 'N/A')} cm | "
             f"**Valor de mercado:** {formatar_valor(perfil.get('marketValue'))}  \n"
             f"**Nascimento:** {nascimento} | **Idade atual:** {idade_atual} anos"
@@ -433,7 +438,7 @@ with tab_watchlist:
                         pos_traduzida = traduzir_posicao(j.get("position", ""))
                         st.markdown(
                             f"**{j['name']}** | {j.get('club', 'N/A')}  \n"
-                            f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
+                            f"{pos_traduzida} | {j.get('height', '?')} cm | {traduzir_pe(j.get('foot'))} | {formatar_valor(j.get('marketValue'))}  \n"
                             f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034} anos",
                         )
                     with col_rm:
@@ -554,7 +559,7 @@ with tab_comparador:
                         f"**País:** {j.get('clubCountry', '')}  \n"
                         f"**Posição:** {pos_traduzida}  \n"
                         f"**Altura:** {j.get('height', '?')} cm  \n"
-                        f"**Pé:** {j.get('foot', 'N/A')}  \n"
+                        f"**Pé:** {traduzir_pe(j.get('foot'))}  \n"
                         f"**Valor:** {formatar_valor(j.get('marketValue'))}  \n"
                         f"**Idade atual:** {idade_atual}  \n"
                         f"**Em 2030:** {idade_2030}  \n"
