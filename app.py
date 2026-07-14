@@ -3,6 +3,7 @@ import requests
 import re
 import json
 import base64
+import pandas as pd
 from datetime import date
 
 st.set_page_config(page_title="WC Prospects 2030/2034", page_icon="⚽", layout="centered")
@@ -161,6 +162,17 @@ def buscar_clube(club_id: str) -> dict | None:
         return resp.json()
     except Exception:
         return None
+
+
+@st.cache_data(ttl=3600)
+def buscar_historico_valor(player_id: str) -> list:
+    try:
+        resp = requests.get(f"{BASE_URL}/players/{player_id}/market_value", timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        return data.get("marketValueHistory", [])
+    except Exception:
+        return []
 
 
 # --- Helpers ---
@@ -525,6 +537,19 @@ with tab_watchlist:
                                 del jogadores[posicao]
                             salvar_watchlist()
                             st.rerun()
+
+                    # Histórico de valor de mercado
+                    with st.expander("Mais detalhes", expanded=False):
+                        historico = buscar_historico_valor(j["id"])
+                        if historico:
+                            datas = [h.get("date", "") for h in historico]
+                            valores = [h.get("value", 0) for h in historico]
+                            df = pd.DataFrame({"Data": datas, "Valor (€)": valores})
+                            df["Data"] = pd.to_datetime(df["Data"], errors="coerce")
+                            df = df.dropna(subset=["Data"]).sort_values("Data")
+                            st.line_chart(df.set_index("Data")["Valor (€)"])
+                        else:
+                            st.caption("Histórico de valor não disponível.")
 
             # Show warning if limit reached
             if st.session_state.pop(f"top_team_full_{posicao}", False):
