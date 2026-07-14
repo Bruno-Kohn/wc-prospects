@@ -22,5 +22,18 @@
       "foot": "right",
       "height": 177
     }
+  ],
+  "Pontas Esquerdas": [
+    {
+      "id": "830365",
+      "name": "Alisson Santos",
+      "club": "Napoli",
+      "nascimento": "2002-09-27",
+      "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/830365-1765306584.jpg?lm=1",
+      "marketValue": 28000000,
+      "position": "Left Winger",
+      "foot": "right",
+      "height": 177
+    }
   ]
 }
