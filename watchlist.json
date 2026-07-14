@@ -194,6 +194,18 @@
         "position": "Goalkeeper",
         "foot": "left",
         "height": 196
+      },
+      {
+        "id": "1087843",
+        "name": "Lucas Furtado",
+        "club": "Guimarães B",
+        "clubCountry": "Portugal",
+        "nascimento": "2005-03-09",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1087843-1769134903.jpg?lm=1",
+        "marketValue": 100000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 197
       }
     ]
   }
