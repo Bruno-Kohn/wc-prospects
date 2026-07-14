@@ -249,6 +249,18 @@
         "position": "Left Winger",
         "foot": "right",
         "height": 180
+      },
+      {
+        "id": "1275528",
+        "name": "Ryan Roberto de Oliveira Dantas",
+        "club": "Shakhtar D.",
+        "clubCountry": "Ukraine",
+        "nascimento": "2008-03-05",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1275528-1781980207.png?lm=1",
+        "marketValue": null,
+        "position": "Left Winger",
+        "foot": "right",
+        "height": 178
       }
     ],
     "Atacantes": [
