@@ -119,6 +119,18 @@
         "position": "Central Midfield",
         "foot": "right",
         "height": 183
+      },
+      {
+        "id": "1086636",
+        "name": "Gabriel Moscardo",
+        "club": "Espanyol",
+        "clubCountry": "Spain",
+        "nascimento": "2005-09-28",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1086636-1724752763.png?lm=1",
+        "marketValue": 7000000,
+        "position": "Defensive Midfield",
+        "foot": "right",
+        "height": 185
       }
     ],
     "Pontas Esquerdas": [
