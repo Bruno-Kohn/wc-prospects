@@ -156,7 +156,8 @@
         "marketValue": 140000000,
         "position": "Left Winger",
         "foot": "right",
-        "height": 176
+        "height": 176,
+        "top_team": true
       },
       {
         "id": "655488",
