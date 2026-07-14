@@ -719,7 +719,9 @@ with tab_campo:
     if not todos:
         st.info("Adicione jogadores na Watchlist para montar o time.")
     else:
-        nomes_opcoes = [""] + [f"{j['name']} ({j.get('club', '')})" for j in todos]
+        # Criar labels únicos usando ID
+        opcoes_map = {f"{j['name']} ({j.get('club', '')}) #{j['id']}": j for j in todos}
+        nomes_opcoes = ["(vazio)"] + list(opcoes_map.keys())
 
         # Seleção de jogadores por posição
         escalacao = {}
@@ -732,9 +734,8 @@ with tab_campo:
                     options=nomes_opcoes,
                     key=f"campo_{formacao_escolhida}_{pos_key}",
                 )
-                if escolha:
-                    jogador_sel = todos[nomes_opcoes.index(escolha) - 1]
-                    escalacao[pos_key] = jogador_sel
+                if escolha != "(vazio)":
+                    escalacao[pos_key] = opcoes_map[escolha]
 
         # Desenhar campo
         st.divider()
@@ -742,37 +743,30 @@ with tab_campo:
 
         # Campo usando HTML/CSS
         campo_html = """
-        <div style="position:relative;width:100%;max-width:400px;margin:0 auto;
-                    height:580px;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
+        <div style="position:relative;width:100%;max-width:360px;margin:0 auto;
+                    aspect-ratio:2/3;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
                     border-radius:12px;border:3px solid white;overflow:hidden;">
-            <!-- Meio campo -->
-            <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.5);"></div>
-            <!-- Círculo central -->
-            <div style="position:absolute;top:50%;left:50%;width:80px;height:80px;
-                        border:2px solid rgba(255,255,255,0.5);border-radius:50%;
+            <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.4);"></div>
+            <div style="position:absolute;top:50%;left:50%;width:70px;height:70px;
+                        border:2px solid rgba(255,255,255,0.4);border-radius:50%;
                         transform:translate(-50%,-50%);"></div>
-            <!-- Área gol inferior -->
-            <div style="position:absolute;bottom:0;left:25%;right:25%;height:60px;
-                        border:2px solid rgba(255,255,255,0.5);border-bottom:none;"></div>
-            <!-- Área gol superior -->
-            <div style="position:absolute;top:0;left:25%;right:25%;height:60px;
-                        border:2px solid rgba(255,255,255,0.5);border-top:none;"></div>
+            <div style="position:absolute;bottom:0;left:25%;right:25%;height:50px;
+                        border:2px solid rgba(255,255,255,0.4);border-bottom:none;"></div>
         """
 
         for pos_key, (x, y) in posicoes_form.items():
             jogador = escalacao.get(pos_key)
             nome_display = jogador["name"].split()[-1] if jogador else pos_key
-            img_html = ""
             if jogador and jogador.get("imageUrl"):
-                img_html = f"<img src='{jogador['imageUrl']}' width='30' height='30' style='border-radius:50%;border:2px solid white;'/>"
+                img_html = f"<img src='{jogador['imageUrl']}' width='28' height='28' style='border-radius:50%;border:2px solid white;display:block;margin:0 auto;'/>"
             else:
-                img_html = f"<div style='width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid white;'></div>"
+                img_html = f"<div style='width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid white;margin:0 auto;'></div>"
 
             campo_html += f"""
             <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);
-                        text-align:center;font-size:0.65rem;color:white;font-weight:bold;">
+                        text-align:center;font-size:0.6rem;color:white;font-weight:bold;width:60px;">
                 {img_html}
-                <div style="margin-top:2px;text-shadow:1px 1px 2px black;">{nome_display}</div>
+                <div style="margin-top:2px;text-shadow:1px 1px 2px black;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{nome_display}</div>
             </div>
             """
 
