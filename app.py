@@ -338,7 +338,7 @@ with tab_watchlist:
                         st.markdown(
                             f"**{j['name']}** | {j.get('club', 'N/A')}  \n"
                             f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
-                            f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034}" anos,
+                            f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034} anos",
                         )
                     with col_rm:
                         if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
