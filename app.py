@@ -194,11 +194,11 @@ def formatar_valor(valor):
     if not valor:
         return "N/A"
     if valor >= 1_000_000_000:
-        return f"€{valor / 1_000_000_000:.2f} B"
+        return f"€ {valor / 1_000_000_000:.2f} B"
     if valor >= 1_000_000:
-        return f"€{valor / 1_000_000:.0f} M"
+        return f"€ {valor / 1_000_000:.0f} M"
     if valor >= 1_000:
-        return f"€{valor / 1_000:.0f} K"
+        return f"€ {valor / 1_000:.0f} K"
     return f"€ {valor}"
 
 
