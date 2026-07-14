@@ -14,7 +14,8 @@ def buscar_jogador(nome: str) -> dict | None:
     headers = {
         "x-apisports-key": st.secrets["API_KEY"],
     }
-    params = {"search": nome, "league": "0"}
+    season = date.today().year if date.today().month >= 8 else date.today().year - 1
+    params = {"search": nome, "season": season}
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=10)
         resp.raise_for_status()
