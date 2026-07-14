@@ -1124,6 +1124,18 @@
         "position": "Attacking Midfield",
         "foot": "left",
         "height": 184
+      },
+      {
+        "id": "1550076",
+        "name": "Kauã Lucas Vitorio Souza",
+        "club": "Flamengo U17",
+        "clubCountry": "",
+        "nascimento": "2011-01-20",
+        "imageUrl": null,
+        "marketValue": null,
+        "position": "Attacking Midfield",
+        "foot": "right",
+        "height": null
       }
     ]
   }
