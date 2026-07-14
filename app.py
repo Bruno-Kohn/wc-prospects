@@ -522,7 +522,7 @@ with tab_comparador:
     if len(todos_jogadores) < 2:
         st.info("Adicione pelo menos 2 jogadores na Watchlist para usar o comparador.")
     else:
-        opcoes_comp = {f"{j['name']} ({j.get('club', 'N/A')})": j for j in todos_jogadores}
+        opcoes_comp = {f"{j['name']} — {traduzir_posicao(j.get('position', ''))} ({j.get('club', 'N/A')})": j for j in todos_jogadores}
         nomes = list(opcoes_comp.keys())
 
         selecionados = st.multiselect(
