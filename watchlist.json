@@ -388,6 +388,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 188
+      },
+      {
+        "id": "1503651",
+        "name": "Daniel Carvalho Marinho da Silva",
+        "club": "Flamengo U17",
+        "clubCountry": "",
+        "nascimento": "2009-03-31",
+        "imageUrl": null,
+        "marketValue": null,
+        "position": "Centre-Back",
+        "foot": "right",
+        "height": 186
       }
     ]
   }
