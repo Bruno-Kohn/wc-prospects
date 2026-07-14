@@ -60,6 +60,18 @@ POSICOES_DEFAULT = [
     "Atacantes",
 ]
 
+TOP_TEAM_LIMITES = {
+    "Goleiros": 3,
+    "Zagueiros": 4,
+    "Laterais Esquerdos": 2,
+    "Laterais Direitos": 2,
+    "Volantes": 4,
+    "Meias": 4,
+    "Pontas Esquerdas": 2,
+    "Pontas Direitas": 2,
+    "Atacantes": 3,
+}
+
 
 # --- GitHub Storage ---
 def _github_headers():
@@ -281,7 +293,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
 
 
 # --- UI ---
-tab_busca, tab_watchlist = st.tabs(["🔍 Buscar", "📋 Watchlist"])
+tab_busca, tab_watchlist, tab_topteam = st.tabs(["Buscar", "Watchlist", "Top Team"])
 
 with tab_busca:
     nome = st.text_input("Nome do jogador", placeholder="Ex: Lamine Yamal")
@@ -388,8 +400,27 @@ with tab_watchlist:
                 else:
                     idade_atual = idade_2030 = idade_2034 = "?"
 
+                is_top = j.get("top_team", False)
                 with st.container(border=True):
-                    col_foto, col_dados, col_rm = st.columns([1, 4, 1])
+                    col_star, col_foto, col_dados, col_rm = st.columns([0.5, 1, 4, 1])
+                    with col_star:
+                        star_label = "★" if is_top else "☆"
+                        if st.button(star_label, key=f"star_{posicao}_{j['id']}"):
+                            if is_top:
+                                j["top_team"] = False
+                                salvar_watchlist()
+                                st.rerun()
+                            else:
+                                # Check limit
+                                top_count = sum(1 for p in lista if p.get("top_team"))
+                                limite = TOP_TEAM_LIMITES.get(posicao, 0)
+                                if top_count >= limite:
+                                    st.session_state[f"top_team_full_{posicao}"] = True
+                                    st.rerun()
+                                else:
+                                    j["top_team"] = True
+                                    salvar_watchlist()
+                                    st.rerun()
                     with col_foto:
                         if j.get("imageUrl"):
                             st.image(j["imageUrl"], width=55)
@@ -407,3 +438,55 @@ with tab_watchlist:
                                 del jogadores[posicao]
                             salvar_watchlist()
                             st.rerun()
+
+            # Show warning if limit reached
+            if st.session_state.pop(f"top_team_full_{posicao}", False):
+                limite = TOP_TEAM_LIMITES.get(posicao, 0)
+                st.warning(f"Limite de {limite} jogadores para {posicao} atingido. Remova um antes de adicionar outro.")
+
+with tab_topteam:
+    wl = get_watchlist()
+    jogadores = wl.get("_jogadores", {})
+
+    st.subheader("Convocação — 26 jogadores")
+
+    total_convocados = 0
+    for posicao in POSICOES_DEFAULT:
+        lista = jogadores.get(posicao, [])
+        convocados = [j for j in lista if j.get("top_team")]
+        total_convocados += len(convocados)
+
+    st.caption(f"Convocados: {total_convocados}/26")
+    st.divider()
+
+    for posicao in POSICOES_DEFAULT:
+        lista = jogadores.get(posicao, [])
+        convocados = [j for j in lista if j.get("top_team")]
+        limite = TOP_TEAM_LIMITES[posicao]
+
+        if not convocados:
+            st.markdown(f"**{posicao}** ({0}/{limite})")
+            st.caption("Nenhum jogador selecionado.")
+            st.divider()
+            continue
+
+        st.markdown(f"**{posicao}** ({len(convocados)}/{limite})")
+        for j in convocados:
+            nascimento = j.get("nascimento")
+            if nascimento:
+                idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
+            else:
+                idade_atual = idade_2030 = idade_2034 = "?"
+
+            col_foto, col_dados = st.columns([1, 5])
+            with col_foto:
+                if j.get("imageUrl"):
+                    st.image(j["imageUrl"], width=45)
+            with col_dados:
+                pos_traduzida = traduzir_posicao(j.get("position", ""))
+                st.markdown(
+                    f"**{j['name']}** — {j.get('club', 'N/A')}  \n"
+                    f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))} | "
+                    f"Idade: {idade_atual} | 2030: {idade_2030} | 2034: {idade_2034}"
+                )
+        st.divider()
