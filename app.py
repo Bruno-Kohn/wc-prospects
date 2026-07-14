@@ -388,25 +388,22 @@ with tab_watchlist:
                 else:
                     idade_atual = idade_2030 = idade_2034 = "?"
 
-                pos_traduzida = traduzir_posicao(j.get("position", ""))
-                country = f" ({j.get('clubCountry', '')})" if j.get("clubCountry") else ""
-                img_tag = f"<img src='{j.get('imageUrl', '')}' width='40' style='border-radius:50%;vertical-align:middle;margin-right:8px;'/>" if j.get("imageUrl") else ""
-                bg = "#f0f2f6" if j_idx % 2 == 0 else "#ffffff"
-
-                st.markdown(
-                    f"""<div style="background-color:{bg};padding:8px 12px;border-radius:6px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
-                    {img_tag}
-                    <div style="flex:1;font-size:0.85rem;line-height:1.4;">
-                        <b>{j['name']}</b> — {j.get('club', 'N/A')}{country}<br/>
-                        {pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}<br/>
-                        Idade: {idade_atual} | 2030: {idade_2030} | 2034: {idade_2034}
-                    </div>
-                    </div>""",
-                    unsafe_allow_html=True,
-                )
-                if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
-                    lista.pop(j_idx)
-                    if not lista:
-                        del jogadores[posicao]
-                    salvar_watchlist()
-                    st.rerun()
+                with st.container(border=True):
+                    col_foto, col_dados, col_rm = st.columns([1, 4, 1])
+                    with col_foto:
+                        if j.get("imageUrl"):
+                            st.image(j["imageUrl"], width=55)
+                    with col_dados:
+                        pos_traduzida = traduzir_posicao(j.get("position", ""))
+                        st.markdown(
+                            f"**{j['name']}** | {j.get('club', 'N/A')}  \n"
+                            f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
+                            f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034} anos",
+                        )
+                    with col_rm:
+                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
+                            lista.pop(j_idx)
+                            if not lista:
+                                del jogadores[posicao]
+                            salvar_watchlist()
+                            st.rerun()
