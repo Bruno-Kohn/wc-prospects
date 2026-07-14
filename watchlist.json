@@ -601,6 +601,18 @@
         "position": "Right-Back",
         "foot": "right",
         "height": 168
+      },
+      {
+        "id": "977464",
+        "name": "Arthur Augusto de Matos Soares",
+        "club": "Leverkusen",
+        "clubCountry": "Germany",
+        "nascimento": "2003-03-17",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/977464-1689709842.jpg?lm=1",
+        "marketValue": 8000000,
+        "position": "Right-Back",
+        "foot": "right",
+        "height": 174
       }
     ]
   }
