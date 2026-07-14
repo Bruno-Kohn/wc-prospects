@@ -636,6 +636,18 @@
         "foot": "right",
         "height": 188,
         "top_team": true
+      },
+      {
+        "id": "1256755",
+        "name": "João Paulo Ananias Bento",
+        "club": "Santos",
+        "clubCountry": "Brazil",
+        "nascimento": "2007-02-12",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1256755-1773445527.png?lm=1",
+        "marketValue": 500000,
+        "position": "Centre-Back",
+        "foot": "left",
+        "height": 188
       }
     ],
     "Pontas Direitas": [
