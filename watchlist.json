@@ -170,6 +170,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 192
+      },
+      {
+        "id": "1229317",
+        "name": "Kauan Lima da Cunha",
+        "club": "Palmeiras U20",
+        "clubCountry": "",
+        "nascimento": "2007-02-14",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1229317-1768936910.jpg?lm=1",
+        "marketValue": null,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 192
       }
     ]
   }
