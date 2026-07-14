@@ -154,36 +154,57 @@ def formatar_valor(valor):
     return f"€{valor}"
 
 
+POSICAO_MAP = {
+    "Centre-Forward": "Centroavante",
+    "Second Striker": "Segundo Atacante",
+    "Left Winger": "Ponta Esquerda",
+    "Right Winger": "Ponta Direita",
+    "Attacking Midfield": "Meia Atacante",
+    "Central Midfield": "Volante",
+    "Defensive Midfield": "Volante",
+    "Left Midfield": "Meia Esquerda",
+    "Right Midfield": "Meia Direita",
+    "Left-Back": "Lateral Esquerdo",
+    "Right-Back": "Lateral Direito",
+    "Centre-Back": "Zagueiro",
+    "Goalkeeper": "Goleiro",
+}
+
+
+def traduzir_posicao(pos: str) -> str:
+    return POSICAO_MAP.get(pos, pos)
+
+
 def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
     idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
 
     st.divider()
 
-    col_foto, col_info = st.columns([1, 2])
+    col_foto, col_info = st.columns([1, 3])
     with col_foto:
         img = perfil.get("imageUrl")
         if img:
-            st.image(img, width=100)
+            st.image(img, width=90)
     with col_info:
         st.subheader(perfil.get("fullName") or perfil.get("name"))
         clube = perfil.get("club", {})
-        st.write(f"**Clube:** {clube.get('name', 'N/A')}")
-        st.write(f"**Idade atual:** {idade_atual} anos")
-        st.write(f"**Altura:** {perfil.get('height', 'N/A')} cm")
-        st.write(f"**Posição:** {perfil.get('position', {}).get('main', 'N/A')}")
-        st.write(f"**Pé:** {perfil.get('foot', 'N/A')}")
-        st.write(f"**Valor de mercado:** {formatar_valor(perfil.get('marketValue'))}")
-        st.write(f"**Nascimento:** {nascimento}")
-
-    st.divider()
+        pos_traduzida = traduzir_posicao(perfil.get("position", {}).get("main", "N/A"))
+        st.markdown(
+            f"**Clube:** {clube.get('name', 'N/A')} | "
+            f"**Posição:** {pos_traduzida} | "
+            f"**Pé:** {perfil.get('foot', 'N/A')}  \n"
+            f"**Altura:** {perfil.get('height', 'N/A')} cm | "
+            f"**Valor de mercado:** {formatar_valor(perfil.get('marketValue'))}  \n"
+            f"**Nascimento:** {nascimento} | **Idade atual:** {idade_atual} anos"
+        )
 
     c1, c2 = st.columns(2)
     with c1:
-        st.metric("Copa 2030 🏆", f"{idade_2030} anos")
-        st.info(badge(idade_2030))
+        st.metric("Copa 2030", f"{idade_2030} anos")
+        st.caption(badge(idade_2030))
     with c2:
-        st.metric("Copa 2034 🏆", f"{idade_2034} anos")
-        st.info(badge(idade_2034))
+        st.metric("Copa 2034", f"{idade_2034} anos")
+        st.caption(badge(idade_2034))
 
     if mostrar_salvar:
         st.divider()
@@ -282,7 +303,7 @@ with tab_watchlist:
             if not lista:
                 continue
 
-            st.subheader(f"📌 {posicao}")
+            st.subheader(posicao)
 
             for j_idx, j in enumerate(lista):
                 nascimento = j.get("nascimento")
@@ -292,33 +313,19 @@ with tab_watchlist:
                     idade_atual = idade_2030 = idade_2034 = "?"
 
                 with st.container(border=True):
-                    col_foto, col_dados = st.columns([1, 3])
+                    col_foto, col_dados, col_rm = st.columns([1, 4, 1])
                     with col_foto:
                         if j.get("imageUrl"):
-                            st.image(j["imageUrl"], width=70)
+                            st.image(j["imageUrl"], width=55)
                     with col_dados:
-                        st.markdown(f"**{j['name']}**")
-                        st.caption(
-                            f"{j.get('club', 'N/A')} · {j.get('clubCountry', '')}  \n"
-                            f"📏 {j.get('height', 'N/A')} cm · ⚽ {j.get('position', 'N/A')}  \n"
-                            f"💰 {formatar_valor(j.get('marketValue'))}  \n"
-                            f"🎂 Atual: **{idade_atual}** · 2030: **{idade_2030}** · 2034: **{idade_2034}**"
+                        pos_traduzida = traduzir_posicao(j.get("position", ""))
+                        st.markdown(
+                            f"**{j['name']}** | {j.get('club', 'N/A')} ({j.get('clubCountry', '')})  \n"
+                            f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
+                            f"Idade: {idade_atual} | Em 2030: {idade_2030} | Em 2034: {idade_2034}",
                         )
-
-                    # Reorder and remove
-                    bcols = st.columns(4)
-                    with bcols[0]:
-                        if j_idx > 0 and st.button("↑", key=f"jup_{posicao}_{j['id']}"):
-                            lista[j_idx], lista[j_idx - 1] = lista[j_idx - 1], lista[j_idx]
-                            salvar_watchlist()
-                            st.rerun()
-                    with bcols[1]:
-                        if j_idx < len(lista) - 1 and st.button("↓", key=f"jdown_{posicao}_{j['id']}"):
-                            lista[j_idx], lista[j_idx + 1] = lista[j_idx + 1], lista[j_idx]
-                            salvar_watchlist()
-                            st.rerun()
-                    with bcols[3]:
-                        if st.button("🗑️", key=f"rm_{posicao}_{j['id']}"):
+                    with col_rm:
+                        if st.button("X", key=f"rm_{posicao}_{j['id']}"):
                             lista.pop(j_idx)
                             if not lista:
                                 del jogadores[posicao]
