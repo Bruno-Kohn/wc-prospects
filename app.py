@@ -320,7 +320,7 @@ with tab_watchlist:
                     with col_dados:
                         pos_traduzida = traduzir_posicao(j.get("position", ""))
                         st.markdown(
-                            f"**{j['name']}** | {j.get('club', 'N/A')} ({j.get('clubCountry', '')})  \n"
+                            f"**{j['name']}** | {j.get('club', 'N/A')} \n"
                             f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
                             f"Idade: {idade_atual} | Em 2030: {idade_2030} | Em 2034: {idade_2034}",
                         )
