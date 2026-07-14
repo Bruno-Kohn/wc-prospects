@@ -237,6 +237,18 @@
         "position": "Left Winger",
         "foot": "right",
         "height": 174
+      },
+      {
+        "id": "1499235",
+        "name": "Eduardo Conceição",
+        "club": "Palmeiras U20",
+        "clubCountry": "",
+        "nascimento": "2009-12-07",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1499235-1768937409.jpg?lm=1",
+        "marketValue": null,
+        "position": "Left Winger",
+        "foot": "right",
+        "height": 180
       }
     ],
     "Atacantes": [
