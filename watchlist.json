@@ -157,6 +157,18 @@
         "position": "Left Winger",
         "foot": "right",
         "height": 176
+      },
+      {
+        "id": "655488",
+        "name": "Gabriel Martinelli",
+        "club": "Arsenal",
+        "clubCountry": "England",
+        "nascimento": "2001-06-18",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/655488-1682689091.jpg?lm=1",
+        "marketValue": 45000000,
+        "position": "Left Winger",
+        "foot": "right",
+        "height": 178
       }
     ],
     "Atacantes": [
