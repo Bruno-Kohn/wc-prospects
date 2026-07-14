@@ -732,17 +732,19 @@ with tab_campo:
             "CA": "Atacantes", "ATA1": "Atacantes", "ATA2": "Atacantes",
         }
 
+        # Layout: campinho à esquerda, dropdowns à direita
+        col_campo, col_dropdowns = st.columns([1, 1])
+
         # Seleção de jogadores por posição
         escalacao = {}
-        st.caption("Selecione um jogador para cada posição:")
-        cols_sel = st.columns(2)
-        for idx, pos_key in enumerate(posicoes_form.keys()):
-            watchlist_pos = POS_KEY_TO_WATCHLIST.get(pos_key, "")
-            jogadores_pos = jogadores_campo.get(watchlist_pos, [])
-            opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
-            nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
+        with col_dropdowns:
+            st.caption("Selecione um jogador para cada posição:")
+            for pos_key in posicoes_form.keys():
+                watchlist_pos = POS_KEY_TO_WATCHLIST.get(pos_key, "")
+                jogadores_pos = jogadores_campo.get(watchlist_pos, [])
+                opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
+                nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
 
-            with cols_sel[idx % 2]:
                 escolha = st.selectbox(
                     f"{pos_key} ({watchlist_pos})",
                     options=nomes_pos,
@@ -752,35 +754,31 @@ with tab_campo:
                     escalacao[pos_key] = opcoes_pos[escolha]
 
         # Desenhar campo
-        st.divider()
-        st.subheader("Escalação")
-
-        # Campo usando HTML/CSS
-        campo_html = """
-        <div style="position:relative;width:100%;max-width:360px;margin:0 auto;
-                    aspect-ratio:2/3;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
-                    border-radius:12px;border:3px solid white;overflow:hidden;">
-            <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.4);"></div>
-            <div style="position:absolute;top:50%;left:50%;width:70px;height:70px;
-                        border:2px solid rgba(255,255,255,0.4);border-radius:50%;
-                        transform:translate(-50%,-50%);"></div>
-            <div style="position:absolute;bottom:0;left:25%;right:25%;height:50px;
-                        border:2px solid rgba(255,255,255,0.4);border-bottom:none;"></div>
-        """
-
-        for pos_key, (x, y) in posicoes_form.items():
-            jogador = escalacao.get(pos_key)
-            if jogador and jogador.get("imageUrl"):
-                img_html = f"<img src='{jogador['imageUrl']}' width='40' height='40' style='border-radius:4px;border:2px solid white;display:block;'/>"
-            else:
-                img_html = f"<div style='width:40px;height:40px;border-radius:4px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:white;'>{pos_key}</div>"
-
-            campo_html += f"""
-            <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
-                {img_html}
-            </div>
+        with col_campo:
+            campo_html = """
+            <div style="position:relative;width:100%;aspect-ratio:2/3;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
+                        border-radius:12px;border:3px solid white;overflow:hidden;">
+                <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.4);"></div>
+                <div style="position:absolute;top:50%;left:50%;width:70px;height:70px;
+                            border:2px solid rgba(255,255,255,0.4);border-radius:50%;
+                            transform:translate(-50%,-50%);"></div>
+                <div style="position:absolute;bottom:0;left:25%;right:25%;height:50px;
+                            border:2px solid rgba(255,255,255,0.4);border-bottom:none;"></div>
             """
 
-        campo_html += "</div>"
-        import streamlit.components.v1 as components
-        components.html(campo_html, height=550)
+            for pos_key, (x, y) in posicoes_form.items():
+                jogador = escalacao.get(pos_key)
+                if jogador and jogador.get("imageUrl"):
+                    img_html = f"<img src='{jogador['imageUrl']}' width='50' height='50' style='border-radius:4px;border:2px solid white;display:block;'/>"
+                else:
+                    img_html = f"<div style='width:50px;height:50px;border-radius:4px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
+
+                campo_html += f"""
+                <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
+                    {img_html}
+                </div>
+                """
+
+            campo_html += "</div>"
+            import streamlit.components.v1 as components
+            components.html(campo_html, height=550)
