@@ -312,7 +312,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
 
 
 # --- UI ---
-tab_busca, tab_watchlist, tab_topteam, tab_comparador = st.tabs(["Buscar", "Watchlist", "Top Team", "Comparador"])
+tab_busca, tab_watchlist, tab_topteam, tab_comparador, tab_campo = st.tabs(["Buscar", "Watchlist", "Top Team", "Comparador", "Campinho"])
 
 with tab_busca:
     nome = st.text_input("Nome do jogador", placeholder="Ex: Lamine Yamal")
@@ -669,3 +669,112 @@ with tab_comparador:
                     )
         elif selecionados:
             st.warning("Selecione pelo menos 2 jogadores.")
+
+with tab_campo:
+    wl = get_watchlist()
+    jogadores_campo = wl.get("_jogadores", {})
+
+    todos = []
+    for pos in POSICOES_DEFAULT:
+        for j in jogadores_campo.get(pos, []):
+            todos.append(j)
+
+    FORMACOES = {
+        "4-3-3": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "VOL": (50, 52), "MC1": (25, 45), "MC2": (75, 45),
+            "PD": (85, 20), "CA": (50, 12), "PE": (15, 20),
+        },
+        "4-4-2": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "MD": (85, 48), "VOL1": (65, 50), "VOL2": (35, 50), "ME": (15, 48),
+            "ATA1": (35, 15), "ATA2": (65, 15),
+        },
+        "4-2-3-1": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "VOL1": (35, 55), "VOL2": (65, 55),
+            "PD": (80, 35), "MEI": (50, 32), "PE": (20, 35),
+            "CA": (50, 12),
+        },
+        "3-5-2": {
+            "GOL": (50, 92),
+            "ZAG1": (25, 75), "ZAG2": (50, 78), "ZAG3": (75, 75),
+            "ALD": (90, 50), "VOL1": (65, 52), "MEI": (50, 42), "VOL2": (35, 52), "ALE": (10, 50),
+            "ATA1": (35, 15), "ATA2": (65, 15),
+        },
+        "5-3-2": {
+            "GOL": (50, 92),
+            "ALD": (90, 70), "LD": (72, 75), "ZAG": (50, 78), "LE": (28, 75), "ALE": (10, 70),
+            "VOL": (50, 50), "MC1": (30, 45), "MC2": (70, 45),
+            "ATA1": (35, 15), "ATA2": (65, 15),
+        },
+    }
+
+    formacao_escolhida = st.selectbox("Formação", list(FORMACOES.keys()))
+    posicoes_form = FORMACOES[formacao_escolhida]
+
+    if not todos:
+        st.info("Adicione jogadores na Watchlist para montar o time.")
+    else:
+        nomes_opcoes = [""] + [f"{j['name']} ({j.get('club', '')})" for j in todos]
+
+        # Seleção de jogadores por posição
+        escalacao = {}
+        st.caption("Selecione um jogador para cada posição:")
+        cols_sel = st.columns(2)
+        for idx, pos_key in enumerate(posicoes_form.keys()):
+            with cols_sel[idx % 2]:
+                escolha = st.selectbox(
+                    pos_key,
+                    options=nomes_opcoes,
+                    key=f"campo_{formacao_escolhida}_{pos_key}",
+                )
+                if escolha:
+                    jogador_sel = todos[nomes_opcoes.index(escolha) - 1]
+                    escalacao[pos_key] = jogador_sel
+
+        # Desenhar campo
+        st.divider()
+        st.subheader("Escalação")
+
+        # Campo usando HTML/CSS
+        campo_html = """
+        <div style="position:relative;width:100%;max-width:400px;margin:0 auto;
+                    height:580px;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
+                    border-radius:12px;border:3px solid white;overflow:hidden;">
+            <!-- Meio campo -->
+            <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.5);"></div>
+            <!-- Círculo central -->
+            <div style="position:absolute;top:50%;left:50%;width:80px;height:80px;
+                        border:2px solid rgba(255,255,255,0.5);border-radius:50%;
+                        transform:translate(-50%,-50%);"></div>
+            <!-- Área gol inferior -->
+            <div style="position:absolute;bottom:0;left:25%;right:25%;height:60px;
+                        border:2px solid rgba(255,255,255,0.5);border-bottom:none;"></div>
+            <!-- Área gol superior -->
+            <div style="position:absolute;top:0;left:25%;right:25%;height:60px;
+                        border:2px solid rgba(255,255,255,0.5);border-top:none;"></div>
+        """
+
+        for pos_key, (x, y) in posicoes_form.items():
+            jogador = escalacao.get(pos_key)
+            nome_display = jogador["name"].split()[-1] if jogador else pos_key
+            img_html = ""
+            if jogador and jogador.get("imageUrl"):
+                img_html = f"<img src='{jogador['imageUrl']}' width='30' height='30' style='border-radius:50%;border:2px solid white;'/>"
+            else:
+                img_html = f"<div style='width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid white;'></div>"
+
+            campo_html += f"""
+            <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);
+                        text-align:center;font-size:0.65rem;color:white;font-weight:bold;">
+                {img_html}
+                <div style="margin-top:2px;text-shadow:1px 1px 2px black;">{nome_display}</div>
+            </div>
+            """
+
+        campo_html += "</div>"
+        st.markdown(campo_html, unsafe_allow_html=True)
