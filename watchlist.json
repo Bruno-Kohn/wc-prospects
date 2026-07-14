@@ -466,6 +466,20 @@
         "foot": "right",
         "height": 174
       }
+    ],
+    "Laterais Esquerdos": [
+      {
+        "id": "676035",
+        "name": "Luciano Juba",
+        "club": "EC Bahia",
+        "clubCountry": "Brazil",
+        "nascimento": "1999-08-29",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/676035-1694193133.jpg?lm=1",
+        "marketValue": 14000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 176
+      }
     ]
   }
 }
