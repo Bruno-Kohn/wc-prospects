@@ -10,6 +10,22 @@ st.set_page_config(page_title="WC Prospects 2030/2034", page_icon="⚽", layout=
 st.title("⚽ World Cup Prospects")
 st.caption("Monitoramento de promessas para 2030 e 2034")
 
+# CSS para botão "Apagar" vermelho
+st.markdown("""
+<style>
+button[kind="primary"] {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    font-weight: bold;
+}
+button[kind="primary"]:hover {
+    background-color: #a71d2a;
+    border-color: #a71d2a;
+}
+</style>
+""", unsafe_allow_html=True)
+
 BASE_URL = "https://transfermarkt-api.fly.dev"
 GITHUB_REPO = "Bruno-Kohn/wc-prospects"
 WATCHLIST_PATH = "watchlist.json"
@@ -325,7 +341,7 @@ with tab_watchlist:
                             f"Idade: {idade_atual} | Em 2030: {idade_2030} | Em 2034: {idade_2034}",
                         )
                     with col_rm:
-                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}"):
+                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
                             lista.pop(j_idx)
                             if not lista:
                                 del jogadores[posicao]
