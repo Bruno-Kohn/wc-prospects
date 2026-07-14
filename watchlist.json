@@ -374,6 +374,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 174
+      },
+      {
+        "id": "432164",
+        "name": "Igor Jesus Maciel da Cruz",
+        "club": "Nott'm Forest",
+        "clubCountry": "England",
+        "nascimento": "2001-02-25",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/432164-1725325779.jpg?lm=1",
+        "marketValue": 25000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 179
       }
     ],
     "Goleiros": [
