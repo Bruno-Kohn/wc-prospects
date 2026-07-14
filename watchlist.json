@@ -499,6 +499,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 197
+      },
+      {
+        "id": "974488",
+        "name": "Pedro Luccas Morisco da Silva",
+        "club": "Coritiba FC",
+        "clubCountry": "Brazil",
+        "nascimento": "2004-01-10",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/974488-1706563541.jpg?lm=1",
+        "marketValue": 5000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 191
       }
     ],
     "Zagueiros": [
