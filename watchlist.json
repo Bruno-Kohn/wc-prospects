@@ -134,6 +134,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 190
+      },
+      {
+        "id": "352041",
+        "name": "Lucas Perri",
+        "club": "Leeds",
+        "clubCountry": "England",
+        "nascimento": "1997-12-10",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/352041-1733188777.jpg?lm=1",
+        "marketValue": 10000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 197
       }
     ]
   }
