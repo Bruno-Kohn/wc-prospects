@@ -182,6 +182,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 192
+      },
+      {
+        "id": "1370606",
+        "name": "Leonardo Nannetti Lopes",
+        "club": "Flamengo U20",
+        "clubCountry": "",
+        "nascimento": "2007-08-21",
+        "imageUrl": null,
+        "marketValue": null,
+        "position": "Goalkeeper",
+        "foot": "left",
+        "height": 196
       }
     ]
   }
