@@ -479,6 +479,18 @@
         "position": "Left-Back",
         "foot": "left",
         "height": 176
+      },
+      {
+        "id": "879217",
+        "name": "Kaiki Bruno da Silva",
+        "club": "Como",
+        "clubCountry": "Italy",
+        "nascimento": "2003-03-08",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/879217-1678847563.jpg?lm=1",
+        "marketValue": 14000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 172
       }
     ]
   }
