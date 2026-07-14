@@ -16,14 +16,13 @@ WATCHLIST_PATH = "watchlist.json"
 
 POSICOES_DEFAULT = [
     "Goleiros",
-    "Laterais Direitos",
     "Zagueiros",
     "Laterais Esquerdos",
+    "Laterais Direitos",
     "Volantes",
     "Meias",
-    "Meias Atacantes",
-    "Pontas Direitas",
     "Pontas Esquerdas",
+    "Pontas Direitas",
     "Atacantes",
 ]
 
@@ -189,10 +188,9 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
     if mostrar_salvar:
         st.divider()
         wl = get_watchlist()
-        posicoes = wl["_ordem_posicoes"]
         col_pos, col_btn = st.columns([2, 1])
         with col_pos:
-            posicao = st.selectbox("Salvar na posição", posicoes, key=f"pos_{perfil.get('id')}")
+            posicao = st.selectbox("Salvar na posição", POSICOES_DEFAULT, key=f"pos_{perfil.get('id')}")
         with col_btn:
             st.write("")
             st.write("")
@@ -279,29 +277,12 @@ with tab_watchlist:
     if not jogadores:
         st.info("Nenhum jogador salvo ainda. Use a aba Buscar para adicionar.")
     else:
-        # Reorder positions
-        st.caption("Reordene posições com ↑↓")
-        for idx, posicao in enumerate(posicoes):
+        for posicao in POSICOES_DEFAULT:
             lista = jogadores.get(posicao, [])
             if not lista:
                 continue
 
-            col_title, col_up, col_down = st.columns([6, 1, 1])
-            with col_title:
-                st.subheader(f"📌 {posicao}")
-            with col_up:
-                if idx > 0:
-                    if st.button("↑", key=f"posup_{posicao}"):
-                        posicoes[idx], posicoes[idx - 1] = posicoes[idx - 1], posicoes[idx]
-                        salvar_watchlist()
-                        st.rerun()
-            with col_down:
-                # Find next non-empty position
-                if idx < len(posicoes) - 1:
-                    if st.button("↓", key=f"posdown_{posicao}"):
-                        posicoes[idx], posicoes[idx + 1] = posicoes[idx + 1], posicoes[idx]
-                        salvar_watchlist()
-                        st.rerun()
+            st.subheader(f"📌 {posicao}")
 
             for j_idx, j in enumerate(lista):
                 nascimento = j.get("nascimento")
