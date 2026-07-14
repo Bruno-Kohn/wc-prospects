@@ -833,6 +833,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 177
+      },
+      {
+        "id": "1423021",
+        "name": "Kauê Furquim",
+        "club": "Bahia U20",
+        "clubCountry": "",
+        "nascimento": "2009-02-27",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1423021-1769167065.png?lm=1",
+        "marketValue": 2500000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 177
       }
     ],
     "Laterais Esquerdos": [
