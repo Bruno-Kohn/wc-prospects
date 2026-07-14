@@ -244,6 +244,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 190
+      },
+      {
+        "id": "524481",
+        "name": "Roger Ibañez",
+        "club": "Al-Ahli",
+        "clubCountry": "",
+        "nascimento": "1998-11-23",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/524481-1663581987.jpg?lm=1",
+        "marketValue": 18000000,
+        "position": "Centre-Back",
+        "foot": "right",
+        "height": 186
       }
     ]
   }
