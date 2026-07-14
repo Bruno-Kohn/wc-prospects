@@ -552,6 +552,20 @@
         "foot": "left",
         "height": 183
       }
+    ],
+    "Laterais Direitos": [
+      {
+        "id": "964580",
+        "name": "Wesley Vinícius França Lima",
+        "club": "Roma",
+        "clubCountry": "Italy",
+        "nascimento": "2003-09-06",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/964580-1743167536.jpg?lm=1",
+        "marketValue": 40000000,
+        "position": "Right-Back",
+        "foot": "right",
+        "height": 178
+      }
     ]
   }
 }
