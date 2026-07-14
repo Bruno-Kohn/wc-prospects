@@ -207,6 +207,18 @@
         "foot": "left",
         "height": 172,
         "clubCountry": "Spain"
+      },
+      {
+        "id": "739443",
+        "name": "Igor Thiago Nascimento Rodrigues",
+        "club": "Brentford",
+        "clubCountry": "England",
+        "nascimento": "2001-06-26",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/739443-1770372295.jpg?lm=1",
+        "marketValue": 65000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 190
       }
     ],
     "Goleiros": [
