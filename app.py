@@ -771,4 +771,5 @@ with tab_campo:
             """
 
         campo_html += "</div>"
-        st.markdown(campo_html, unsafe_allow_html=True)
+        import streamlit.components.v1 as components
+        components.html(campo_html, height=550)
