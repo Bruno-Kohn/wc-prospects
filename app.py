@@ -719,23 +719,37 @@ with tab_campo:
     if not todos:
         st.info("Adicione jogadores na Watchlist para montar o time.")
     else:
-        # Criar labels únicos usando ID
-        opcoes_map = {f"{j['name']} ({j.get('club', '')}) #{j['id']}": j for j in todos}
-        nomes_opcoes = ["(vazio)"] + list(opcoes_map.keys())
+        # Mapeamento de posição no campo → posição na watchlist
+        POS_KEY_TO_WATCHLIST = {
+            "GOL": "Goleiros",
+            "ZAG": "Zagueiros", "ZAG1": "Zagueiros", "ZAG2": "Zagueiros", "ZAG3": "Zagueiros",
+            "LD": "Laterais Direitos", "ALD": "Laterais Direitos",
+            "LE": "Laterais Esquerdos", "ALE": "Laterais Esquerdos",
+            "VOL": "Volantes", "VOL1": "Volantes", "VOL2": "Volantes",
+            "MC1": "Meias", "MC2": "Meias", "MEI": "Meias",
+            "MD": "Pontas Direitas", "PD": "Pontas Direitas",
+            "ME": "Pontas Esquerdas", "PE": "Pontas Esquerdas",
+            "CA": "Atacantes", "ATA1": "Atacantes", "ATA2": "Atacantes",
+        }
 
         # Seleção de jogadores por posição
         escalacao = {}
         st.caption("Selecione um jogador para cada posição:")
         cols_sel = st.columns(2)
         for idx, pos_key in enumerate(posicoes_form.keys()):
+            watchlist_pos = POS_KEY_TO_WATCHLIST.get(pos_key, "")
+            jogadores_pos = jogadores_campo.get(watchlist_pos, [])
+            opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
+            nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
+
             with cols_sel[idx % 2]:
                 escolha = st.selectbox(
-                    pos_key,
-                    options=nomes_opcoes,
+                    f"{pos_key} ({watchlist_pos})",
+                    options=nomes_pos,
                     key=f"campo_{formacao_escolhida}_{pos_key}",
                 )
                 if escolha != "(vazio)":
-                    escalacao[pos_key] = opcoes_map[escolha]
+                    escalacao[pos_key] = opcoes_pos[escolha]
 
         # Desenhar campo
         st.divider()
@@ -756,17 +770,14 @@ with tab_campo:
 
         for pos_key, (x, y) in posicoes_form.items():
             jogador = escalacao.get(pos_key)
-            nome_display = jogador["name"].split()[-1] if jogador else pos_key
             if jogador and jogador.get("imageUrl"):
-                img_html = f"<img src='{jogador['imageUrl']}' width='28' height='28' style='border-radius:50%;border:2px solid white;display:block;margin:0 auto;'/>"
+                img_html = f"<img src='{jogador['imageUrl']}' width='40' height='40' style='border-radius:4px;border:2px solid white;display:block;'/>"
             else:
-                img_html = f"<div style='width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid white;margin:0 auto;'></div>"
+                img_html = f"<div style='width:40px;height:40px;border-radius:4px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:white;'>{pos_key}</div>"
 
             campo_html += f"""
-            <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);
-                        text-align:center;font-size:0.6rem;color:white;font-weight:bold;width:60px;">
+            <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
                 {img_html}
-                <div style="margin-top:2px;text-shadow:1px 1px 2px black;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{nome_display}</div>
             </div>
             """
 
