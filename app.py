@@ -23,6 +23,24 @@ button[kind="primary"]:hover {
     background-color: #a71d2a;
     border-color: #a71d2a;
 }
+table {
+    width: 100%;
+}
+thead tr th {
+    background-color: #262730 !important;
+    color: white !important;
+    font-size: 0.8rem;
+}
+tbody tr:nth-child(even) {
+    background-color: #f0f2f6;
+}
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+tbody tr td {
+    font-size: 0.85rem;
+    vertical-align: middle !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -363,29 +381,31 @@ with tab_watchlist:
 
             st.subheader(posicao)
 
-            for j_idx, j in enumerate(lista):
+            # Tabela com zebra striping
+            header = "| Foto | Jogador | Clube | Pos. | Altura | Valor | Idade | 2030 | 2034 |"
+            separator = "|:---:|:---|:---|:---:|:---:|:---:|:---:|:---:|:---:|"
+            rows = []
+            for j in lista:
                 nascimento = j.get("nascimento")
                 if nascimento:
                     idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
                 else:
                     idade_atual = idade_2030 = idade_2034 = "?"
+                img = f"<img src='{j.get('imageUrl', '')}' width='35'/>" if j.get("imageUrl") else ""
+                pos_traduzida = traduzir_posicao(j.get("position", ""))
+                country = f" ({j.get('clubCountry', '')})" if j.get("clubCountry") else ""
+                rows.append(
+                    f"| {img} | **{j['name']}** | {j.get('club', 'N/A')}{country} | {pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))} | {idade_atual} | {idade_2030} | {idade_2034} |"
+                )
 
-                with st.container(border=True):
-                    col_foto, col_dados, col_rm = st.columns([1, 4, 1])
-                    with col_foto:
-                        if j.get("imageUrl"):
-                            st.image(j["imageUrl"], width=55)
-                    with col_dados:
-                        pos_traduzida = traduzir_posicao(j.get("position", ""))
-                        st.markdown(
-                            f"**{j['name']}** | {j.get('club', 'N/A')}  \n"
-                            f"{pos_traduzida} | {j.get('height', '?')} cm | {formatar_valor(j.get('marketValue'))}  \n"
-                            f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034} anos",
-                        )
-                    with col_rm:
-                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
-                            lista.pop(j_idx)
-                            if not lista:
-                                del jogadores[posicao]
-                            salvar_watchlist()
-                            st.rerun()
+            table_md = "\n".join([header, separator] + rows)
+            st.markdown(table_md, unsafe_allow_html=True)
+
+            # Botões de remoção abaixo da tabela
+            for j_idx, j in enumerate(lista):
+                if st.button(f"Apagar {j['name']}", key=f"rm_{posicao}_{j['id']}", type="primary"):
+                    lista.pop(j_idx)
+                    if not lista:
+                        del jogadores[posicao]
+                    salvar_watchlist()
+                    st.rerun()
