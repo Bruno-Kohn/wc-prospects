@@ -491,6 +491,18 @@
         "position": "Left-Back",
         "foot": "left",
         "height": 172
+      },
+      {
+        "id": "646402",
+        "name": "Abner Vinícius da Silva Santos",
+        "club": "Lyon",
+        "clubCountry": "France",
+        "nascimento": "2000-05-27",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/646402-1773951778.jpg?lm=1",
+        "marketValue": 10000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 181
       }
     ]
   }
