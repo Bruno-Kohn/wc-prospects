@@ -527,6 +527,18 @@
         "position": "Left-Back",
         "foot": "left",
         "height": 184
+      },
+      {
+        "id": "843397",
+        "name": "Rubens Antonio Dias",
+        "club": "Dynamo Moscow",
+        "clubCountry": "Russia",
+        "nascimento": "2001-06-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/843397-1753953510.png?lm=1",
+        "marketValue": 8000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 178
       }
     ]
   }
