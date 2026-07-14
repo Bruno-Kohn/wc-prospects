@@ -61,6 +61,20 @@
         "foot": "left",
         "height": 172
       }
+    ],
+    "Goleiros": [
+      {
+        "id": "432914",
+        "name": "John Victor Maciel Furtado",
+        "club": "Nott'm Forest",
+        "clubCountry": "England",
+        "nascimento": "1996-02-13",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/432914-1734107350.jpg?lm=1",
+        "marketValue": 5000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 197
+      }
     ]
   }
 }
