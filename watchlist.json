@@ -59,6 +59,18 @@
         "position": "Central Midfield",
         "foot": "left",
         "height": 177
+      },
+      {
+        "id": "520624",
+        "name": "Bruno Guimarães",
+        "club": "Newcastle",
+        "clubCountry": "England",
+        "nascimento": "1997-11-16",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/520624-1780929894.jpg?lm=1",
+        "marketValue": 70000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 182
       }
     ],
     "Pontas Esquerdas": [
