@@ -771,6 +771,18 @@
         "position": "Central Midfield",
         "foot": "left",
         "height": 178
+      },
+      {
+        "id": "668235",
+        "name": "Marlon Gomes Claudino",
+        "club": "Shakhtar D.",
+        "clubCountry": "Ukraine",
+        "nascimento": "2003-12-14",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/668235-1723486644.png?lm=1",
+        "marketValue": 12000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 184
       }
     ]
   }
