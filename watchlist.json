@@ -74,6 +74,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 197
+      },
+      {
+        "id": "574901",
+        "name": "Hugo de Souza Nogueira",
+        "club": "Corinthians",
+        "clubCountry": "Brazil",
+        "nascimento": "1999-01-31",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/574901-1758160198.jpg?lm=1",
+        "marketValue": 11000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 199
       }
     ]
   }
