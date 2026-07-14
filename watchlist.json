@@ -14,17 +14,6 @@
   "_jogadores": {
     "Volantes": [
       {
-        "id": "1372012",
-        "name": "Khensane Mpusane Eustaquio Machel",
-        "club": "Coritiba U20",
-        "nascimento": "2009-01-30",
-        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1372012-1769212550.png?lm=1",
-        "marketValue": null,
-        "position": "Defensive Midfield",
-        "foot": "right",
-        "height": 176
-      },
-      {
         "id": "447661",
         "name": "Douglas Luiz Soares de Paulo",
         "club": "Juventus",
