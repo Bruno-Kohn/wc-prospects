@@ -340,6 +340,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 189
+      },
+      {
+        "id": "546213",
+        "name": "Lucas Silva Melo",
+        "club": "Al-Duhail SC",
+        "clubCountry": "Qatar",
+        "nascimento": "1999-07-04",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/546213-1762259656.png?lm=1",
+        "marketValue": 10000000,
+        "position": "Centre-Back",
+        "foot": "right",
+        "height": 185
       }
     ]
   }
