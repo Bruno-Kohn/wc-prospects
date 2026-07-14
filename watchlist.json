@@ -258,7 +258,8 @@
         "marketValue": 20000000,
         "position": "Centre-Forward",
         "foot": "right",
-        "height": 177
+        "height": 177,
+        "top_team": true
       }
     ],
     "Goleiros": [
