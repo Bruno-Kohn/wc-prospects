@@ -277,6 +277,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 181
+      },
+      {
+        "id": "943837",
+        "name": "Vitor Hugo Roque Ferreira",
+        "club": "Palmeiras",
+        "clubCountry": "Brazil",
+        "nascimento": "2005-02-28",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/943837-1744743482.jpg?lm=1",
+        "marketValue": 38000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 174
       }
     ],
     "Goleiros": [
