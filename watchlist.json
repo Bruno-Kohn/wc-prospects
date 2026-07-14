@@ -426,6 +426,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 178
+      },
+      {
+        "id": "1012564",
+        "name": "Rayan Vitor Simplício Rocha",
+        "club": "Bournemouth",
+        "clubCountry": "England",
+        "nascimento": "2006-08-03",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1012564-1780390891.jpg?lm=1",
+        "marketValue": 60000000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 187
       }
     ]
   }
