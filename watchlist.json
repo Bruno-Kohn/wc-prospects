@@ -733,6 +733,18 @@
         "position": "Centre-Back",
         "foot": "right",
         "height": 194
+      },
+      {
+        "id": "950393",
+        "name": "Viery Fernandes Santos Lopes",
+        "club": "Fiorentina",
+        "clubCountry": "Italy",
+        "nascimento": "2005-01-02",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/950393-1773183484.jpg?lm=1",
+        "marketValue": 6000000,
+        "position": "Centre-Back",
+        "foot": "left",
+        "height": 187
       }
     ],
     "Pontas Direitas": [
