@@ -735,6 +735,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 183
+      },
+      {
+        "id": "553469",
+        "name": "Gabriel Sara",
+        "club": "Galatasaray",
+        "clubCountry": "Türkiye",
+        "nascimento": "1999-06-26",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/553469-1779994043.png?lm=1",
+        "marketValue": 27000000,
+        "position": "Central Midfield",
+        "foot": "left",
+        "height": 177
       }
     ]
   }
