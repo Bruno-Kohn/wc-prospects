@@ -759,6 +759,18 @@
         "position": "Attacking Midfield",
         "foot": "left",
         "height": 183
+      },
+      {
+        "id": "1029227",
+        "name": "Breno Bidon",
+        "club": "Corinthians",
+        "clubCountry": "Brazil",
+        "nascimento": "2005-02-20",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1029227-1725327135.jpg?lm=1",
+        "marketValue": 22000000,
+        "position": "Central Midfield",
+        "foot": "left",
+        "height": 178
       }
     ]
   }
