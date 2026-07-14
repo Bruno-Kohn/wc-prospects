@@ -325,7 +325,7 @@ with tab_watchlist:
                             f"Idade: {idade_atual} | Em 2030: {idade_2030} | Em 2034: {idade_2034}",
                         )
                     with col_rm:
-                        if st.button("X", key=f"rm_{posicao}_{j['id']}"):
+                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}"):
                             lista.pop(j_idx)
                             if not lista:
                                 del jogadores[posicao]
