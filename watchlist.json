@@ -648,6 +648,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 188
+      },
+      {
+        "id": "1355486",
+        "name": "Vitor Fernandes Chaves Teixeira",
+        "club": "Atlético-MG",
+        "clubCountry": "Brazil",
+        "nascimento": "2008-03-04",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1355486-1759166330.jpeg?lm=1",
+        "marketValue": null,
+        "position": "Centre-Back",
+        "foot": "right",
+        "height": 194
       }
     ],
     "Pontas Direitas": [
