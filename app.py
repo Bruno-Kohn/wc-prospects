@@ -14,7 +14,7 @@ BASE_URL = "https://transfermarkt-api.fly.dev"
 GITHUB_REPO = "Bruno-Kohn/wc-prospects"
 WATCHLIST_PATH = "watchlist.json"
 
-POSICOES = [
+POSICOES_DEFAULT = [
     "Goleiros",
     "Laterais Direitos",
     "Zagueiros",
@@ -36,25 +36,22 @@ def _github_headers():
     }
 
 
-def carregar_watchlist() -> dict:
+def _carregar_watchlist_github() -> dict:
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{WATCHLIST_PATH}"
     try:
         resp = requests.get(url, headers=_github_headers(), timeout=10)
         if resp.status_code == 200:
             content = base64.b64decode(resp.json()["content"]).decode()
             return json.loads(content)
-        return {}
+        return {"_ordem_posicoes": POSICOES_DEFAULT, "_jogadores": {}}
     except Exception:
-        return {}
+        return {"_ordem_posicoes": POSICOES_DEFAULT, "_jogadores": {}}
 
 
-def salvar_watchlist(data: dict):
+def _salvar_watchlist_github(data: dict):
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{WATCHLIST_PATH}"
     content_b64 = base64.b64encode(json.dumps(data, ensure_ascii=False, indent=2).encode()).decode()
-    payload = {
-        "message": "Update watchlist",
-        "content": content_b64,
-    }
+    payload = {"message": "Update watchlist", "content": content_b64}
     try:
         resp = requests.get(url, headers=_github_headers(), timeout=10)
         if resp.status_code == 200:
@@ -62,6 +59,30 @@ def salvar_watchlist(data: dict):
     except Exception:
         pass
     requests.put(url, headers=_github_headers(), json=payload, timeout=10)
+
+
+def get_watchlist() -> dict:
+    if "watchlist" not in st.session_state:
+        st.session_state["watchlist"] = _carregar_watchlist_github()
+    wl = st.session_state["watchlist"]
+    if "_ordem_posicoes" not in wl:
+        wl["_ordem_posicoes"] = POSICOES_DEFAULT
+    if "_jogadores" not in wl:
+        # Migrate old format
+        jogadores = {}
+        for k, v in wl.items():
+            if k not in ("_ordem_posicoes", "_jogadores") and isinstance(v, list):
+                jogadores[k] = v
+        wl["_jogadores"] = jogadores
+        for k in list(jogadores.keys()):
+            if k in wl and k not in ("_ordem_posicoes", "_jogadores"):
+                del wl[k]
+    return wl
+
+
+def salvar_watchlist():
+    wl = st.session_state["watchlist"]
+    _salvar_watchlist_github(wl)
 
 
 # --- API Functions ---
@@ -157,22 +178,24 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
 
     if mostrar_salvar:
         st.divider()
+        wl = get_watchlist()
+        posicoes = wl["_ordem_posicoes"]
         col_pos, col_btn = st.columns([2, 1])
         with col_pos:
-            posicao = st.selectbox("Salvar na posição", POSICOES, key=f"pos_{perfil.get('id')}")
+            posicao = st.selectbox("Salvar na posição", posicoes, key=f"pos_{perfil.get('id')}")
         with col_btn:
             st.write("")
             st.write("")
             if st.button("💾 Salvar", use_container_width=True, key=f"save_{perfil.get('id')}"):
-                watchlist = carregar_watchlist()
-                if posicao not in watchlist:
-                    watchlist[posicao] = []
-                player_ids = [p["id"] for p in watchlist[posicao]]
+                jogadores = wl["_jogadores"]
+                if posicao not in jogadores:
+                    jogadores[posicao] = []
+                player_ids = [p["id"] for p in jogadores[posicao]]
                 pid = str(perfil.get("id"))
                 if pid in player_ids:
                     st.warning("Jogador já está nessa posição!")
                 else:
-                    watchlist[posicao].append({
+                    jogadores[posicao].append({
                         "id": pid,
                         "name": perfil.get("fullName") or perfil.get("name"),
                         "club": perfil.get("club", {}).get("name", "N/A"),
@@ -183,7 +206,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
                         "foot": perfil.get("foot", "N/A"),
                         "height": perfil.get("height"),
                     })
-                    salvar_watchlist(watchlist)
+                    salvar_watchlist()
                     st.success(f"✅ {perfil.get('name')} salvo em {posicao}!")
 
 
@@ -232,17 +255,38 @@ with tab_busca:
             st.error("Data de nascimento indisponível.")
 
 with tab_watchlist:
-    watchlist = carregar_watchlist()
+    wl = get_watchlist()
+    posicoes = wl["_ordem_posicoes"]
+    jogadores = wl["_jogadores"]
 
-    if not watchlist:
+    if not jogadores:
         st.info("Nenhum jogador salvo ainda. Use a aba Buscar para adicionar.")
     else:
-        for posicao in POSICOES:
-            jogadores = watchlist.get(posicao, [])
-            if not jogadores:
+        # Reorder positions
+        st.caption("Reordene posições com ↑↓")
+        for idx, posicao in enumerate(posicoes):
+            lista = jogadores.get(posicao, [])
+            if not lista:
                 continue
-            st.subheader(f"📌 {posicao}")
-            for j in jogadores:
+
+            col_title, col_up, col_down = st.columns([6, 1, 1])
+            with col_title:
+                st.subheader(f"📌 {posicao}")
+            with col_up:
+                if idx > 0:
+                    if st.button("↑", key=f"posup_{posicao}"):
+                        posicoes[idx], posicoes[idx - 1] = posicoes[idx - 1], posicoes[idx]
+                        salvar_watchlist()
+                        st.rerun()
+            with col_down:
+                # Find next non-empty position
+                if idx < len(posicoes) - 1:
+                    if st.button("↓", key=f"posdown_{posicao}"):
+                        posicoes[idx], posicoes[idx + 1] = posicoes[idx + 1], posicoes[idx]
+                        salvar_watchlist()
+                        st.rerun()
+
+            for j_idx, j in enumerate(lista):
                 with st.expander(f"{j['name']} — {j['club']}"):
                     nascimento = j.get("nascimento")
                     if nascimento:
@@ -265,9 +309,22 @@ with tab_watchlist:
                             st.metric("2034 🏆", f"{idade_2034} anos")
                             st.caption(badge(idade_2034))
 
-                    if st.button("🗑️ Remover", key=f"rm_{posicao}_{j['id']}"):
-                        watchlist[posicao] = [p for p in watchlist[posicao] if p["id"] != j["id"]]
-                        if not watchlist[posicao]:
-                            del watchlist[posicao]
-                        salvar_watchlist(watchlist)
-                        st.rerun()
+                    # Player reorder and remove buttons
+                    bcols = st.columns(4)
+                    with bcols[0]:
+                        if j_idx > 0 and st.button("↑", key=f"jup_{posicao}_{j['id']}"):
+                            lista[j_idx], lista[j_idx - 1] = lista[j_idx - 1], lista[j_idx]
+                            salvar_watchlist()
+                            st.rerun()
+                    with bcols[1]:
+                        if j_idx < len(lista) - 1 and st.button("↓", key=f"jdown_{posicao}_{j['id']}"):
+                            lista[j_idx], lista[j_idx + 1] = lista[j_idx + 1], lista[j_idx]
+                            salvar_watchlist()
+                            st.rerun()
+                    with bcols[3]:
+                        if st.button("🗑️", key=f"rm_{posicao}_{j['id']}"):
+                            lista.pop(j_idx)
+                            if not lista:
+                                del jogadores[posicao]
+                            salvar_watchlist()
+                            st.rerun()
