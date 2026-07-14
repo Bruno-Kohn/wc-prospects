@@ -795,6 +795,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 175
+      },
+      {
+        "id": "1228661",
+        "name": "Gabriel Ferreira de Carvalho",
+        "club": "Grêmio",
+        "clubCountry": "Brazil",
+        "nascimento": "2008-04-11",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1228661-1757072570.png?lm=1",
+        "marketValue": 16000000,
+        "position": "Attacking Midfield",
+        "foot": "both",
+        "height": 173
       }
     ]
   }
