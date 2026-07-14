@@ -393,11 +393,51 @@ with tab_watchlist:
         if st.button("Atualizar dados", use_container_width=True):
             modal_atualizar()
 
-        total_geral = sum(len(jogadores.get(p, [])) for p in POSICOES_DEFAULT)
-        st.caption(f"Total de jogadores na Watchlist: {total_geral}")
+        # --- Filtros ---
+        with st.expander("Filtros"):
+            col_f1, col_f2 = st.columns(2)
+            with col_f1:
+                filtro_idade_max = st.number_input("Idade máxima", min_value=15, max_value=45, value=45, step=1)
+                filtro_pe = st.selectbox("Pé", ["Todos", "Canhoto", "Destro", "Ambidestro"])
+            with col_f2:
+                filtro_valor_min = st.number_input("Valor mínimo (€M)", min_value=0, max_value=500, value=0, step=5)
+                filtro_posicao = st.selectbox("Posição", ["Todas"] + POSICOES_DEFAULT)
+            filtro_clube = st.text_input("Filtrar por clube", placeholder="Ex: Real Madrid")
+            filtro_top = st.checkbox("Apenas jogadores do Top Team")
 
-        for posicao in POSICOES_DEFAULT:
-            lista = jogadores.get(posicao, [])
+        def aplicar_filtros(jogador):
+            nasc = jogador.get("nascimento")
+            if nasc:
+                idade, _, _ = calcular_idades(nasc)
+            else:
+                idade = 0
+            if idade > filtro_idade_max:
+                return False
+            valor = jogador.get("marketValue") or 0
+            if valor < filtro_valor_min * 1_000_000:
+                return False
+            if filtro_pe != "Todos":
+                pe_map = {"left": "Canhoto", "right": "Destro", "both": "Ambidestro"}
+                pe_jogador = pe_map.get((jogador.get("foot") or "").lower(), "")
+                if pe_jogador != filtro_pe:
+                    return False
+            if filtro_clube and filtro_clube.lower() not in (jogador.get("club") or "").lower():
+                return False
+            if filtro_top and not jogador.get("top_team"):
+                return False
+            return True
+
+        posicoes_exibir = [filtro_posicao] if filtro_posicao != "Todas" else POSICOES_DEFAULT
+        total_filtrado = 0
+        for pos in posicoes_exibir:
+            lista_filtrada = [j for j in jogadores.get(pos, []) if aplicar_filtros(j)]
+            total_filtrado += len(lista_filtrada)
+
+        total_geral = sum(len(jogadores.get(p, [])) for p in POSICOES_DEFAULT)
+        st.caption(f"Exibindo {total_filtrado} de {total_geral} jogadores")
+
+        for posicao in posicoes_exibir:
+            lista = [j for j in jogadores.get(posicao, []) if aplicar_filtros(j)]
             if not lista:
                 continue
 
@@ -422,7 +462,8 @@ with tab_watchlist:
                                 st.rerun()
                             else:
                                 # Check limit
-                                top_count = sum(1 for p in lista if p.get("top_team"))
+                                lista_original = jogadores.get(posicao, [])
+                                top_count = sum(1 for p in lista_original if p.get("top_team"))
                                 limite = TOP_TEAM_LIMITES.get(posicao, 0)
                                 if top_count >= limite:
                                     st.session_state[f"top_team_full_{posicao}"] = True
@@ -443,8 +484,9 @@ with tab_watchlist:
                         )
                     with col_rm:
                         if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
-                            lista.pop(j_idx)
-                            if not lista:
+                            lista_original = jogadores.get(posicao, [])
+                            jogadores[posicao] = [p for p in lista_original if p["id"] != j["id"]]
+                            if not jogadores[posicao]:
                                 del jogadores[posicao]
                             salvar_watchlist()
                             st.rerun()
