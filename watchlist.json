@@ -98,6 +98,18 @@
         "position": "Goalkeeper",
         "foot": "left",
         "height": 204
+      },
+      {
+        "id": "371247",
+        "name": "Gabriel Brazão",
+        "club": "Santos",
+        "clubCountry": "Brazil",
+        "nascimento": "2000-10-05",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/371247-1780359299.jpg?lm=1",
+        "marketValue": 12000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 192
       }
     ]
   }
