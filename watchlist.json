@@ -328,6 +328,18 @@
         "position": "Centre-Back",
         "foot": "both",
         "height": 198
+      },
+      {
+        "id": "985172",
+        "name": "David Ricardo Loiola da Silva",
+        "club": "Dynamo Moscow",
+        "clubCountry": "Russia",
+        "nascimento": "2002-12-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/985172-1769008141.png?lm=1",
+        "marketValue": 6000000,
+        "position": "Centre-Back",
+        "foot": "left",
+        "height": 189
       }
     ]
   }
