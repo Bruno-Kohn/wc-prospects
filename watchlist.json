@@ -565,6 +565,18 @@
         "position": "Right-Back",
         "foot": "right",
         "height": 178
+      },
+      {
+        "id": "789082",
+        "name": "Vanderson de Oliveira Campos",
+        "club": "Monaco",
+        "clubCountry": "France",
+        "nascimento": "2001-06-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/789082-1655282894.jpg?lm=1",
+        "marketValue": 18000000,
+        "position": "Right-Back",
+        "foot": "right",
+        "height": 173
       }
     ]
   }
