@@ -48,6 +48,19 @@
         "foot": "right",
         "height": 177
       }
+    ],
+    "Atacantes": [
+      {
+        "id": "971570",
+        "name": "Endrick Felipe Moreira de Sousa",
+        "club": "Real Madrid",
+        "nascimento": "2006-07-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/971570-1782847902.jpg?lm=1",
+        "marketValue": 40000000,
+        "position": "Centre-Forward",
+        "foot": "left",
+        "height": 172
+      }
     ]
   }
 }
