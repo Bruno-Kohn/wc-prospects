@@ -633,6 +633,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 174
+      },
+      {
+        "id": "743598",
+        "name": "Ângelo Gabriel Borges Damaceno",
+        "club": "Al-Nassr",
+        "clubCountry": "Saudi Arabia",
+        "nascimento": "2004-12-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/743598-1694617496.jpg?lm=1",
+        "marketValue": 15000000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 180
       }
     ],
     "Laterais Esquerdos": [
