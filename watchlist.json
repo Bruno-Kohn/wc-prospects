@@ -136,6 +136,18 @@
         "position": "Defensive Midfield",
         "foot": "right",
         "height": 185
+      },
+      {
+        "id": "1221818",
+        "name": "André Luiz Santos Dias",
+        "club": "Corinthians",
+        "clubCountry": "Brazil",
+        "nascimento": "2006-06-20",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1221818-1760492908.jpg?lm=1",
+        "marketValue": 16000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 183
       }
     ],
     "Pontas Esquerdas": [
