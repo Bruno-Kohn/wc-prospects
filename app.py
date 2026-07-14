@@ -397,44 +397,72 @@ with tab_watchlist:
         with st.expander("Filtros"):
             col_f1, col_f2 = st.columns(2)
             with col_f1:
-                filtro_idade_max = st.number_input("Idade máxima", min_value=15, max_value=45, value=45, step=1)
-                filtro_pe = st.selectbox("Pé", ["Todos", "Canhoto", "Destro", "Ambidestro"])
+                filtro_idade_max = st.number_input("Idade máxima", min_value=15, max_value=45, value=45, step=1, key="f_idade")
+                filtro_pe = st.selectbox("Pé", ["Todos", "Canhoto", "Destro", "Ambidestro"], key="f_pe")
             with col_f2:
-                filtro_valor_min = st.number_input("Valor mínimo (€M)", min_value=0, max_value=500, value=0, step=5)
-                filtro_posicao = st.selectbox("Posição", ["Todas"] + POSICOES_DEFAULT)
-            filtro_clube = st.text_input("Filtrar por clube", placeholder="Ex: Real Madrid")
-            filtro_top = st.checkbox("Apenas jogadores do Top Team")
+                filtro_valor_min = st.selectbox(
+                    "Valor mínimo",
+                    options=[0, 1, 5, 10, 20, 30, 50, 75, 100, 150, 200],
+                    format_func=lambda x: f"€{x}M" if x > 0 else "Sem mínimo",
+                    key="f_valor",
+                )
+                filtro_posicao = st.selectbox("Posição", ["Todas"] + POSICOES_DEFAULT, key="f_posicao")
+            filtro_clube = st.text_input("Filtrar por clube", placeholder="Ex: Real Madrid", key="f_clube")
+            filtro_top = st.checkbox("Apenas jogadores do Top Team", key="f_top")
+
+            col_btn_f, col_btn_c = st.columns(2)
+            with col_btn_f:
+                if st.button("Filtrar", use_container_width=True):
+                    st.session_state["filtros_ativos"] = {
+                        "idade_max": filtro_idade_max,
+                        "pe": filtro_pe,
+                        "valor_min": filtro_valor_min * 1_000_000,
+                        "posicao": filtro_posicao,
+                        "clube": filtro_clube,
+                        "top": filtro_top,
+                    }
+            with col_btn_c:
+                if st.button("Limpar filtros", use_container_width=True):
+                    st.session_state.pop("filtros_ativos", None)
+                    st.rerun()
+
+        filtros = st.session_state.get("filtros_ativos")
 
         def aplicar_filtros(jogador):
+            if not filtros:
+                return True
             nasc = jogador.get("nascimento")
             if nasc:
                 idade, _, _ = calcular_idades(nasc)
             else:
                 idade = 0
-            if idade > filtro_idade_max:
+            if idade > filtros["idade_max"]:
                 return False
             valor = jogador.get("marketValue") or 0
-            if valor < filtro_valor_min * 1_000_000:
+            if valor < filtros["valor_min"]:
                 return False
-            if filtro_pe != "Todos":
+            if filtros["pe"] != "Todos":
                 pe_map = {"left": "Canhoto", "right": "Destro", "both": "Ambidestro"}
                 pe_jogador = pe_map.get((jogador.get("foot") or "").lower(), "")
-                if pe_jogador != filtro_pe:
+                if pe_jogador != filtros["pe"]:
                     return False
-            if filtro_clube and filtro_clube.lower() not in (jogador.get("club") or "").lower():
+            if filtros["clube"] and filtros["clube"].lower() not in (jogador.get("club") or "").lower():
                 return False
-            if filtro_top and not jogador.get("top_team"):
+            if filtros["top"] and not jogador.get("top_team"):
                 return False
             return True
 
-        posicoes_exibir = [filtro_posicao] if filtro_posicao != "Todas" else POSICOES_DEFAULT
+        posicoes_exibir = [filtros["posicao"]] if filtros and filtros["posicao"] != "Todas" else POSICOES_DEFAULT
         total_filtrado = 0
         for pos in posicoes_exibir:
             lista_filtrada = [j for j in jogadores.get(pos, []) if aplicar_filtros(j)]
             total_filtrado += len(lista_filtrada)
 
         total_geral = sum(len(jogadores.get(p, [])) for p in POSICOES_DEFAULT)
-        st.caption(f"Exibindo {total_filtrado} de {total_geral} jogadores")
+        if filtros:
+            st.caption(f"Filtro ativo — Exibindo {total_filtrado} de {total_geral} jogadores")
+        else:
+            st.caption(f"Total de jogadores na Watchlist: {total_geral}")
 
         for posicao in posicoes_exibir:
             lista = [j for j in jogadores.get(posicao, []) if aplicar_filtros(j)]
