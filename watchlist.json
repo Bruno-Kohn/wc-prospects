@@ -158,6 +158,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 196
+      },
+      {
+        "id": "997947",
+        "name": "Otávio Eleodoro Rezende Costa",
+        "club": "Cruzeiro",
+        "clubCountry": "Brazil",
+        "nascimento": "2005-12-27",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/997947-1745456431.jpeg?lm=1",
+        "marketValue": 500000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 192
       }
     ]
   }
