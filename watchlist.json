@@ -256,6 +256,18 @@
         "position": "Centre-Back",
         "foot": "right",
         "height": 186
+      },
+      {
+        "id": "648020",
+        "name": "Alexsandro Victor de Souza Ribeiro",
+        "club": "Lille",
+        "clubCountry": "France",
+        "nascimento": "1999-08-09",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/648020-1666689768.jpg?lm=1",
+        "marketValue": 15000000,
+        "position": "Centre-Back",
+        "foot": "both",
+        "height": 191
       }
     ]
   }
