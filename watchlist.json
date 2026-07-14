@@ -375,7 +375,8 @@
         "marketValue": 500000,
         "position": "Goalkeeper",
         "foot": "right",
-        "height": 192
+        "height": 192,
+        "top_team": true
       },
       {
         "id": "1229317",
