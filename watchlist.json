@@ -71,7 +71,8 @@
         "marketValue": 70000000,
         "position": "Central Midfield",
         "foot": "right",
-        "height": 182
+        "height": 182,
+        "top_team": true
       },
       {
         "id": "743600",
