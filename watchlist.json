@@ -613,6 +613,18 @@
         "position": "Right-Back",
         "foot": "right",
         "height": 174
+      },
+      {
+        "id": "743587",
+        "name": "Vinícius Tobias",
+        "club": "Shakhtar D.",
+        "clubCountry": "Ukraine",
+        "nascimento": "2004-02-23",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/743587-1723486503.png?lm=1",
+        "marketValue": 6000000,
+        "position": "Right-Back",
+        "foot": "right",
+        "height": 177
       }
     ]
   }
