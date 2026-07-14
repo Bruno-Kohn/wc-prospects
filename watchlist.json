@@ -988,7 +988,8 @@
         "marketValue": 16000000,
         "position": "Attacking Midfield",
         "foot": "both",
-        "height": 173
+        "height": 173,
+        "top_team": true
       },
       {
         "id": "1056993",
