@@ -243,6 +243,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 182
+      },
+      {
+        "id": "668267",
+        "name": "Marcos Leonardo Santos Almeida",
+        "club": "Al-Hilal",
+        "clubCountry": "Saudi Arabia",
+        "nascimento": "2003-05-02",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/668267-1706201941.jpg?lm=1",
+        "marketValue": 20000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 177
       }
     ],
     "Goleiros": [
