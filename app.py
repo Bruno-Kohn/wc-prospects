@@ -199,28 +199,37 @@ with tab_busca:
         else:
             with st.spinner("Buscando dados em tempo real..."):
                 resultados = buscar_jogadores(nome.strip())
-
             if not resultados:
                 st.warning("Nenhum jogador encontrado. Tente outro nome.")
             else:
-                opcoes = {
-                    f"{r['name']} ({r.get('club', {}).get('name', 'N/A')})": r
-                    for r in resultados
-                }
-                escolha = st.selectbox("Selecione o jogador", options=list(opcoes.keys()))
-                jogador = opcoes[escolha]
+                st.session_state["resultados"] = resultados
+                st.session_state["perfil"] = None
+                st.session_state["nascimento"] = None
 
-                with st.spinner("Carregando perfil..."):
-                    perfil = buscar_perfil(jogador["id"])
+    if "resultados" in st.session_state and st.session_state["resultados"]:
+        resultados = st.session_state["resultados"]
+        opcoes = {
+            f"{r['name']} ({r.get('club', {}).get('name', 'N/A')})": r
+            for r in resultados
+        }
+        escolha = st.selectbox("Selecione o jogador", options=list(opcoes.keys()))
+        jogador = opcoes[escolha]
 
-                if not perfil:
-                    st.error("Não foi possível carregar o perfil.")
-                else:
-                    nascimento = extrair_nascimento(perfil.get("description"))
-                    if not nascimento:
-                        st.error("Data de nascimento indisponível.")
-                    else:
-                        exibir_card_jogador(perfil, nascimento, mostrar_salvar=True)
+        if st.session_state.get("perfil_id") != jogador["id"]:
+            with st.spinner("Carregando perfil..."):
+                perfil = buscar_perfil(jogador["id"])
+            if perfil:
+                st.session_state["perfil"] = perfil
+                st.session_state["perfil_id"] = jogador["id"]
+                st.session_state["nascimento"] = extrair_nascimento(perfil.get("description"))
+
+        perfil = st.session_state.get("perfil")
+        nascimento = st.session_state.get("nascimento")
+
+        if perfil and nascimento:
+            exibir_card_jogador(perfil, nascimento, mostrar_salvar=True)
+        elif perfil and not nascimento:
+            st.error("Data de nascimento indisponível.")
 
 with tab_watchlist:
     watchlist = carregar_watchlist()
