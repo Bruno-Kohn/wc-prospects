@@ -265,6 +265,18 @@
         "foot": "right",
         "height": 177,
         "top_team": true
+      },
+      {
+        "id": "1119009",
+        "name": "Kauã Elias Nogueira",
+        "club": "Shakhtar D.",
+        "clubCountry": "Ukraine",
+        "nascimento": "2006-03-28",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1119009-1739082351.png?lm=1",
+        "marketValue": 15000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 181
       }
     ],
     "Goleiros": [
