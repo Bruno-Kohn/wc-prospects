@@ -161,6 +161,18 @@
         "position": "Defensive Midfield",
         "foot": "left",
         "height": null
+      },
+      {
+        "id": "1089958",
+        "name": "Gabriel Bontempo",
+        "club": "Santos",
+        "clubCountry": "Brazil",
+        "nascimento": "2005-01-16",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1089958-1743040770.jpg?lm=1",
+        "marketValue": 9000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 181
       }
     ],
     "Pontas Esquerdas": [
