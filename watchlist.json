@@ -503,6 +503,18 @@
         "position": "Left-Back",
         "foot": "left",
         "height": 181
+      },
+      {
+        "id": "891353",
+        "name": "Luis Eduardo Soares da Silva",
+        "club": "Vasco da Gama",
+        "clubCountry": "Brazil",
+        "nascimento": "2003-02-16",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/891353-1723245970.jpg?lm=1",
+        "marketValue": 10000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 179
       }
     ]
   }
