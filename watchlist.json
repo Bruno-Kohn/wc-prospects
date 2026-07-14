@@ -146,6 +146,18 @@
         "position": "Goalkeeper",
         "foot": "right",
         "height": 197
+      },
+      {
+        "id": "997861",
+        "name": "Kauã Santos",
+        "club": "Frankfurt",
+        "clubCountry": "Germany",
+        "nascimento": "2003-04-11",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/997861-1696509170.jpg?lm=1",
+        "marketValue": 7000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 196
       }
     ]
   }
