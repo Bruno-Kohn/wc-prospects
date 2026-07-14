@@ -231,6 +231,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 186
+      },
+      {
+        "id": "620477",
+        "name": "Kaio Jorge Pinto Ramos",
+        "club": "Cruzeiro",
+        "clubCountry": "Brazil",
+        "nascimento": "2002-01-24",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/620477-1693289628.jpg?lm=1",
+        "marketValue": 25000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 182
       }
     ],
     "Goleiros": [
