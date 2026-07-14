@@ -304,6 +304,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 188
+      },
+      {
+        "id": "673492",
+        "name": "Felipe Rodrigues da Silva",
+        "club": "Nott'm Forest",
+        "clubCountry": "England",
+        "nascimento": "2001-06-30",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/673492-1701295349.jpg?lm=1",
+        "marketValue": 14000000,
+        "position": "Centre-Back",
+        "foot": "left",
+        "height": 192
       }
     ]
   }
