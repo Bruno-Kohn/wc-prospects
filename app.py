@@ -786,4 +786,4 @@ with tab_campo:
 
             campo_html += "</div>"
             import streamlit.components.v1 as components
-            components.html(campo_html, height=550)
+            components.html(campo_html, height=700)
