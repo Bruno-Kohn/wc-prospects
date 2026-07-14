@@ -441,6 +441,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 187
+      },
+      {
+        "id": "412363",
+        "name": "Rodrygo Silva de Goes",
+        "club": "Real Madrid",
+        "clubCountry": "Spain",
+        "nascimento": "2001-01-09",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/412363-1763041611.jpg?lm=1",
+        "marketValue": 45000000,
+        "position": "Right Winger",
+        "foot": "right",
+        "height": 174
       }
     ]
   }
