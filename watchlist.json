@@ -208,7 +208,8 @@
         "position": "Centre-Forward",
         "foot": "left",
         "height": 172,
-        "clubCountry": "Spain"
+        "clubCountry": "Spain",
+        "top_team": true
       },
       {
         "id": "739443",
