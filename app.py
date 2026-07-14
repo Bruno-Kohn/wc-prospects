@@ -108,6 +108,16 @@ def buscar_perfil(player_id: str) -> dict | None:
         return None
 
 
+@st.cache_data(ttl=3600)
+def buscar_clube(club_id: str) -> dict | None:
+    try:
+        resp = requests.get(f"{BASE_URL}/clubs/{club_id}/profile", timeout=10)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception:
+        return None
+
+
 # --- Helpers ---
 def extrair_nascimento(description: str) -> str | None:
     match = re.search(r"\*\s*(\d{2}/\d{2}/\d{4})", description or "")
@@ -195,10 +205,17 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
                 if pid in player_ids:
                     st.warning("Jogador já está nessa posição!")
                 else:
+                    club_country = ""
+                    club_id = perfil.get("club", {}).get("id")
+                    if club_id:
+                        club_data = buscar_clube(str(club_id))
+                        if club_data:
+                            club_country = club_data.get("league", {}).get("countryName", "")
                     jogadores[posicao].append({
                         "id": pid,
                         "name": perfil.get("fullName") or perfil.get("name"),
                         "club": perfil.get("club", {}).get("name", "N/A"),
+                        "clubCountry": club_country,
                         "nascimento": nascimento,
                         "imageUrl": perfil.get("imageUrl"),
                         "marketValue": perfil.get("marketValue"),
@@ -287,29 +304,27 @@ with tab_watchlist:
                         st.rerun()
 
             for j_idx, j in enumerate(lista):
-                with st.expander(f"{j['name']} — {j['club']}"):
-                    nascimento = j.get("nascimento")
-                    if nascimento:
-                        idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
-                        col_f, col_i = st.columns([1, 2])
-                        with col_f:
-                            if j.get("imageUrl"):
-                                st.image(j["imageUrl"], width=80)
-                        with col_i:
-                            st.write(f"**Clube:** {j['club']}")
-                            st.write(f"**Idade atual:** {idade_atual} anos")
-                            st.write(f"**Posição real:** {j.get('position', 'N/A')}")
-                            st.write(f"**Valor:** {formatar_valor(j.get('marketValue'))}")
+                nascimento = j.get("nascimento")
+                if nascimento:
+                    idade_atual, idade_2030, idade_2034 = calcular_idades(nascimento)
+                else:
+                    idade_atual = idade_2030 = idade_2034 = "?"
 
-                        c1, c2 = st.columns(2)
-                        with c1:
-                            st.metric("2030 🏆", f"{idade_2030} anos")
-                            st.caption(badge(idade_2030))
-                        with c2:
-                            st.metric("2034 🏆", f"{idade_2034} anos")
-                            st.caption(badge(idade_2034))
+                with st.container(border=True):
+                    col_foto, col_dados = st.columns([1, 3])
+                    with col_foto:
+                        if j.get("imageUrl"):
+                            st.image(j["imageUrl"], width=70)
+                    with col_dados:
+                        st.markdown(f"**{j['name']}**")
+                        st.caption(
+                            f"{j.get('club', 'N/A')} · {j.get('clubCountry', '')}  \n"
+                            f"📏 {j.get('height', 'N/A')} cm · ⚽ {j.get('position', 'N/A')}  \n"
+                            f"💰 {formatar_valor(j.get('marketValue'))}  \n"
+                            f"🎂 Atual: **{idade_atual}** · 2030: **{idade_2030}** · 2034: **{idade_2034}**"
+                        )
 
-                    # Player reorder and remove buttons
+                    # Reorder and remove
                     bcols = st.columns(4)
                     with bcols[0]:
                         if j_idx > 0 and st.button("↑", key=f"jup_{posicao}_{j['id']}"):
