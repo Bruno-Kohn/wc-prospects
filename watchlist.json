@@ -597,6 +597,18 @@
         "position": "Right Winger",
         "foot": "left",
         "height": 182
+      },
+      {
+        "id": "602105",
+        "name": "Antony Matheus dos Santos",
+        "club": "Real Betis",
+        "clubCountry": "Spain",
+        "nascimento": "2000-02-24",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/602105-1758783018.jpg?lm=1",
+        "marketValue": 40000000,
+        "position": "Right Winger",
+        "foot": "left",
+        "height": 172
       }
     ],
     "Laterais Esquerdos": [
