@@ -219,6 +219,18 @@
         "position": "Centre-Forward",
         "foot": "right",
         "height": 190
+      },
+      {
+        "id": "626724",
+        "name": "João Pedro Junqueira de Jesus",
+        "club": "Chelsea",
+        "clubCountry": "England",
+        "nascimento": "2001-09-26",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/626724-1724792744.jpg?lm=1",
+        "marketValue": 80000000,
+        "position": "Centre-Forward",
+        "foot": "right",
+        "height": 186
       }
     ],
     "Goleiros": [
