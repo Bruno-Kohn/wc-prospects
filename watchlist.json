@@ -981,7 +981,8 @@
         "marketValue": 80000000,
         "position": "Right Winger",
         "foot": "left",
-        "height": 178
+        "height": 178,
+        "top_team": true
       }
     ]
   }
