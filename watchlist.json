@@ -10,6 +10,17 @@
       "position": "Defensive Midfield",
       "foot": "right",
       "height": 176
+    },
+    {
+      "id": "447661",
+      "name": "Douglas Luiz Soares de Paulo",
+      "club": "Juventus",
+      "nascimento": "1998-05-09",
+      "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/447661-1696598670.jpg?lm=1",
+      "marketValue": 18000000,
+      "position": "Central Midfield",
+      "foot": "right",
+      "height": 177
     }
   ]
 }
