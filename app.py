@@ -462,7 +462,15 @@ with tab_topteam:
 
     media_str = f" | Média de idade: {sum(idades) / len(idades):.1f} anos" if idades else ""
     st.subheader(f"Convocação — 26 jogadores{media_str}")
-    st.caption(f"Convocados: {total_convocados}/26")
+
+    # Valor de mercado total
+    valor_total = sum(
+        j.get("marketValue", 0) or 0
+        for pos in POSICOES_DEFAULT
+        for j in jogadores.get(pos, [])
+        if j.get("top_team")
+    )
+    st.caption(f"Convocados: {total_convocados}/26 | Valor de mercado total: {formatar_valor(valor_total)}")
     st.divider()
 
     for posicao in POSICOES_DEFAULT:
