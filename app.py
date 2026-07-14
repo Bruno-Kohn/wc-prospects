@@ -745,11 +745,16 @@ with tab_campo:
                 opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
                 nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
 
-                escolha = st.selectbox(
-                    f"{pos_key} ({watchlist_pos})",
-                    options=nomes_pos,
-                    key=f"campo_{formacao_escolhida}_{pos_key}",
-                )
+                c_label, c_select = st.columns([1, 3])
+                with c_label:
+                    st.markdown(f"**{pos_key}**")
+                with c_select:
+                    escolha = st.selectbox(
+                        pos_key,
+                        options=nomes_pos,
+                        key=f"campo_{formacao_escolhida}_{pos_key}",
+                        label_visibility="collapsed",
+                    )
                 if escolha != "(vazio)":
                     escalacao[pos_key] = opcoes_pos[escolha]
 
