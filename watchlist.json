@@ -47,6 +47,18 @@
         "position": "Centre-Back",
         "foot": "left",
         "height": 186
+      },
+      {
+        "id": "808509",
+        "name": "Danilo dos Santos de Oliveira",
+        "club": "Botafogo",
+        "clubCountry": "Brazil",
+        "nascimento": "2001-04-29",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/808509-1780390517.jpg?lm=1",
+        "marketValue": 32000000,
+        "position": "Central Midfield",
+        "foot": "left",
+        "height": 177
       }
     ],
     "Pontas Esquerdas": [
