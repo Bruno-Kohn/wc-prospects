@@ -407,7 +407,14 @@ with tab_watchlist:
                     key="f_valor",
                 )
                 filtro_posicao = st.selectbox("Posição", ["Todas"] + POSICOES_DEFAULT, key="f_posicao")
-            filtro_clube = st.text_input("Filtrar por clube", placeholder="Ex: Real Madrid", key="f_clube")
+            # Coletar clubes únicos dos jogadores
+            clubes_unicos = sorted(set(
+                j.get("club", "")
+                for pos in POSICOES_DEFAULT
+                for j in jogadores.get(pos, [])
+                if j.get("club")
+            ))
+            filtro_clube = st.selectbox("Clube", ["Todos"] + clubes_unicos, key="f_clube")
             filtro_top = st.checkbox("Apenas jogadores do Top Team", key="f_top")
 
             col_btn_f, col_btn_c = st.columns(2)
@@ -446,7 +453,7 @@ with tab_watchlist:
                 pe_jogador = pe_map.get((jogador.get("foot") or "").lower(), "")
                 if pe_jogador != filtros["pe"]:
                     return False
-            if filtros["clube"] and filtros["clube"].lower() not in (jogador.get("club") or "").lower():
+            if filtros["clube"] != "Todos" and jogador.get("club") != filtros["clube"]:
                 return False
             if filtros["top"] and not jogador.get("top_team"):
                 return False
