@@ -1100,6 +1100,18 @@
         "foot": "left",
         "height": 178,
         "top_team": true
+      },
+      {
+        "id": "1180021",
+        "name": "Erick Machado Belé",
+        "club": "Palmeiras U20",
+        "clubCountry": "",
+        "nascimento": "2007-01-21",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1180021-1697290801.jpg?lm=1",
+        "marketValue": 1000000,
+        "position": "Attacking Midfield",
+        "foot": "left",
+        "height": 184
       }
     ]
   }
