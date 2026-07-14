@@ -610,7 +610,8 @@
         "marketValue": 35000000,
         "position": "Centre-Back",
         "foot": "right",
-        "height": 188
+        "height": 188,
+        "top_team": true
       }
     ],
     "Pontas Direitas": [
