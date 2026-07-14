@@ -515,6 +515,18 @@
         "position": "Left-Back",
         "foot": "left",
         "height": 179
+      },
+      {
+        "id": "585982",
+        "name": "Carlos Augusto Zopolato Neves",
+        "club": "Inter",
+        "clubCountry": "Italy",
+        "nascimento": "1999-01-07",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/585982-1735891597.jpg?lm=1",
+        "marketValue": 23000000,
+        "position": "Left-Back",
+        "foot": "left",
+        "height": 184
       }
     ]
   }
