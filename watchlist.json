@@ -95,6 +95,18 @@
         "position": "Defensive Midfield",
         "foot": "right",
         "height": 176
+      },
+      {
+        "id": "735570",
+        "name": "João Gomes",
+        "club": "Wolves",
+        "clubCountry": "England",
+        "nascimento": "2001-02-12",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/735570-1675092223.jpg?lm=1",
+        "marketValue": 40000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 176
       }
     ],
     "Pontas Esquerdas": [
