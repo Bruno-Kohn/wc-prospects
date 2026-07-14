@@ -1,39 +1,53 @@
 {
-  "Volantes": [
-    {
-      "id": "1372012",
-      "name": "Khensane Mpusane Eustaquio Machel",
-      "club": "Coritiba U20",
-      "nascimento": "2009-01-30",
-      "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1372012-1769212550.png?lm=1",
-      "marketValue": null,
-      "position": "Defensive Midfield",
-      "foot": "right",
-      "height": 176
-    },
-    {
-      "id": "447661",
-      "name": "Douglas Luiz Soares de Paulo",
-      "club": "Juventus",
-      "nascimento": "1998-05-09",
-      "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/447661-1696598670.jpg?lm=1",
-      "marketValue": 18000000,
-      "position": "Central Midfield",
-      "foot": "right",
-      "height": 177
-    }
+  "_ordem_posicoes": [
+    "Goleiros",
+    "Laterais Direitos",
+    "Zagueiros",
+    "Laterais Esquerdos",
+    "Meias",
+    "Volantes",
+    "Meias Atacantes",
+    "Pontas Direitas",
+    "Pontas Esquerdas",
+    "Atacantes"
   ],
-  "Pontas Esquerdas": [
-    {
-      "id": "830365",
-      "name": "Alisson Santos",
-      "club": "Napoli",
-      "nascimento": "2002-09-27",
-      "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/830365-1765306584.jpg?lm=1",
-      "marketValue": 28000000,
-      "position": "Left Winger",
-      "foot": "right",
-      "height": 177
-    }
-  ]
+  "_jogadores": {
+    "Volantes": [
+      {
+        "id": "1372012",
+        "name": "Khensane Mpusane Eustaquio Machel",
+        "club": "Coritiba U20",
+        "nascimento": "2009-01-30",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1372012-1769212550.png?lm=1",
+        "marketValue": null,
+        "position": "Defensive Midfield",
+        "foot": "right",
+        "height": 176
+      },
+      {
+        "id": "447661",
+        "name": "Douglas Luiz Soares de Paulo",
+        "club": "Juventus",
+        "nascimento": "1998-05-09",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/447661-1696598670.jpg?lm=1",
+        "marketValue": 18000000,
+        "position": "Central Midfield",
+        "foot": "right",
+        "height": 177
+      }
+    ],
+    "Pontas Esquerdas": [
+      {
+        "id": "830365",
+        "name": "Alisson Santos",
+        "club": "Napoli",
+        "nascimento": "2002-09-27",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/830365-1765306584.jpg?lm=1",
+        "marketValue": 28000000,
+        "position": "Left Winger",
+        "foot": "right",
+        "height": 177
+      }
+    ]
+  }
 }
