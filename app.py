@@ -604,18 +604,45 @@ with tab_watchlist:
                             salvar_watchlist()
                             st.rerun()
 
-                    # Histórico de valor de mercado
+                    # Histórico de valor de mercado e estatísticas
                     with st.expander("Mais detalhes", expanded=False):
+                        # Estatísticas do SofaScore
+                        from sofascore_api import (
+                            buscar_id_sofascore, buscar_temporadas,
+                            buscar_stats_temporada, get_stats_por_posicao,
+                        )
+                        ss_player = buscar_id_sofascore(j["name"])
+                        if ss_player:
+                            temporadas = buscar_temporadas(ss_player["id"])
+                            if temporadas:
+                                # Mostrar últimas 2 temporadas
+                                temp_exibir = temporadas[:4]
+                                for temp in temp_exibir:
+                                    stats_temp = buscar_stats_temporada(
+                                        ss_player["id"], temp["tournament_id"], temp["season_id"]
+                                    )
+                                    if stats_temp:
+                                        posicao_tm = j.get("position", "")
+                                        stats_formatadas = get_stats_por_posicao(posicao_tm, stats_temp)
+                                        st.markdown(f"**{temp['season_name']}** — {temp['tournament_name']}")
+                                        for label, valor in stats_formatadas.items():
+                                            st.caption(f"{label}: {valor}")
+                                        st.divider()
+                            else:
+                                st.caption("Temporadas não encontradas no SofaScore.")
+                        else:
+                            st.caption("Jogador não encontrado no SofaScore.")
+
+                        # Histórico de valor de mercado (Transfermarkt)
                         historico = buscar_historico_valor(j["id"])
                         if historico:
+                            st.markdown("**Evolução do valor de mercado**")
                             datas = [h.get("date", "") for h in historico]
                             valores = [h.get("value", 0) for h in historico]
                             df = pd.DataFrame({"Data": datas, "Valor (€)": valores})
                             df["Data"] = pd.to_datetime(df["Data"], errors="coerce")
                             df = df.dropna(subset=["Data"]).sort_values("Data")
                             st.line_chart(df.set_index("Data")["Valor (€)"])
-                        else:
-                            st.caption("Histórico de valor não disponível.")
 
             # Show warning if limit reached
             if st.session_state.pop(f"top_team_full_{posicao}", False):
