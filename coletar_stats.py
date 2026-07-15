@@ -10,6 +10,9 @@ coleta stats das últimas temporadas e salva em stats_cache.json.
 Depois faça git add/commit/push para atualizar o app.
 """
 
+import truststore
+truststore.inject_into_ssl()
+
 import json
 import time
 from pathlib import Path
