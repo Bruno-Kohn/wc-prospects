@@ -197,6 +197,20 @@ def buscar_historico_valor(player_id: str) -> list:
         return []
 
 
+@st.cache_data(ttl=300)
+def _carregar_stats_cache() -> dict:
+    """Carrega stats_cache.json do repositório via GitHub."""
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/stats_cache.json"
+    try:
+        resp = requests.get(url, headers=_github_headers(), timeout=10)
+        if resp.status_code == 200:
+            content = base64.b64decode(resp.json()["content"]).decode()
+            return json.loads(content)
+    except Exception:
+        pass
+    return {}
+
+
 # --- Helpers ---
 def extrair_nascimento(description: str) -> str | None:
     match = re.search(r"\*\s*(\d{2}/\d{2}/\d{4})", description or "")
@@ -606,34 +620,17 @@ with tab_watchlist:
 
                     # Histórico de valor de mercado e estatísticas
                     with st.expander("Mais detalhes", expanded=False):
-                        # Estatísticas do SofaScore
-                        from sofascore_api import (
-                            buscar_id_sofascore, buscar_temporadas,
-                            buscar_stats_temporada, get_stats_por_posicao,
-                        )
-                        ss_player = buscar_id_sofascore(j["name"])
-                        if ss_player and "error" in ss_player:
-                            st.caption(f"Erro SofaScore: {ss_player['error']}")
-                        elif ss_player:
-                            temporadas = buscar_temporadas(ss_player["id"])
-                            if temporadas:
-                                # Mostrar últimas 2 temporadas
-                                temp_exibir = temporadas[:4]
-                                for temp in temp_exibir:
-                                    stats_temp = buscar_stats_temporada(
-                                        ss_player["id"], temp["tournament_id"], temp["season_id"]
-                                    )
-                                    if stats_temp:
-                                        posicao_tm = j.get("position", "")
-                                        stats_formatadas = get_stats_por_posicao(posicao_tm, stats_temp)
-                                        st.markdown(f"**{temp['season_name']}** — {temp['tournament_name']}")
-                                        for label, valor in stats_formatadas.items():
-                                            st.caption(f"{label}: {valor}")
-                                        st.divider()
-                            else:
-                                st.caption("Temporadas não encontradas no SofaScore.")
+                        # Estatísticas do cache local (coletado via coletar_stats.py)
+                        stats_cache = _carregar_stats_cache()
+                        player_stats = stats_cache.get(j["id"], {})
+                        if player_stats and player_stats.get("temporadas"):
+                            for temp in player_stats["temporadas"]:
+                                st.markdown(f"**{temp['season_name']}** — {temp['tournament_name']}")
+                                for label, valor in temp.get("stats", {}).items():
+                                    st.caption(f"{label}: {valor}")
+                                st.divider()
                         else:
-                            st.caption("Jogador não encontrado no SofaScore.")
+                            st.caption("Estatísticas não disponíveis. Execute 'python coletar_stats.py' localmente.")
 
                         # Histórico de valor de mercado (Transfermarkt)
                         historico = buscar_historico_valor(j["id"])
