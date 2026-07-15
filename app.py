@@ -414,7 +414,7 @@ with tab_watchlist:
             with col_f2:
                 filtro_valor_min = st.selectbox(
                     "Valor mínimo",
-                    options=[5, 10, 25, 50, 75, 100, 125, 150, 175, 200],
+                    options=[0, 5, 10, 25, 50, 75, 100, 125, 150, 175, 200],
                     format_func=lambda x: f"€{x}M" if x > 0 else "Sem mínimo",
                     key="f_valor",
                 )
