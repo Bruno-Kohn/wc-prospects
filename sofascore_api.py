@@ -35,8 +35,9 @@ def _buscar_player_sofascore(query: str) -> dict | None:
                     "country": entity.get("country", {}).get("name", ""),
                 }
         return None
-    except Exception:
-        return None
+    except Exception as e:
+        # Retornar erro para debug no app
+        return {"error": str(e)}
 
 
 def buscar_id_sofascore(nome: str) -> dict | None:

@@ -612,7 +612,9 @@ with tab_watchlist:
                             buscar_stats_temporada, get_stats_por_posicao,
                         )
                         ss_player = buscar_id_sofascore(j["name"])
-                        if ss_player:
+                        if ss_player and "error" in ss_player:
+                            st.caption(f"Erro SofaScore: {ss_player['error']}")
+                        elif ss_player:
                             temporadas = buscar_temporadas(ss_player["id"])
                             if temporadas:
                                 # Mostrar últimas 2 temporadas
