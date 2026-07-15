@@ -20,7 +20,7 @@ from sofascore_api import (
     buscar_id_sofascore,
     buscar_temporadas,
     buscar_stats_temporada,
-    get_stats_por_posicao,
+    get_metricas_carreira,
 )
 
 WATCHLIST_PATH = Path("watchlist.json")
@@ -85,27 +85,46 @@ def main():
                 time.sleep(1)
                 continue
 
-            # Coletar stats das últimas 4 temporadas
+            # Separar temporadas de clube vs seleção
+            temps_clube = [t for t in temporadas if "World" not in t["tournament_name"]
+                          and "Qualification" not in t["tournament_name"]
+                          and "Cup 20" not in t["season_name"]  # Copa do Mundo
+                          and "Championship" not in t["tournament_name"]]
+            temps_selecao = [t for t in temporadas if t not in temps_clube]
+
+            # Buscar TODAS as temporadas para consolidar
+            all_temps = temps_clube + temps_selecao
+
             stats_jogador = {
                 "sofascore_id": ss_player["id"],
                 "sofascore_name": ss_player["name"],
-                "temporadas": [],
             }
 
-            for temp in temporadas[:4]:
+            # Acumular stats brutas de todas as temporadas
+            stats_acumuladas = {}
+            temps_coletadas = 0
+
+            for temp in all_temps:
                 stats = buscar_stats_temporada(
                     ss_player["id"], temp["tournament_id"], temp["season_id"]
                 )
                 if stats:
-                    stats_formatadas = get_stats_por_posicao(posicao_tm, stats)
-                    stats_jogador["temporadas"].append({
-                        "season_name": temp["season_name"],
-                        "tournament_name": temp["tournament_name"],
-                        "stats": stats_formatadas,
-                        "raw": stats,
-                    })
+                    temps_coletadas += 1
+                    # Somar valores numéricos
+                    for key, value in stats.items():
+                        if isinstance(value, (int, float)):
+                            stats_acumuladas[key] = stats_acumuladas.get(key, 0) + value
                     print(f"  ✓ {temp['season_name']} — {temp['tournament_name']}")
-                time.sleep(0.5)  # Rate limiting
+                time.sleep(0.3)
+
+            if stats_acumuladas:
+                # Calcular métricas de carreira consolidadas
+                metricas = get_metricas_carreira(posicao_tm, stats_acumuladas)
+                stats_jogador["metricas"] = metricas
+                stats_jogador["temporadas_coletadas"] = temps_coletadas
+                print(f"  📊 {temps_coletadas} temporadas consolidadas")
+            else:
+                print(f"  ⚠️ Sem dados estatísticos")
 
             cache[player_id] = stats_jogador
             time.sleep(1)  # Rate limiting entre jogadores

@@ -628,15 +628,14 @@ with tab_watchlist:
 
                     # Histórico de valor de mercado e estatísticas
                     with st.expander("Mais detalhes", expanded=False):
-                        # Estatísticas do cache local (coletado via coletar_stats.py)
+                        # Estatísticas de carreira consolidadas
                         stats_cache = _carregar_stats_cache()
                         player_stats = stats_cache.get(j["id"], {})
-                        if player_stats and player_stats.get("temporadas"):
-                            for temp in player_stats["temporadas"]:
-                                st.markdown(f"**{temp['season_name']}** — {temp['tournament_name']}")
-                                for label, valor in temp.get("stats", {}).items():
-                                    st.caption(f"{label}: {valor}")
-                                st.divider()
+                        metricas = player_stats.get("metricas", {})
+                        if metricas:
+                            st.markdown(f"**Estatísticas de carreira** ({player_stats.get('sofascore_name', '')})")
+                            for label, valor in metricas.items():
+                                st.caption(f"{label}: {valor}")
                         else:
                             st.caption("Estatísticas não disponíveis. Execute 'python coletar_stats.py' localmente.")
 

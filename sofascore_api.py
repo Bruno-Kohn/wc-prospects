@@ -320,160 +320,186 @@ def buscar_stats_temporada(player_id: int, tournament_id: int, season_id: int) -
         return {}
 
 
-# --- Formatação de stats por posição ---
+# --- Métricas de carreira por posição (consolidado por 90 min) ---
 
-def stats_relevantes_atacante(stats: dict) -> dict:
-    """Stats relevantes para atacantes/centroavantes."""
+def _p90(valor, minutos):
+    """Calcula métrica por 90 minutos."""
+    if not minutos or minutos == 0:
+        return 0.0
+    return round(valor / (minutos / 90), 2)
+
+
+def _pct(parte, total):
+    """Calcula porcentagem."""
+    if not total or total == 0:
+        return 0.0
+    return round((parte / total) * 100, 1)
+
+
+def metricas_carreira_goleiro(stats: dict) -> dict:
+    """Métricas de carreira para goleiros."""
     minutos = stats.get("minutesPlayed", 0)
-    gols = stats.get("goals", 0)
+    jogos = round(minutos / 90, 1) if minutos > 0 else 0
+    defesas = stats.get("saves", 0)
+    clean_sheets = stats.get("cleanSheet", 0)
+    gols_sofridos = stats.get("goalsConcededInsideTheBox", 0) + stats.get("goalsConcededOutsideTheBox", 0)
+    total_jogos_aprox = stats.get("countRating", 0) or jogos
+
     return {
-        "Gols": gols,
-        "Assistências": stats.get("assists", 0),
+        "Jogos na carreira": int(total_jogos_aprox),
         "Minutos jogados": minutos,
-        "Gols/90min": round(gols / (minutos / 90), 2) if minutos > 0 else 0,
-        "Finalizações no gol": stats.get("shotsOnTarget", 0),
-        "Finalizações total": stats.get("totalShots", 0),
-        "Conversão de gols (%)": round(stats.get("goalConversionPercentage", 0), 1),
-        "Grandes chances perdidas": stats.get("bigChancesMissed", 0),
-        "Dribles certos": stats.get("successfulDribbles", 0),
-        "Duelos aéreos ganhos": stats.get("aerialDuelsWon", 0),
-        "Impedimentos": stats.get("offsides", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_meia(stats: dict) -> dict:
-    """Stats relevantes para meias/armadores."""
-    minutos = stats.get("minutesPlayed", 0)
-    return {
-        "Gols": stats.get("goals", 0),
-        "Assistências": stats.get("assists", 0),
-        "Minutos jogados": minutos,
-        "Passes certos": stats.get("accuratePasses", 0),
-        "Precisão de passes (%)": round(stats.get("accuratePassesPercentage", 0), 1),
-        "Passes decisivos": stats.get("keyPasses", 0),
-        "Grandes chances criadas": stats.get("bigChancesCreated", 0),
-        "Dribles certos": stats.get("successfulDribbles", 0),
-        "Finalizações no gol": stats.get("shotsOnTarget", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_ponta(stats: dict) -> dict:
-    """Stats relevantes para pontas."""
-    minutos = stats.get("minutesPlayed", 0)
-    gols = stats.get("goals", 0)
-    return {
-        "Gols": gols,
-        "Assistências": stats.get("assists", 0),
-        "Minutos jogados": minutos,
-        "Gols/90min": round(gols / (minutos / 90), 2) if minutos > 0 else 0,
-        "Dribles certos": stats.get("successfulDribbles", 0),
-        "Dribles (%)": round(stats.get("successfulDribblesPercentage", 0), 1),
-        "Grandes chances criadas": stats.get("bigChancesCreated", 0),
-        "Passes decisivos": stats.get("keyPasses", 0),
-        "Finalizações no gol": stats.get("shotsOnTarget", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_volante(stats: dict) -> dict:
-    """Stats relevantes para volantes."""
-    minutos = stats.get("minutesPlayed", 0)
-    return {
-        "Desarmes": stats.get("tackles", 0),
-        "Interceptações": stats.get("interceptions", 0),
-        "Minutos jogados": minutos,
-        "Passes certos": stats.get("accuratePasses", 0),
-        "Precisão de passes (%)": round(stats.get("accuratePassesPercentage", 0), 1),
-        "Duelos ganhos": stats.get("totalDuelsWon", 0),
-        "Duelos ganhos (%)": round(stats.get("totalDuelsWonPercentage", 0), 1),
-        "Gols": stats.get("goals", 0),
-        "Assistências": stats.get("assists", 0),
-        "Cartões amarelos": stats.get("yellowCards", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_zagueiro(stats: dict) -> dict:
-    """Stats relevantes para zagueiros."""
-    minutos = stats.get("minutesPlayed", 0)
-    return {
-        "Desarmes": stats.get("tackles", 0),
-        "Interceptações": stats.get("interceptions", 0),
-        "Cortes": stats.get("clearances", 0),
-        "Minutos jogados": minutos,
-        "Duelos aéreos ganhos": stats.get("aerialDuelsWon", 0),
-        "Duelos aéreos (%)": round(stats.get("aerialDuelsWonPercentage", 0), 1),
-        "Passes certos": stats.get("accuratePasses", 0),
-        "Precisão de passes (%)": round(stats.get("accuratePassesPercentage", 0), 1),
-        "Clean sheets": stats.get("cleanSheet", 0),
-        "Erros para gol": stats.get("errorLeadToGoal", 0),
-        "Gols": stats.get("goals", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_lateral(stats: dict) -> dict:
-    """Stats relevantes para laterais."""
-    minutos = stats.get("minutesPlayed", 0)
-    return {
-        "Assistências": stats.get("assists", 0),
-        "Passes decisivos": stats.get("keyPasses", 0),
-        "Cruzamentos certos": stats.get("accurateCrosses", 0),
-        "Minutos jogados": minutos,
-        "Desarmes": stats.get("tackles", 0),
-        "Interceptações": stats.get("interceptions", 0),
-        "Dribles certos": stats.get("successfulDribbles", 0),
-        "Duelos ganhos (%)": round(stats.get("totalDuelsWonPercentage", 0), 1),
-        "Gols": stats.get("goals", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
-    }
-
-
-def stats_relevantes_goleiro(stats: dict) -> dict:
-    """Stats relevantes para goleiros."""
-    minutos = stats.get("minutesPlayed", 0)
-    return {
-        "Defesas": stats.get("saves", 0),
-        "Clean sheets": stats.get("cleanSheet", 0),
-        "Gols sofridos": stats.get("goalsConcededInsideTheBox", 0) + stats.get("goalsConcededOutsideTheBox", 0),
-        "Minutos jogados": minutos,
+        "Defesas/90min": _p90(defesas, minutos),
+        "Clean sheets (%)": _pct(clean_sheets, total_jogos_aprox) if total_jogos_aprox else 0,
         "Pênaltis defendidos": stats.get("penaltySave", 0),
-        "Defesas dentro da área": stats.get("savedShotsFromInsideTheBox", 0),
-        "Saídas do gol": stats.get("runsOut", 0),
-        "Passes certos": stats.get("accuratePasses", 0),
-        "Nota média": round(stats.get("rating", 0), 2),
+        "Defesas dentro da área/90min": _p90(stats.get("savedShotsFromInsideTheBox", 0), minutos),
+        "Saídas do gol/90min": _p90(stats.get("runsOut", 0), minutos),
+        "Passes certos/90min": _p90(stats.get("accuratePasses", 0), minutos),
+        "Gols sofridos/90min": _p90(gols_sofridos, minutos),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
-# Mapeamento posição SofaScore → função de stats
-POSICAO_STATS_MAP = {
-    "F": stats_relevantes_atacante,  # Forward
-    "M": stats_relevantes_meia,      # Midfielder
-    "D": stats_relevantes_zagueiro,  # Defender
-    "G": stats_relevantes_goleiro,   # Goalkeeper
+def metricas_carreira_zagueiro(stats: dict) -> dict:
+    """Métricas de carreira para zagueiros."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Desarmes/90min": _p90(stats.get("tackles", 0), minutos),
+        "Interceptações/90min": _p90(stats.get("interceptions", 0), minutos),
+        "Cortes/90min": _p90(stats.get("clearances", 0), minutos),
+        "Duelos aéreos ganhos/90min": _p90(stats.get("aerialDuelsWon", 0), minutos),
+        "Duelos aéreos (%)": _pct(stats.get("aerialDuelsWon", 0), stats.get("aerialDuelsWon", 0) + stats.get("aerialDuelsLost", 0)),
+        "Passes certos/90min": _p90(stats.get("accuratePasses", 0), minutos),
+        "Gols": stats.get("goals", 0),
+        "Erros para gol": stats.get("errorLeadToGoal", 0),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+def metricas_carreira_lateral(stats: dict) -> dict:
+    """Métricas de carreira para laterais."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Assistências/90min": _p90(stats.get("assists", 0), minutos),
+        "Passes decisivos/90min": _p90(stats.get("keyPasses", 0), minutos),
+        "Cruzamentos certos/90min": _p90(stats.get("accurateCrosses", 0), minutos),
+        "Desarmes/90min": _p90(stats.get("tackles", 0), minutos),
+        "Interceptações/90min": _p90(stats.get("interceptions", 0), minutos),
+        "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
+        "Gols": stats.get("goals", 0),
+        "Assistências": stats.get("assists", 0),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+def metricas_carreira_volante(stats: dict) -> dict:
+    """Métricas de carreira para volantes."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Desarmes/90min": _p90(stats.get("tackles", 0), minutos),
+        "Interceptações/90min": _p90(stats.get("interceptions", 0), minutos),
+        "Passes certos/90min": _p90(stats.get("accuratePasses", 0), minutos),
+        "Duelos ganhos/90min": _p90(stats.get("totalDuelsWon", 0), minutos),
+        "Gols": stats.get("goals", 0),
+        "Assistências": stats.get("assists", 0),
+        "Gols/90min": _p90(stats.get("goals", 0), minutos),
+        "Cartões amarelos": stats.get("yellowCards", 0),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+def metricas_carreira_meia(stats: dict) -> dict:
+    """Métricas de carreira para meias/armadores."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Gols": stats.get("goals", 0),
+        "Assistências": stats.get("assists", 0),
+        "Gols/90min": _p90(stats.get("goals", 0), minutos),
+        "Assistências/90min": _p90(stats.get("assists", 0), minutos),
+        "Passes decisivos/90min": _p90(stats.get("keyPasses", 0), minutos),
+        "Grandes chances criadas/90min": _p90(stats.get("bigChancesCreated", 0), minutos),
+        "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
+        "Finalizações no gol/90min": _p90(stats.get("shotsOnTarget", 0), minutos),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+def metricas_carreira_ponta(stats: dict) -> dict:
+    """Métricas de carreira para pontas."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Gols": stats.get("goals", 0),
+        "Assistências": stats.get("assists", 0),
+        "Gols/90min": _p90(stats.get("goals", 0), minutos),
+        "Assistências/90min": _p90(stats.get("assists", 0), minutos),
+        "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
+        "Grandes chances criadas/90min": _p90(stats.get("bigChancesCreated", 0), minutos),
+        "Finalizações no gol/90min": _p90(stats.get("shotsOnTarget", 0), minutos),
+        "Passes decisivos/90min": _p90(stats.get("keyPasses", 0), minutos),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+def metricas_carreira_atacante(stats: dict) -> dict:
+    """Métricas de carreira para atacantes/centroavantes."""
+    minutos = stats.get("minutesPlayed", 0)
+    total_jogos = stats.get("countRating", 0) or round(minutos / 90, 1)
+    gols = stats.get("goals", 0)
+    total_shots = stats.get("totalShots", 0)
+
+    return {
+        "Jogos na carreira": int(total_jogos),
+        "Minutos jogados": minutos,
+        "Gols": gols,
+        "Assistências": stats.get("assists", 0),
+        "Gols/90min": _p90(gols, minutos),
+        "Conversão de gols (%)": _pct(gols, total_shots) if total_shots else 0,
+        "Finalizações no gol/90min": _p90(stats.get("shotsOnTarget", 0), minutos),
+        "Grandes chances perdidas": stats.get("bigChancesMissed", 0),
+        "Duelos aéreos ganhos/90min": _p90(stats.get("aerialDuelsWon", 0), minutos),
+        "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
+        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+    }
+
+
+# Mapeamento posição Transfermarkt → função de métricas de carreira
+POSICAO_TM_METRICAS_MAP = {
+    "Centre-Forward": metricas_carreira_atacante,
+    "Second Striker": metricas_carreira_atacante,
+    "Left Winger": metricas_carreira_ponta,
+    "Right Winger": metricas_carreira_ponta,
+    "Attacking Midfield": metricas_carreira_meia,
+    "Central Midfield": metricas_carreira_volante,
+    "Defensive Midfield": metricas_carreira_volante,
+    "Left Midfield": metricas_carreira_meia,
+    "Right Midfield": metricas_carreira_meia,
+    "Left-Back": metricas_carreira_lateral,
+    "Right-Back": metricas_carreira_lateral,
+    "Centre-Back": metricas_carreira_zagueiro,
+    "Goalkeeper": metricas_carreira_goleiro,
 }
 
-# Mapeamento posição Transfermarkt → função de stats
-POSICAO_TM_STATS_MAP = {
-    "Centre-Forward": stats_relevantes_atacante,
-    "Second Striker": stats_relevantes_atacante,
-    "Left Winger": stats_relevantes_ponta,
-    "Right Winger": stats_relevantes_ponta,
-    "Attacking Midfield": stats_relevantes_meia,
-    "Central Midfield": stats_relevantes_volante,
-    "Defensive Midfield": stats_relevantes_volante,
-    "Left Midfield": stats_relevantes_meia,
-    "Right Midfield": stats_relevantes_meia,
-    "Left-Back": stats_relevantes_lateral,
-    "Right-Back": stats_relevantes_lateral,
-    "Centre-Back": stats_relevantes_zagueiro,
-    "Goalkeeper": stats_relevantes_goleiro,
-}
 
-
-def get_stats_por_posicao(posicao_tm: str, stats: dict) -> dict:
-    """Retorna stats formatadas de acordo com a posição do Transfermarkt."""
-    func = POSICAO_TM_STATS_MAP.get(posicao_tm, stats_relevantes_atacante)
-    return func(stats)
+def get_metricas_carreira(posicao_tm: str, stats_acumuladas: dict) -> dict:
+    """Retorna métricas de carreira consolidadas de acordo com a posição."""
+    func = POSICAO_TM_METRICAS_MAP.get(posicao_tm, metricas_carreira_atacante)
+    return func(stats_acumuladas)
