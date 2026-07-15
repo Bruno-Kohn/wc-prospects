@@ -204,8 +204,16 @@ def _carregar_stats_cache() -> dict:
     try:
         resp = requests.get(url, headers=_github_headers(), timeout=10)
         if resp.status_code == 200:
-            content = base64.b64decode(resp.json()["content"]).decode()
-            return json.loads(content)
+            data = resp.json()
+            content = data.get("content")
+            if content:
+                return json.loads(base64.b64decode(content).decode())
+            # Arquivo grande: usar download_url
+            download_url = data.get("download_url")
+            if download_url:
+                resp2 = requests.get(download_url, timeout=15)
+                if resp2.status_code == 200:
+                    return resp2.json()
     except Exception:
         pass
     return {}
