@@ -64,11 +64,13 @@ def main():
             player_id = j.get("id", "")
             posicao_tm = j.get("position", "")
             clube = j.get("club", "")
+            nascimento = j.get("nascimento", "")
+            altura = j.get("height") or 0
 
             print(f"[{count}/{total}] {nome} ({posicao})...")
 
             # Buscar no SofaScore
-            ss_player = buscar_id_sofascore(nome, clube)
+            ss_player = buscar_id_sofascore(nome, clube, nascimento, altura)
             if not ss_player or "error" in ss_player:
                 print(f"  ❌ Não encontrado no SofaScore")
                 time.sleep(1)
