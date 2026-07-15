@@ -765,6 +765,33 @@ with tab_campo:
             "PD": (80, 35), "MEI": (50, 32), "PE": (20, 35),
             "CA": (50, 12),
         },
+        "4-1-4-1": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "VOL": (50, 58),
+            "MD": (85, 38), "MC1": (62, 40), "MC2": (38, 40), "ME": (15, 38),
+            "CA": (50, 12),
+        },
+        "4-4-1-1": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "MD": (85, 48), "VOL1": (62, 50), "VOL2": (38, 50), "ME": (15, 48),
+            "MEI": (50, 28),
+            "CA": (50, 12),
+        },
+        "4-3-1-2": {
+            "GOL": (50, 92),
+            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
+            "VOL": (50, 55), "MC1": (25, 50), "MC2": (75, 50),
+            "MEI": (50, 32),
+            "ATA1": (35, 15), "ATA2": (65, 15),
+        },
+        "3-4-3": {
+            "GOL": (50, 92),
+            "ZAG1": (25, 75), "ZAG2": (50, 78), "ZAG3": (75, 75),
+            "ALD": (90, 50), "VOL1": (62, 52), "VOL2": (38, 52), "ALE": (10, 50),
+            "PD": (80, 20), "CA": (50, 12), "PE": (20, 20),
+        },
         "3-5-2": {
             "GOL": (50, 92),
             "ZAG1": (25, 75), "ZAG2": (50, 78), "ZAG3": (75, 75),
@@ -777,10 +804,19 @@ with tab_campo:
             "VOL": (50, 50), "MC1": (30, 45), "MC2": (70, 45),
             "ATA1": (35, 15), "ATA2": (65, 15),
         },
+        "5-4-1": {
+            "GOL": (50, 92),
+            "ALD": (90, 70), "LD": (72, 75), "ZAG": (50, 78), "LE": (28, 75), "ALE": (10, 70),
+            "MD": (85, 45), "VOL1": (62, 48), "VOL2": (38, 48), "ME": (15, 45),
+            "CA": (50, 12),
+        },
     }
 
-    formacao_escolhida = st.selectbox("Formação", list(FORMACOES.keys()))
+    formacao_escolhida = st.selectbox("Formação", list(FORMACOES.keys()), key="formacao_campo")
     posicoes_form = FORMACOES[formacao_escolhida]
+
+    # Carregar escalação salva
+    escalacao_salva = wl.get("_campinho", {})
 
     if not todos:
         st.info("Adicione jogadores na Watchlist para montar o time.")
@@ -811,6 +847,15 @@ with tab_campo:
                 opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
                 nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
 
+                # Restaurar seleção salva
+                saved_id = escalacao_salva.get(formacao_escolhida, {}).get(pos_key)
+                default_idx = 0
+                if saved_id:
+                    for i, label in enumerate(nomes_pos):
+                        if i > 0 and opcoes_pos.get(label, {}).get("id") == saved_id:
+                            default_idx = i
+                            break
+
                 c_label, c_select = st.columns([1, 3])
                 with c_label:
                     st.markdown(f"**{pos_key}**")
@@ -818,11 +863,23 @@ with tab_campo:
                     escolha = st.selectbox(
                         pos_key,
                         options=nomes_pos,
+                        index=default_idx,
                         key=f"campo_{formacao_escolhida}_{pos_key}",
                         label_visibility="collapsed",
                     )
                 if escolha != "(vazio)":
                     escalacao[pos_key] = opcoes_pos[escolha]
+
+            # Botão salvar escalação
+            if st.button("Salvar escalação", use_container_width=True, disabled=not MODO_EDICAO):
+                if "_campinho" not in wl:
+                    wl["_campinho"] = {}
+                wl["_campinho"][formacao_escolhida] = {
+                    pos_key: escalacao[pos_key]["id"]
+                    for pos_key in escalacao
+                }
+                salvar_watchlist()
+                st.success("Escalação salva!")
 
         # Desenhar campo
         with col_campo:
@@ -853,3 +910,22 @@ with tab_campo:
             campo_html += "</div>"
             import streamlit.components.v1 as components
             components.html(campo_html, height=700)
+
+        # Estatísticas da escalação
+        if escalacao:
+            st.divider()
+            idades_campo = []
+            valor_campo = 0
+            for j in escalacao.values():
+                nasc = j.get("nascimento")
+                if nasc:
+                    idade, _, _ = calcular_idades(nasc)
+                    idades_campo.append(idade)
+                valor_campo += j.get("marketValue") or 0
+
+            c1, c2 = st.columns(2)
+            with c1:
+                if idades_campo:
+                    st.metric("Idade média", f"{sum(idades_campo) / len(idades_campo):.1f} anos")
+            with c2:
+                st.metric("Valor de mercado total", formatar_valor(valor_campo))
