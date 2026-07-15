@@ -774,9 +774,9 @@ with tab_campo:
             for pos_key, (x, y) in posicoes_form.items():
                 jogador = escalacao.get(pos_key)
                 if jogador and jogador.get("imageUrl"):
-                    img_html = f"<img src='{jogador['imageUrl']}' style='width:55px;height:55px;object-fit:cover;border-radius:6px;border:2px solid white;display:block;'/>"
+                    img_html = f"<img src='{jogador['imageUrl']}' style='width:55px;height:55px;object-fit:cover;border-radius:50%;border:2px solid white;display:block;'/>"
                 else:
-                    img_html = f"<div style='width:55px;height:55px;border-radius:6px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
+                    img_html = f"<div style='width:55px;height:55px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
 
                 campo_html += f"""
                 <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
