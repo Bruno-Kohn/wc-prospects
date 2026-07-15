@@ -42,25 +42,27 @@ def _buscar_player_sofascore(query: str) -> dict | None:
 def buscar_id_sofascore(nome: str) -> dict | None:
     """
     Busca um jogador pelo nome no SofaScore.
-    Tenta variações: nome completo, último nome, primeiro nome.
+    Tenta variações: primeiro nome, cada parte do nome, nome completo.
     """
+    partes = nome.split()
+
+    # Tentar primeiro nome (mais comum para brasileiros: Endrick, Vinicius, etc)
+    if partes:
+        result = _buscar_player_sofascore(partes[0])
+        if result:
+            return result
+
+    # Tentar cada parte do nome individualmente
+    for parte in partes[1:]:
+        if len(parte) > 3:  # Ignorar "de", "da", "dos"
+            result = _buscar_player_sofascore(parte)
+            if result:
+                return result
+
     # Tentar nome completo
     result = _buscar_player_sofascore(nome)
     if result:
         return result
-
-    # Tentar último nome (mais comum no futebol)
-    partes = nome.split()
-    if len(partes) > 1:
-        result = _buscar_player_sofascore(partes[-1])
-        if result:
-            return result
-
-    # Tentar primeiro nome
-    if len(partes) > 1:
-        result = _buscar_player_sofascore(partes[0])
-        if result:
-            return result
 
     return None
 
