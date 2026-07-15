@@ -1280,6 +1280,18 @@
         "position": "Attacking Midfield",
         "foot": "right",
         "height": null
+      },
+      {
+        "id": "1550076",
+        "name": "Isaque Severino Silva",
+        "club": "Shakhtar D.",
+        "clubCountry": "Ukraine",
+        "nascimento": "2007-02-24",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1219752-1756399742.png?lm=1",
+        "marketValue": 11000000,
+        "position": "Attacking Midfield",
+        "foot": "right",
+        "height": 172
       }
     ]
   }
