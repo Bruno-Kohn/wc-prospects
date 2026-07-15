@@ -16,8 +16,8 @@ HEADERS = {
 }
 
 
-def _buscar_player_sofascore(query: str) -> dict | None:
-    """Busca interna por query exata."""
+def _buscar_player_sofascore(query: str, country_filter: str = "Brazil") -> dict | None:
+    """Busca interna por query, filtrando por país e futebol."""
     try:
         resp = requests.get(
             f"{SOFASCORE_BASE}/search/all",
@@ -27,6 +27,25 @@ def _buscar_player_sofascore(query: str) -> dict | None:
         )
         resp.raise_for_status()
         results = resp.json().get("results", [])
+
+        # Primeiro: tentar match exato com país
+        for r in results:
+            entity = r.get("entity", {})
+            team = entity.get("team", {})
+            sport = team.get("sport", {})
+            country = entity.get("country", {}).get("name", "")
+            if (sport.get("slug") == "football"
+                    and r.get("type") == "player"
+                    and country == country_filter):
+                return {
+                    "id": entity["id"],
+                    "name": entity.get("name", ""),
+                    "team": team.get("name", ""),
+                    "position": entity.get("position", ""),
+                    "country": country,
+                }
+
+        # Fallback: qualquer jogador de futebol
         for r in results:
             entity = r.get("entity", {})
             team = entity.get("team", {})
@@ -41,34 +60,50 @@ def _buscar_player_sofascore(query: str) -> dict | None:
                 }
         return None
     except Exception as e:
-        # Retornar erro para debug no app
         return {"error": str(e)}
 
 
-def buscar_id_sofascore(nome: str) -> dict | None:
+def buscar_id_sofascore(nome: str, clube: str = "") -> dict | None:
     """
     Busca um jogador pelo nome no SofaScore.
-    Tenta variações: primeiro nome, cada parte do nome, nome completo.
+    Prioriza jogadores brasileiros e valida pelo clube quando possível.
     """
     partes = nome.split()
 
-    # Tentar primeiro nome (mais comum para brasileiros: Endrick, Vinicius, etc)
+    # Tentar primeiro nome (Endrick, Vinicius, Alisson, etc)
     if partes:
         result = _buscar_player_sofascore(partes[0])
-        if result:
-            return result
-
-    # Tentar cada parte do nome individualmente
-    for parte in partes[1:]:
-        if len(parte) > 3:  # Ignorar "de", "da", "dos"
-            result = _buscar_player_sofascore(parte)
-            if result:
+        if result and not result.get("error"):
+            # Se tem clube, validar
+            if clube and result.get("team") and clube.lower() in result["team"].lower():
+                return result
+            # Se o país é Brasil, aceitar
+            if result.get("country") == "Brazil":
                 return result
 
-    # Tentar nome completo
-    result = _buscar_player_sofascore(nome)
-    if result:
-        return result
+    # Tentar combinações de duas palavras (ex: "Vitor Roque", "Kaio Jorge")
+    if len(partes) >= 2:
+        for i in range(len(partes) - 1):
+            combo = f"{partes[i]} {partes[i+1]}"
+            if len(combo) > 5:
+                result = _buscar_player_sofascore(combo)
+                if result and not result.get("error"):
+                    if result.get("country") == "Brazil":
+                        return result
+
+    # Tentar cada parte com mais de 4 letras
+    for parte in partes[1:]:
+        if len(parte) > 4:
+            result = _buscar_player_sofascore(parte)
+            if result and not result.get("error"):
+                if result.get("country") == "Brazil":
+                    return result
+
+    # Último recurso: primeiro nome sem filtro de país
+    if partes:
+        result = _buscar_player_sofascore(partes[0], country_filter="")
+        if result and not result.get("error"):
+            return result
 
     return None
 
