@@ -8,6 +8,28 @@ from datetime import date
 
 st.set_page_config(page_title="WC Prospects 2030/2034", page_icon="⚽", layout="centered")
 
+# --- Autenticação para edição ---
+if "modo_edicao" not in st.session_state:
+    st.session_state["modo_edicao"] = False
+
+with st.sidebar:
+    st.subheader("Modo Edição")
+    if st.session_state["modo_edicao"]:
+        st.success("Edição desbloqueada")
+        if st.button("Bloquear edição"):
+            st.session_state["modo_edicao"] = False
+            st.rerun()
+    else:
+        senha = st.text_input("Senha de edição", type="password")
+        if st.button("Desbloquear"):
+            if senha == st.secrets.get("EDIT_PASSWORD", ""):
+                st.session_state["modo_edicao"] = True
+                st.rerun()
+            else:
+                st.error("Senha incorreta")
+
+MODO_EDICAO = st.session_state["modo_edicao"]
+
 st.title("⚽ World Cup Prospects")
 st.caption("Monitoramento de promessas para 2030 e 2034")
 
@@ -280,7 +302,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
         with col_btn:
             st.write("")
             st.write("")
-            if st.button("💾 Salvar", use_container_width=True, key=f"save_{perfil.get('id')}"):
+            if st.button("💾 Salvar", use_container_width=True, key=f"save_{perfil.get('id')}", disabled=not MODO_EDICAO):
                 jogadores = wl["_jogadores"]
                 if posicao not in jogadores:
                     jogadores[posicao] = []
@@ -402,7 +424,7 @@ with tab_watchlist:
                     st.success("Dados atualizados com sucesso!")
                     st.rerun()
 
-        if st.button("Atualizar dados", use_container_width=True):
+        if st.button("Atualizar dados", use_container_width=True, disabled=not MODO_EDICAO):
             modal_atualizar()
 
         # --- Filtros ---
@@ -502,7 +524,7 @@ with tab_watchlist:
                     col_star, col_foto, col_dados, col_rm = st.columns([0.5, 1, 4, 1])
                     with col_star:
                         star_label = "★" if is_top else "☆"
-                        if st.button(star_label, key=f"star_{posicao}_{j['id']}"):
+                        if st.button(star_label, key=f"star_{posicao}_{j['id']}", disabled=not MODO_EDICAO):
                             if is_top:
                                 j["top_team"] = False
                                 salvar_watchlist()
@@ -530,7 +552,7 @@ with tab_watchlist:
                             f"Idade: {idade_atual} anos | Em 2030: {idade_2030} anos | Em 2034: {idade_2034} anos",
                         )
                     with col_rm:
-                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary"):
+                        if st.button("Apagar", key=f"rm_{posicao}_{j['id']}", type="primary", disabled=not MODO_EDICAO):
                             lista_original = jogadores.get(posicao, [])
                             jogadores[posicao] = [p for p in lista_original if p["id"] != j["id"]]
                             if not jogadores[posicao]:
