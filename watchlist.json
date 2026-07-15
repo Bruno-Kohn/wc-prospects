@@ -390,6 +390,18 @@
     ],
     "Goleiros": [
       {
+        "id": "105470",
+        "name": "Alisson Ramses Becker",
+        "club": "Liverpool",
+        "clubCountry": "England",
+        "nascimento": "1992-02-10",
+        "imageUrl": "https://img.a.transfermarkt.technology/portrait/big/105470-1780389358.jpg?lm=1",
+        "marketValue": 15000000,
+        "position": "Goalkeeper",
+        "foot": "right",
+        "height": 193
+      },
+      {
         "id": "432914",
         "name": "John Victor Maciel Furtado",
         "club": "Nott'm Forest",
