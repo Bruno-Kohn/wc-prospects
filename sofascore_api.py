@@ -11,15 +11,12 @@ HEADERS = {
 }
 
 
-def buscar_id_sofascore(nome: str) -> dict | None:
-    """
-    Busca um jogador pelo nome e retorna o primeiro resultado de futebol.
-    Retorna dict com 'id', 'name', 'team', 'position', 'country'.
-    """
+def _buscar_player_sofascore(query: str) -> dict | None:
+    """Busca interna por query exata."""
     try:
         resp = requests.get(
             f"{SOFASCORE_BASE}/search/all",
-            params={"q": nome, "type": "player"},
+            params={"q": query, "type": "player"},
             headers=HEADERS,
             timeout=10,
         )
@@ -40,6 +37,32 @@ def buscar_id_sofascore(nome: str) -> dict | None:
         return None
     except Exception:
         return None
+
+
+def buscar_id_sofascore(nome: str) -> dict | None:
+    """
+    Busca um jogador pelo nome no SofaScore.
+    Tenta variações: nome completo, último nome, primeiro nome.
+    """
+    # Tentar nome completo
+    result = _buscar_player_sofascore(nome)
+    if result:
+        return result
+
+    # Tentar último nome (mais comum no futebol)
+    partes = nome.split()
+    if len(partes) > 1:
+        result = _buscar_player_sofascore(partes[-1])
+        if result:
+            return result
+
+    # Tentar primeiro nome
+    if len(partes) > 1:
+        result = _buscar_player_sofascore(partes[0])
+        if result:
+            return result
+
+    return None
 
 
 def buscar_temporadas(player_id: int) -> list[dict]:
