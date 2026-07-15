@@ -776,7 +776,7 @@ with tab_campo:
                 if jogador and jogador.get("imageUrl"):
                     img_html = f"<img src='{jogador['imageUrl']}' style='width:45px;height:auto;border-radius:4px;display:block;'/>"
                 else:
-                    img_html = f"<div style='width:45px;height:58px;border-radius:4px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
+                    img_html = f"<div style='width:45px;height:58px;border-radius:8px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
 
                 campo_html += f"""
                 <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
