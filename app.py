@@ -257,6 +257,50 @@ def traduzir_posicao(pos: str) -> str:
     return POSICAO_MAP.get(pos, pos)
 
 
+PAIS_MAP = {
+    "Spain": "Espanha",
+    "England": "Inglaterra",
+    "Germany": "Alemanha",
+    "Italy": "Itália",
+    "France": "França",
+    "Brazil": "Brasil",
+    "Portugal": "Portugal",
+    "Netherlands": "Holanda",
+    "Argentina": "Argentina",
+    "Belgium": "Bélgica",
+    "Scotland": "Escócia",
+    "United States": "Estados Unidos",
+    "Mexico": "México",
+    "Japan": "Japão",
+    "South Korea": "Coreia do Sul",
+    "Saudi Arabia": "Arábia Saudita",
+    "United Arab Emirates": "Emirados Árabes",
+    "Qatar": "Catar",
+    "Turkey": "Turquia",
+    "Russia": "Rússia",
+    "Denmark": "Dinamarca",
+    "Sweden": "Suécia",
+    "Norway": "Noruega",
+    "Switzerland": "Suíça",
+    "Austria": "Áustria",
+    "Poland": "Polônia",
+    "Uruguay": "Uruguai",
+    "Colombia": "Colômbia",
+    "Greece": "Grécia",
+    "Croatia": "Croácia",
+    "Serbia": "Sérvia",
+    "Czech Republic": "República Tcheca",
+    "Romania": "Romênia",
+    "Ukraine": "Ucrânia",
+    "China": "China",
+    "Australia": "Austrália",
+}
+
+
+def traduzir_pais(pais: str) -> str:
+    return PAIS_MAP.get(pais, pais)
+
+
 def traduzir_pe(foot: str) -> str:
     foot_map = {"left": "Canhoto", "right": "Destro", "both": "Ambidestro"}
     return foot_map.get((foot or "").lower(), foot or "N/A")
@@ -680,7 +724,7 @@ with tab_comparador:
 
                     st.markdown(
                         f"**Clube:** {j.get('club', 'N/A')}  \n"
-                        f"**País:** {j.get('clubCountry', '')}  \n"
+                        f"**País:** {traduzir_pais(j.get('clubCountry', ''))}  \n"
                         f"**Posição:** {pos_traduzida}  \n"
                         f"**Altura:** {j.get('height', '?')} cm  \n"
                         f"**Pé:** {traduzir_pe(j.get('foot'))}  \n"
