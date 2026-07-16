@@ -782,14 +782,11 @@ with tab_campo:
             if j.get("top_team"):
                 todos_top.append(j)
 
-    # Templates de formação (ponto de partida)
-    FORMACOES_TEMPLATE = {
-        "4-3-3": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (50, 52), (25, 42), (75, 42), (85, 18), (50, 10), (15, 18)],
-        "4-4-2": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (85, 48), (62, 50), (38, 50), (15, 48), (35, 15), (65, 15)],
-        "4-2-3-1": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (35, 55), (65, 55), (80, 35), (50, 32), (20, 35), (50, 12)],
-        "3-5-2": [(50, 92), (25, 75), (50, 78), (75, 75), (90, 50), (65, 52), (50, 42), (35, 52), (10, 50), (35, 15), (65, 15)],
-        "3-4-3": [(50, 92), (25, 75), (50, 78), (75, 75), (90, 50), (62, 52), (38, 52), (10, 50), (80, 18), (50, 10), (20, 18)],
-    }
+    # Posições default para distribuir jogadores no campo
+    DEFAULT_POSITIONS = [
+        (50, 92), (80, 72), (60, 75), (40, 75), (20, 72),
+        (70, 50), (50, 50), (30, 50), (75, 25), (50, 15), (25, 25),
+    ]
 
     # Carregar posições salvas
     posicoes_salvas = wl.get("_campinho_pos", {})
@@ -814,47 +811,42 @@ with tab_campo:
                 valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
                 st.caption(f"{len(escalados)} jogadores escalados | {media_str} | {valor_str}")
 
-        # Seleção de jogadores + template
-        col_sel, col_template = st.columns([3, 1])
-        with col_sel:
-            opcoes = {f"{j['name']} ({j.get('club', '')})": j for j in todos_top}
-            # Default: jogadores já no campo
-            default_sel = [k for k, v in opcoes.items() if v["id"] in posicoes_salvas]
-            selecionados = st.multiselect(
-                "Jogadores no campo",
-                options=list(opcoes.keys()),
-                default=default_sel,
-                max_selections=11,
-                key="campo_jogadores_sel",
-            )
-        with col_template:
-            template = st.selectbox("Template", ["(manter)"] + list(FORMACOES_TEMPLATE.keys()), key="campo_template")
+        # Seleção individual: 11 slots
+        st.caption("Selecione até 11 jogadores:")
+        opcoes_all = {f"{j['name']} ({j.get('club', '')})": j for j in todos_top}
+        nomes_all = ["(vazio)"] + list(opcoes_all.keys())
 
-        # Montar posicoes para o componente
-        jogadores_sel = [opcoes[s] for s in selecionados if s in opcoes]
+        jogadores_sel = []
+        cols = st.columns(3)
+        for slot_idx in range(11):
+            with cols[slot_idx % 3]:
+                # Restaurar seleção salva
+                saved_ids = list(posicoes_salvas.keys())
+                default_idx = 0
+                if slot_idx < len(saved_ids):
+                    sid = saved_ids[slot_idx]
+                    for i, label in enumerate(nomes_all):
+                        if i > 0 and opcoes_all.get(label, {}).get("id") == sid:
+                            default_idx = i
+                            break
+                escolha = st.selectbox(
+                    f"Jogador {slot_idx + 1}",
+                    options=nomes_all,
+                    index=default_idx,
+                    key=f"campo_slot_{slot_idx}",
+                    label_visibility="collapsed",
+                )
+                if escolha != "(vazio)":
+                    jogadores_sel.append(opcoes_all[escolha])
 
-        # Se aplicou template, resetar posições
-        if template != "(manter)":
-            coords = FORMACOES_TEMPLATE[template]
-            posicoes_input = {}
-            for i, j in enumerate(jogadores_sel):
-                if i < len(coords):
-                    posicoes_input[j["id"]] = {"x": coords[i][0], "y": coords[i][1]}
-                else:
-                    posicoes_input[j["id"]] = {"x": 50, "y": 50}
-        else:
-            # Usar posições salvas, ou distribuir novos jogadores
-            posicoes_input = {}
-            idx_new = 0
-            default_positions = [(50, 92), (80, 72), (60, 75), (40, 75), (20, 72),
-                                 (70, 50), (50, 50), (30, 50), (75, 25), (50, 15), (25, 25)]
-            for j in jogadores_sel:
-                if j["id"] in posicoes_salvas:
-                    posicoes_input[j["id"]] = posicoes_salvas[j["id"]]
-                else:
-                    pos = default_positions[idx_new % len(default_positions)]
-                    posicoes_input[j["id"]] = {"x": pos[0], "y": pos[1]}
-                    idx_new += 1
+        # Montar posições
+        posicoes_input = {}
+        for i, j in enumerate(jogadores_sel):
+            if j["id"] in posicoes_salvas:
+                posicoes_input[j["id"]] = posicoes_salvas[j["id"]]
+            else:
+                pos = DEFAULT_POSITIONS[i % len(DEFAULT_POSITIONS)]
+                posicoes_input[j["id"]] = {"x": pos[0], "y": pos[1]}
 
         # Dados para o componente
         jogadores_data = [

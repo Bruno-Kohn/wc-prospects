@@ -1,322 +1,361 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; overflow: hidden; }
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: transparent;
+        overflow: hidden;
+      }
 
-.pitch {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: linear-gradient(180deg, #1a7a3a 0%, #22914a 25%, #1a7a3a 50%, #22914a 75%, #1a7a3a 100%);
-    border-radius: 12px;
-    border: 3px solid rgba(255,255,255,0.7);
-    overflow: hidden;
-    user-select: none;
-}
+      .pitch {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        aspect-ratio: 4/5;
+        background: linear-gradient(
+          180deg,
+          #1a7a3a 0%,
+          #22914a 25%,
+          #1a7a3a 50%,
+          #22914a 75%,
+          #1a7a3a 100%
+        );
+        border-radius: 12px;
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        user-select: none;
+      }
 
-/* Field markings */
-.pitch::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 8%;
-    right: 8%;
-    height: 2px;
-    background: rgba(255,255,255,0.45);
-}
+      /* Field markings */
+      .pitch::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        right: 8%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.45);
+      }
 
-.center-circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80px;
-    height: 80px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-}
+      .center-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80px;
+        height: 80px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-.penalty-area-top {
-    position: absolute;
-    top: 0;
-    left: 25%;
-    right: 25%;
-    height: 14%;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top: none;
-}
+      .penalty-area-top {
+        position: absolute;
+        top: 0;
+        left: 25%;
+        right: 25%;
+        height: 14%;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top: none;
+      }
 
-.penalty-area-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 25%;
-    right: 25%;
-    height: 14%;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-bottom: none;
-}
+      .penalty-area-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+        height: 14%;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-bottom: none;
+      }
 
-.goal-area-top {
-    position: absolute;
-    top: 0;
-    left: 35%;
-    right: 35%;
-    height: 6%;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top: none;
-}
+      .goal-area-top {
+        position: absolute;
+        top: 0;
+        left: 35%;
+        right: 35%;
+        height: 6%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: none;
+      }
 
-.goal-area-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 35%;
-    right: 35%;
-    height: 6%;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-bottom: none;
-}
+      .goal-area-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 35%;
+        right: 35%;
+        height: 6%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-bottom: none;
+      }
 
-.player-marker {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    cursor: grab;
-    text-align: center;
-    transition: transform 0.05s ease, box-shadow 0.2s;
-    z-index: 10;
-}
+      .player-marker {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        cursor: grab;
+        text-align: center;
+        transition:
+          transform 0.05s ease,
+          box-shadow 0.2s;
+        z-index: 10;
+      }
 
-.player-marker:active {
-    cursor: grabbing;
-    z-index: 100;
-}
+      .player-marker:active {
+        cursor: grabbing;
+        z-index: 100;
+      }
 
-.player-marker.dragging {
-    z-index: 100;
-    transform: translate(-50%, -50%) scale(1.15);
-}
+      .player-marker.dragging {
+        z-index: 100;
+        transform: translate(-50%, -50%) scale(1.15);
+      }
 
-.player-img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid white;
-    background: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
+      .player-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        background: #333;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
 
-.player-placeholder {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
+      .player-placeholder {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        border: 3px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
 
-.player-name {
-    margin-top: 2px;
-    font-size: 10px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    white-space: nowrap;
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+      .player-name {
+        margin-top: 2px;
+        font-size: 10px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        white-space: nowrap;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-.empty-slot {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 2px dashed rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.05);
-}
-</style>
-</head>
-<body>
-<div class="pitch" id="pitch">
-    <div class="center-circle"></div>
-    <div class="penalty-area-top"></div>
-    <div class="penalty-area-bottom"></div>
-    <div class="goal-area-top"></div>
-    <div class="goal-area-bottom"></div>
-</div>
+      .empty-slot {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pitch" id="pitch">
+      <div class="center-circle"></div>
+      <div class="penalty-area-top"></div>
+      <div class="penalty-area-bottom"></div>
+      <div class="goal-area-top"></div>
+      <div class="goal-area-bottom"></div>
+    </div>
 
-<script>
-// Streamlit component communication
-function sendMessageToStreamlitClient(type, data) {
-    const outData = Object.assign({ isStreamlitMessage: true, type: type }, data);
-    window.parent.postMessage(outData, "*");
-}
+    <script>
+      // Streamlit component communication
+      function sendMessageToStreamlitClient(type, data) {
+        const outData = Object.assign(
+          { isStreamlitMessage: true, type: type },
+          data,
+        );
+        window.parent.postMessage(outData, "*");
+      }
 
-function init() {
-    sendMessageToStreamlitClient("streamlit:componentReady", { apiVersion: 1 });
-}
+      function init() {
+        sendMessageToStreamlitClient("streamlit:componentReady", {
+          apiVersion: 1,
+        });
+      }
 
-function setFrameHeight(height) {
-    sendMessageToStreamlitClient("streamlit:setFrameHeight", { height: height });
-}
+      function setFrameHeight(height) {
+        sendMessageToStreamlitClient("streamlit:setFrameHeight", {
+          height: height,
+        });
+      }
 
-function sendValue(value) {
-    sendMessageToStreamlitClient("streamlit:setComponentValue", { value: value });
-}
+      function sendValue(value) {
+        sendMessageToStreamlitClient("streamlit:setComponentValue", {
+          value: value,
+        });
+      }
 
-let jogadores = [];
-let posicoes = {};
-let dragging = null;
-let offsetX = 0, offsetY = 0;
+      let jogadores = [];
+      let posicoes = {};
+      let dragging = null;
+      let offsetX = 0,
+        offsetY = 0;
 
-function render() {
-    const pitch = document.getElementById('pitch');
-    // Remove existing markers
-    pitch.querySelectorAll('.player-marker').forEach(el => el.remove());
+      function render() {
+        const pitch = document.getElementById("pitch");
+        // Remove existing markers
+        pitch.querySelectorAll(".player-marker").forEach((el) => el.remove());
 
-    jogadores.forEach(j => {
-        const pos = posicoes[j.id];
-        if (!pos) return;
+        jogadores.forEach((j) => {
+          const pos = posicoes[j.id];
+          if (!pos) return;
 
-        const marker = document.createElement('div');
-        marker.className = 'player-marker';
-        marker.style.left = pos.x + '%';
-        marker.style.top = pos.y + '%';
-        marker.dataset.playerId = j.id;
+          const marker = document.createElement("div");
+          marker.className = "player-marker";
+          marker.style.left = pos.x + "%";
+          marker.style.top = pos.y + "%";
+          marker.dataset.playerId = j.id;
 
-        if (j.imageUrl) {
+          if (j.imageUrl) {
             marker.innerHTML = `
                 <img class="player-img" src="${j.imageUrl}" alt="${j.name}" draggable="false"/>
-                <div class="player-name">${j.name.split(' ').pop()}</div>
             `;
-        } else {
-            const initials = j.name.split(' ').map(w => w[0]).slice(0, 2).join('');
+          } else {
+            const initials = j.name
+              .split(" ")
+              .map((w) => w[0])
+              .slice(0, 2)
+              .join("");
             marker.innerHTML = `
                 <div class="player-placeholder">${initials}</div>
-                <div class="player-name">${j.name.split(' ').pop()}</div>
             `;
-        }
+          }
 
-        // Drag events
-        marker.addEventListener('mousedown', startDrag);
-        marker.addEventListener('touchstart', startDragTouch, { passive: false });
+          // Drag events
+          marker.addEventListener("mousedown", startDrag);
+          marker.addEventListener("touchstart", startDragTouch, {
+            passive: false,
+          });
 
-        pitch.appendChild(marker);
-    });
+          pitch.appendChild(marker);
+        });
 
-    setFrameHeight(pitch.offsetHeight + 10);
-}
+        setFrameHeight(pitch.offsetHeight + 10);
+      }
 
-function startDrag(e) {
-    e.preventDefault();
-    const marker = e.currentTarget;
-    dragging = marker;
-    marker.classList.add('dragging');
+      function startDrag(e) {
+        e.preventDefault();
+        const marker = e.currentTarget;
+        dragging = marker;
+        marker.classList.add("dragging");
 
-    const pitch = document.getElementById('pitch');
-    const rect = pitch.getBoundingClientRect();
-    const markerRect = marker.getBoundingClientRect();
+        const pitch = document.getElementById("pitch");
+        const rect = pitch.getBoundingClientRect();
+        const markerRect = marker.getBoundingClientRect();
 
-    offsetX = e.clientX - (markerRect.left + markerRect.width / 2);
-    offsetY = e.clientY - (markerRect.top + markerRect.height / 2);
+        offsetX = e.clientX - (markerRect.left + markerRect.width / 2);
+        offsetY = e.clientY - (markerRect.top + markerRect.height / 2);
 
-    document.addEventListener('mousemove', onDrag);
-    document.addEventListener('mouseup', endDrag);
-}
+        document.addEventListener("mousemove", onDrag);
+        document.addEventListener("mouseup", endDrag);
+      }
 
-function startDragTouch(e) {
-    e.preventDefault();
-    const marker = e.currentTarget;
-    dragging = marker;
-    marker.classList.add('dragging');
-    offsetX = 0;
-    offsetY = 0;
+      function startDragTouch(e) {
+        e.preventDefault();
+        const marker = e.currentTarget;
+        dragging = marker;
+        marker.classList.add("dragging");
+        offsetX = 0;
+        offsetY = 0;
 
-    document.addEventListener('touchmove', onDragTouch, { passive: false });
-    document.addEventListener('touchend', endDragTouch);
-}
+        document.addEventListener("touchmove", onDragTouch, { passive: false });
+        document.addEventListener("touchend", endDragTouch);
+      }
 
-function onDrag(e) {
-    if (!dragging) return;
-    const pitch = document.getElementById('pitch');
-    const rect = pitch.getBoundingClientRect();
+      function onDrag(e) {
+        if (!dragging) return;
+        const pitch = document.getElementById("pitch");
+        const rect = pitch.getBoundingClientRect();
 
-    let x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
-    let y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
+        let x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
+        let y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
 
-    x = Math.max(5, Math.min(95, x));
-    y = Math.max(5, Math.min(95, y));
+        x = Math.max(5, Math.min(95, x));
+        y = Math.max(5, Math.min(95, y));
 
-    dragging.style.left = x + '%';
-    dragging.style.top = y + '%';
-}
+        dragging.style.left = x + "%";
+        dragging.style.top = y + "%";
+      }
 
-function onDragTouch(e) {
-    if (!dragging) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const pitch = document.getElementById('pitch');
-    const rect = pitch.getBoundingClientRect();
+      function onDragTouch(e) {
+        if (!dragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const pitch = document.getElementById("pitch");
+        const rect = pitch.getBoundingClientRect();
 
-    let x = ((touch.clientX - rect.left) / rect.width) * 100;
-    let y = ((touch.clientY - rect.top) / rect.height) * 100;
+        let x = ((touch.clientX - rect.left) / rect.width) * 100;
+        let y = ((touch.clientY - rect.top) / rect.height) * 100;
 
-    x = Math.max(5, Math.min(95, x));
-    y = Math.max(5, Math.min(95, y));
+        x = Math.max(5, Math.min(95, x));
+        y = Math.max(5, Math.min(95, y));
 
-    dragging.style.left = x + '%';
-    dragging.style.top = y + '%';
-}
+        dragging.style.left = x + "%";
+        dragging.style.top = y + "%";
+      }
 
-function endDrag(e) {
-    if (!dragging) return;
-    dragging.classList.remove('dragging');
-    const playerId = dragging.dataset.playerId;
-    const x = parseFloat(dragging.style.left);
-    const y = parseFloat(dragging.style.top);
-    posicoes[playerId] = { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
-    dragging = null;
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging.classList.remove("dragging");
+        const playerId = dragging.dataset.playerId;
+        const x = parseFloat(dragging.style.left);
+        const y = parseFloat(dragging.style.top);
+        posicoes[playerId] = {
+          x: Math.round(x * 10) / 10,
+          y: Math.round(y * 10) / 10,
+        };
+        dragging = null;
 
-    document.removeEventListener('mousemove', onDrag);
-    document.removeEventListener('mouseup', endDrag);
+        document.removeEventListener("mousemove", onDrag);
+        document.removeEventListener("mouseup", endDrag);
 
-    sendValue(posicoes);
-}
+        sendValue(posicoes);
+      }
 
-function endDragTouch(e) {
-    if (!dragging) return;
-    dragging.classList.remove('dragging');
-    const playerId = dragging.dataset.playerId;
-    const x = parseFloat(dragging.style.left);
-    const y = parseFloat(dragging.style.top);
-    posicoes[playerId] = { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
-    dragging = null;
+      function endDragTouch(e) {
+        if (!dragging) return;
+        dragging.classList.remove("dragging");
+        const playerId = dragging.dataset.playerId;
+        const x = parseFloat(dragging.style.left);
+        const y = parseFloat(dragging.style.top);
+        posicoes[playerId] = {
+          x: Math.round(x * 10) / 10,
+          y: Math.round(y * 10) / 10,
+        };
+        dragging = null;
 
-    document.removeEventListener('touchmove', onDragTouch);
-    document.removeEventListener('touchend', endDragTouch);
+        document.removeEventListener("touchmove", onDragTouch);
+        document.removeEventListener("touchend", endDragTouch);
 
-    sendValue(posicoes);
-}
+        sendValue(posicoes);
+      }
 
-// Listen for data from Streamlit
-window.addEventListener("message", (event) => {
-    if (event.data.type !== "streamlit:render") return;
-    const args = event.data.args;
-    jogadores = args.jogadores || [];
-    posicoes = args.posicoes || {};
-    render();
-});
+      // Listen for data from Streamlit
+      window.addEventListener("message", (event) => {
+        if (event.data.type !== "streamlit:render") return;
+        const args = event.data.args;
+        jogadores = args.jogadores || [];
+        posicoes = args.posicoes || {};
+        render();
+      });
 
-init();
-</script>
-</body>
+      init();
+    </script>
+  </body>
 </html>
