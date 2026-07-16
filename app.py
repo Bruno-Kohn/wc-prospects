@@ -787,8 +787,10 @@ with tab_campo:
         (70, 50), (50, 50), (30, 50), (75, 25), (50, 15), (25, 25),
     ]
 
-    # Carregar posições salvas
+    # Carregar posições salvas (session_state tem prioridade sobre GitHub)
     posicoes_salvas = wl.get("_campinho_pos", {})
+    if "campinho_posicoes" not in st.session_state:
+        st.session_state["campinho_posicoes"] = posicoes_salvas
 
     # Seleção de jogadores escalados
     if not todos_wl:
@@ -803,9 +805,9 @@ with tab_campo:
         jogadores_sel = []
         with col_inputs:
             st.caption("Selecione até 11 jogadores:")
+            current_pos = st.session_state["campinho_posicoes"]
+            saved_ids = list(current_pos.keys())
             for slot_idx in range(11):
-                # Restaurar seleção salva
-                saved_ids = list(posicoes_salvas.keys())
                 default_idx = 0
                 if slot_idx < len(saved_ids):
                     sid = saved_ids[slot_idx]
@@ -823,11 +825,11 @@ with tab_campo:
                 if escolha != "(vazio)":
                     jogadores_sel.append(opcoes_all[escolha])
 
-        # Montar posições
+        # Montar posições usando session_state
         posicoes_input = {}
         for i, j in enumerate(jogadores_sel):
-            if j["id"] in posicoes_salvas:
-                posicoes_input[j["id"]] = posicoes_salvas[j["id"]]
+            if j["id"] in st.session_state["campinho_posicoes"]:
+                posicoes_input[j["id"]] = st.session_state["campinho_posicoes"][j["id"]]
             else:
                 pos = DEFAULT_POSITIONS[i % len(DEFAULT_POSITIONS)]
                 posicoes_input[j["id"]] = {"x": pos[0], "y": pos[1]}
@@ -841,6 +843,10 @@ with tab_campo:
         # Renderizar componente interativo
         with col_campo:
             novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
+
+        # Atualizar session_state com posições do componente
+        if novas_posicoes and novas_posicoes != posicoes_input:
+            st.session_state["campinho_posicoes"] = novas_posicoes
 
         # Estatísticas do time escalado
         if jogadores_sel:
@@ -856,9 +862,9 @@ with tab_campo:
             valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
             st.caption(f"{len(jogadores_sel)} jogadores escalados | {media_str} | {valor_str}")
 
-        # Botão salvar (depois do componente para ter novas_posicoes)
+        # Botão salvar
         if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
-            wl["_campinho_pos"] = novas_posicoes
+            wl["_campinho_pos"] = st.session_state["campinho_posicoes"]
             salvar_watchlist()
             st.success("Posições salvas!")
 
