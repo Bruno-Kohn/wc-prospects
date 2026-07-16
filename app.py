@@ -770,197 +770,105 @@ with tab_comparador:
             st.warning("Selecione pelo menos 2 jogadores.")
 
 with tab_campo:
+    from components.campinho import campinho
+
     wl = get_watchlist()
     jogadores_campo = wl.get("_jogadores", {})
 
-    todos = []
+    # Todos os jogadores do Top Team para escalar
+    todos_top = []
     for pos in POSICOES_DEFAULT:
         for j in jogadores_campo.get(pos, []):
-            todos.append(j)
+            if j.get("top_team"):
+                todos_top.append(j)
 
-    FORMACOES = {
-        "4-3-3": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "VOL": (50, 52), "MC1": (25, 45), "MC2": (75, 45),
-            "PD": (85, 20), "CA": (50, 12), "PE": (15, 20),
-        },
-        "4-4-2": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "MD": (85, 48), "VOL1": (65, 50), "VOL2": (35, 50), "ME": (15, 48),
-            "ATA1": (35, 15), "ATA2": (65, 15),
-        },
-        "4-2-3-1": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "VOL1": (35, 55), "VOL2": (65, 55),
-            "PD": (80, 35), "MEI": (50, 32), "PE": (20, 35),
-            "CA": (50, 12),
-        },
-        "4-1-4-1": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "VOL": (50, 58),
-            "MD": (85, 38), "MC1": (62, 40), "MC2": (38, 40), "ME": (15, 38),
-            "CA": (50, 12),
-        },
-        "4-4-1-1": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "MD": (85, 48), "VOL1": (62, 50), "VOL2": (38, 50), "ME": (15, 48),
-            "MEI": (50, 28),
-            "CA": (50, 12),
-        },
-        "4-3-1-2": {
-            "GOL": (50, 92),
-            "LD": (85, 72), "ZAG1": (65, 75), "ZAG2": (35, 75), "LE": (15, 72),
-            "VOL": (50, 55), "MC1": (25, 50), "MC2": (75, 50),
-            "MEI": (50, 32),
-            "ATA1": (35, 15), "ATA2": (65, 15),
-        },
-        "3-4-3": {
-            "GOL": (50, 92),
-            "ZAG1": (25, 75), "ZAG2": (50, 78), "ZAG3": (75, 75),
-            "ALD": (90, 50), "VOL1": (62, 52), "VOL2": (38, 52), "ALE": (10, 50),
-            "PD": (80, 20), "CA": (50, 12), "PE": (20, 20),
-        },
-        "3-5-2": {
-            "GOL": (50, 92),
-            "ZAG1": (25, 75), "ZAG2": (50, 78), "ZAG3": (75, 75),
-            "ALD": (90, 50), "VOL1": (65, 52), "MEI": (50, 42), "VOL2": (35, 52), "ALE": (10, 50),
-            "ATA1": (35, 15), "ATA2": (65, 15),
-        },
-        "5-3-2": {
-            "GOL": (50, 92),
-            "ALD": (90, 70), "LD": (72, 75), "ZAG": (50, 78), "LE": (28, 75), "ALE": (10, 70),
-            "VOL": (50, 50), "MC1": (30, 45), "MC2": (70, 45),
-            "ATA1": (35, 15), "ATA2": (65, 15),
-        },
-        "5-4-1": {
-            "GOL": (50, 92),
-            "ALD": (90, 70), "LD": (72, 75), "ZAG": (50, 78), "LE": (28, 75), "ALE": (10, 70),
-            "MD": (85, 45), "VOL1": (62, 48), "VOL2": (38, 48), "ME": (15, 45),
-            "CA": (50, 12),
-        },
+    # Templates de formação (ponto de partida)
+    FORMACOES_TEMPLATE = {
+        "4-3-3": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (50, 52), (25, 42), (75, 42), (85, 18), (50, 10), (15, 18)],
+        "4-4-2": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (85, 48), (62, 50), (38, 50), (15, 48), (35, 15), (65, 15)],
+        "4-2-3-1": [(50, 92), (85, 72), (65, 75), (35, 75), (15, 72), (35, 55), (65, 55), (80, 35), (50, 32), (20, 35), (50, 12)],
+        "3-5-2": [(50, 92), (25, 75), (50, 78), (75, 75), (90, 50), (65, 52), (50, 42), (35, 52), (10, 50), (35, 15), (65, 15)],
+        "3-4-3": [(50, 92), (25, 75), (50, 78), (75, 75), (90, 50), (62, 52), (38, 52), (10, 50), (80, 18), (50, 10), (20, 18)],
     }
 
-    formacao_escolhida = st.selectbox("Formação", list(FORMACOES.keys()), key="formacao_campo")
-    posicoes_form = FORMACOES[formacao_escolhida]
+    # Carregar posições salvas
+    posicoes_salvas = wl.get("_campinho_pos", {})
 
-    # Carregar escalação salva
-    escalacao_salva = wl.get("_campinho", {})
-
-    if not todos:
-        st.info("Adicione jogadores na Watchlist para montar o time.")
+    # Seleção de jogadores escalados
+    if not todos_top:
+        st.info("Marque jogadores como ⭐ Top Team na Watchlist para escalá-los aqui.")
     else:
-        # Mapeamento de posição no campo → posição na watchlist
-        POS_KEY_TO_WATCHLIST = {
-            "GOL": "Goleiros",
-            "ZAG": "Zagueiros", "ZAG1": "Zagueiros", "ZAG2": "Zagueiros", "ZAG3": "Zagueiros",
-            "LD": "Laterais Direitos", "ALD": "Laterais Direitos",
-            "LE": "Laterais Esquerdos", "ALE": "Laterais Esquerdos",
-            "VOL": "Volantes", "VOL1": "Volantes", "VOL2": "Volantes",
-            "MC1": "Meias", "MC2": "Meias", "MEI": "Meias",
-            "MD": "Pontas Direitas", "PD": "Pontas Direitas",
-            "ME": "Pontas Esquerdas", "PE": "Pontas Esquerdas",
-            "CA": "Atacantes", "ATA1": "Atacantes", "ATA2": "Atacantes",
-        }
+        # Estatísticas no topo
+        if posicoes_salvas:
+            escalados = [j for j in todos_top if j["id"] in posicoes_salvas]
+            if escalados:
+                _idades = []
+                _valor = 0
+                for j in escalados:
+                    nasc = j.get("nascimento")
+                    if nasc:
+                        idade, _, _ = calcular_idades(nasc)
+                        _idades.append(idade)
+                    _valor += j.get("marketValue") or 0
+                media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
+                valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
+                st.caption(f"{len(escalados)} jogadores escalados | {media_str} | {valor_str}")
 
-        # Estatísticas da escalação (topo)
-        escalacao_salva_ids = escalacao_salva.get(formacao_escolhida, {})
-        if escalacao_salva_ids:
-            _idades = []
-            _valor = 0
-            for pos_key_s, sid in escalacao_salva_ids.items():
-                wpos = POS_KEY_TO_WATCHLIST.get(pos_key_s, "")
-                for j in jogadores_campo.get(wpos, []):
-                    if j.get("id") == sid:
-                        nasc = j.get("nascimento")
-                        if nasc:
-                            idade, _, _ = calcular_idades(nasc)
-                            _idades.append(idade)
-                        _valor += j.get("marketValue") or 0
-                        break
-            media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
-            valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
-            st.caption(f"{len(escalacao_salva_ids)} jogadores escalados | {media_str} | {valor_str}")
+        # Seleção de jogadores + template
+        col_sel, col_template = st.columns([3, 1])
+        with col_sel:
+            opcoes = {f"{j['name']} ({j.get('club', '')})": j for j in todos_top}
+            # Default: jogadores já no campo
+            default_sel = [k for k, v in opcoes.items() if v["id"] in posicoes_salvas]
+            selecionados = st.multiselect(
+                "Jogadores no campo",
+                options=list(opcoes.keys()),
+                default=default_sel,
+                max_selections=11,
+                key="campo_jogadores_sel",
+            )
+        with col_template:
+            template = st.selectbox("Template", ["(manter)"] + list(FORMACOES_TEMPLATE.keys()), key="campo_template")
 
-        # Layout: campinho à esquerda, dropdowns à direita
-        col_campo, col_dropdowns = st.columns([1, 1])
+        # Montar posicoes para o componente
+        jogadores_sel = [opcoes[s] for s in selecionados if s in opcoes]
 
-        # Seleção de jogadores por posição
-        escalacao = {}
-        with col_dropdowns:
-            st.caption("Selecione um jogador para cada posição:")
-            for pos_key in posicoes_form.keys():
-                watchlist_pos = POS_KEY_TO_WATCHLIST.get(pos_key, "")
-                jogadores_pos = jogadores_campo.get(watchlist_pos, [])
-                opcoes_pos = {f"{j['name']} ({j.get('club', '')})": j for j in jogadores_pos}
-                nomes_pos = ["(vazio)"] + list(opcoes_pos.keys())
-
-                # Restaurar seleção salva
-                saved_id = escalacao_salva.get(formacao_escolhida, {}).get(pos_key)
-                default_idx = 0
-                if saved_id:
-                    for i, label in enumerate(nomes_pos):
-                        if i > 0 and opcoes_pos.get(label, {}).get("id") == saved_id:
-                            default_idx = i
-                            break
-
-                c_label, c_select = st.columns([1, 3])
-                with c_label:
-                    st.markdown(f"**{pos_key}**")
-                with c_select:
-                    escolha = st.selectbox(
-                        pos_key,
-                        options=nomes_pos,
-                        index=default_idx,
-                        key=f"campo_{formacao_escolhida}_{pos_key}",
-                        label_visibility="collapsed",
-                    )
-                if escolha != "(vazio)":
-                    escalacao[pos_key] = opcoes_pos[escolha]
-
-            # Botão salvar escalação
-            if st.button("Salvar escalação", use_container_width=True, disabled=not MODO_EDICAO):
-                if "_campinho" not in wl:
-                    wl["_campinho"] = {}
-                wl["_campinho"][formacao_escolhida] = {
-                    pos_key: escalacao[pos_key]["id"]
-                    for pos_key in escalacao
-                }
-                salvar_watchlist()
-                st.success("Escalação salva!")
-
-        # Desenhar campo
-        with col_campo:
-            campo_html = """
-            <div style="position:relative;width:100%;aspect-ratio:2/3;background:linear-gradient(to bottom, #2d8a4e 0%, #3da060 50%, #2d8a4e 100%);
-                        border-radius:12px;border:3px solid white;overflow:hidden;">
-                <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(255,255,255,0.4);"></div>
-                <div style="position:absolute;top:50%;left:50%;width:70px;height:70px;
-                            border:2px solid rgba(255,255,255,0.4);border-radius:50%;
-                            transform:translate(-50%,-50%);"></div>
-                <div style="position:absolute;bottom:0;left:25%;right:25%;height:50px;
-                            border:2px solid rgba(255,255,255,0.4);border-bottom:none;"></div>
-            """
-
-            for pos_key, (x, y) in posicoes_form.items():
-                jogador = escalacao.get(pos_key)
-                if jogador and jogador.get("imageUrl"):
-                    img_html = f"<img src='{jogador['imageUrl']}' style='width:45px;height:auto;border-radius:4px;display:block;'/>"
+        # Se aplicou template, resetar posições
+        if template != "(manter)":
+            coords = FORMACOES_TEMPLATE[template]
+            posicoes_input = {}
+            for i, j in enumerate(jogadores_sel):
+                if i < len(coords):
+                    posicoes_input[j["id"]] = {"x": coords[i][0], "y": coords[i][1]}
                 else:
-                    img_html = f"<div style='width:45px;height:58px;border-radius:8px;background:rgba(255,255,255,0.3);border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:white;'>{pos_key}</div>"
+                    posicoes_input[j["id"]] = {"x": 50, "y": 50}
+        else:
+            # Usar posições salvas, ou distribuir novos jogadores
+            posicoes_input = {}
+            idx_new = 0
+            default_positions = [(50, 92), (80, 72), (60, 75), (40, 75), (20, 72),
+                                 (70, 50), (50, 50), (30, 50), (75, 25), (50, 15), (25, 25)]
+            for j in jogadores_sel:
+                if j["id"] in posicoes_salvas:
+                    posicoes_input[j["id"]] = posicoes_salvas[j["id"]]
+                else:
+                    pos = default_positions[idx_new % len(default_positions)]
+                    posicoes_input[j["id"]] = {"x": pos[0], "y": pos[1]}
+                    idx_new += 1
 
-                campo_html += f"""
-                <div style="position:absolute;left:{x}%;top:{y}%;transform:translate(-50%,-50%);text-align:center;">
-                    {img_html}
-                </div>
-                """
+        # Dados para o componente
+        jogadores_data = [
+            {"id": j["id"], "name": j["name"], "imageUrl": j.get("imageUrl", "")}
+            for j in jogadores_sel
+        ]
 
-            campo_html += "</div>"
-            import streamlit.components.v1 as components
-            components.html(campo_html, height=700)
+        # Renderizar componente interativo
+        novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
+
+        # Botão salvar
+        if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
+            wl["_campinho_pos"] = novas_posicoes
+            salvar_watchlist()
+            st.success("Posições salvas!")
 
 
