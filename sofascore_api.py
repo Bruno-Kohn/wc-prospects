@@ -355,7 +355,7 @@ def metricas_carreira_goleiro(stats: dict) -> dict:
         "Saídas do gol/90min": _p90(stats.get("runsOut", 0), minutos),
         "Passes certos/90min": _p90(stats.get("accuratePasses", 0), minutos),
         "Gols sofridos/90min": _p90(gols_sofridos, minutos),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -375,7 +375,7 @@ def metricas_carreira_zagueiro(stats: dict) -> dict:
         "Passes certos/90min": _p90(stats.get("accuratePasses", 0), minutos),
         "Gols": stats.get("goals", 0),
         "Erros para gol": stats.get("errorLeadToGoal", 0),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -395,7 +395,7 @@ def metricas_carreira_lateral(stats: dict) -> dict:
         "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
         "Gols": stats.get("goals", 0),
         "Assistências": stats.get("assists", 0),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -415,7 +415,7 @@ def metricas_carreira_volante(stats: dict) -> dict:
         "Assistências": stats.get("assists", 0),
         "Gols/90min": _p90(stats.get("goals", 0), minutos),
         "Cartões amarelos": stats.get("yellowCards", 0),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -435,7 +435,7 @@ def metricas_carreira_meia(stats: dict) -> dict:
         "Grandes chances criadas/90min": _p90(stats.get("bigChancesCreated", 0), minutos),
         "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
         "Finalizações no gol/90min": _p90(stats.get("shotsOnTarget", 0), minutos),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -455,7 +455,7 @@ def metricas_carreira_ponta(stats: dict) -> dict:
         "Grandes chances criadas/90min": _p90(stats.get("bigChancesCreated", 0), minutos),
         "Finalizações no gol/90min": _p90(stats.get("shotsOnTarget", 0), minutos),
         "Passes decisivos/90min": _p90(stats.get("keyPasses", 0), minutos),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
@@ -477,7 +477,7 @@ def metricas_carreira_atacante(stats: dict) -> dict:
         "Grandes chances perdidas": stats.get("bigChancesMissed", 0),
         "Duelos aéreos ganhos/90min": _p90(stats.get("aerialDuelsWon", 0), minutos),
         "Dribles certos/90min": _p90(stats.get("successfulDribbles", 0), minutos),
-        "Nota média": round(stats.get("rating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
+        "Nota média": round(stats.get("totalRating", 0) / stats.get("countRating", 1), 2) if stats.get("countRating") else 0,
     }
 
 
