@@ -867,6 +867,25 @@ with tab_campo:
             "CA": "Atacantes", "ATA1": "Atacantes", "ATA2": "Atacantes",
         }
 
+        # Estatísticas da escalação (topo)
+        escalacao_salva_ids = escalacao_salva.get(formacao_escolhida, {})
+        if escalacao_salva_ids:
+            _idades = []
+            _valor = 0
+            for pos_key_s, sid in escalacao_salva_ids.items():
+                wpos = POS_KEY_TO_WATCHLIST.get(pos_key_s, "")
+                for j in jogadores_campo.get(wpos, []):
+                    if j.get("id") == sid:
+                        nasc = j.get("nascimento")
+                        if nasc:
+                            idade, _, _ = calcular_idades(nasc)
+                            _idades.append(idade)
+                        _valor += j.get("marketValue") or 0
+                        break
+            media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
+            valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
+            st.caption(f"{len(escalacao_salva_ids)} jogadores escalados | {media_str} | {valor_str}")
+
         # Layout: campinho à esquerda, dropdowns à direita
         col_campo, col_dropdowns = st.columns([1, 1])
 
@@ -944,21 +963,4 @@ with tab_campo:
             import streamlit.components.v1 as components
             components.html(campo_html, height=700)
 
-        # Estatísticas da escalação
-        if escalacao:
-            st.divider()
-            idades_campo = []
-            valor_campo = 0
-            for j in escalacao.values():
-                nasc = j.get("nascimento")
-                if nasc:
-                    idade, _, _ = calcular_idades(nasc)
-                    idades_campo.append(idade)
-                valor_campo += j.get("marketValue") or 0
 
-            c1, c2 = st.columns(2)
-            with c1:
-                if idades_campo:
-                    st.metric("Idade média", f"{sum(idades_campo) / len(idades_campo):.1f} anos")
-            with c2:
-                st.metric("Valor de mercado total", formatar_valor(valor_campo))
