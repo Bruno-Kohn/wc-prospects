@@ -844,7 +844,7 @@ with tab_campo:
         with col_campo:
             novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
 
-        # Atualizar session_state com posições do componente
+        # Atualizar session_state com posições do componente (só atualiza quando user clica confirmar)
         if novas_posicoes and novas_posicoes != posicoes_input:
             st.session_state["campinho_posicoes"] = novas_posicoes
 
@@ -862,8 +862,8 @@ with tab_campo:
             valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
             st.caption(f"{len(jogadores_sel)} jogadores escalados | {media_str} | {valor_str}")
 
-        # Botão salvar
-        if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
+        # Botão salvar no GitHub
+        if st.button("💾 Salvar no GitHub", use_container_width=True, disabled=not MODO_EDICAO):
             wl["_campinho_pos"] = st.session_state["campinho_posicoes"]
             salvar_watchlist()
             st.success("Posições salvas!")
