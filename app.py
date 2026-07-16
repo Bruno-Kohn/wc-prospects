@@ -811,15 +811,17 @@ with tab_campo:
                 valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
                 st.caption(f"{len(escalados)} jogadores escalados | {media_str} | {valor_str}")
 
-        # Seleção individual: 11 slots
-        st.caption("Selecione até 11 jogadores:")
+        # Layout: inputs à esquerda, campinho à direita
         opcoes_all = {f"{j['name']} ({j.get('club', '')})": j for j in todos_top}
         nomes_all = ["(vazio)"] + list(opcoes_all.keys())
 
+        col_inputs, col_campo = st.columns([1, 2])
+
+        novas_posicoes = {}
         jogadores_sel = []
-        cols = st.columns(3)
-        for slot_idx in range(11):
-            with cols[slot_idx % 3]:
+        with col_inputs:
+            st.caption("Selecione até 11 jogadores:")
+            for slot_idx in range(11):
                 # Restaurar seleção salva
                 saved_ids = list(posicoes_salvas.keys())
                 default_idx = 0
@@ -839,6 +841,12 @@ with tab_campo:
                 if escolha != "(vazio)":
                     jogadores_sel.append(opcoes_all[escolha])
 
+            # Botão salvar
+            if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
+                wl["_campinho_pos"] = novas_posicoes
+                salvar_watchlist()
+                st.success("Posições salvas!")
+
         # Montar posições
         posicoes_input = {}
         for i, j in enumerate(jogadores_sel):
@@ -855,12 +863,7 @@ with tab_campo:
         ]
 
         # Renderizar componente interativo
-        novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
-
-        # Botão salvar
-        if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
-            wl["_campinho_pos"] = novas_posicoes
-            salvar_watchlist()
-            st.success("Posições salvas!")
+        with col_campo:
+            novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
 
 
