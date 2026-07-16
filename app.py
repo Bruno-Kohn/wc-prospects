@@ -781,91 +781,70 @@ with tab_campo:
         for j in jogadores_campo.get(pos, []):
             todos_wl.append(j)
 
-    # Posições default para distribuir jogadores no campo
+    # Posições default para os 11 slots
     DEFAULT_POSITIONS = [
-        (50, 92), (80, 72), (60, 75), (40, 75), (20, 72),
-        (70, 50), (50, 50), (30, 50), (75, 25), (50, 15), (25, 25),
+        {"x": 50, "y": 92}, {"x": 80, "y": 72}, {"x": 60, "y": 75},
+        {"x": 40, "y": 75}, {"x": 20, "y": 72}, {"x": 70, "y": 50},
+        {"x": 50, "y": 50}, {"x": 30, "y": 50}, {"x": 75, "y": 25},
+        {"x": 50, "y": 12}, {"x": 25, "y": 25},
     ]
 
-    # Carregar posições salvas (session_state tem prioridade sobre GitHub)
-    posicoes_salvas = wl.get("_campinho_pos", {})
-    if "campinho_posicoes" not in st.session_state:
-        st.session_state["campinho_posicoes"] = posicoes_salvas
+    # Carregar estado salvo do campinho
+    campinho_salvo = wl.get("_campinho_pos", {})
+    # campinho_salvo format: {slot_index: {id, x, y}} or {player_id: {x, y}} (legacy)
 
-    # Seleção de jogadores escalados
     if not todos_wl:
         st.info("Adicione jogadores na Watchlist para escalá-los aqui.")
     else:
-        # Layout: inputs à esquerda, campinho à direita
-        opcoes_all = {f"{j['name']} ({j.get('club', '')})": j for j in todos_wl}
-        nomes_all = ["(vazio)"] + list(opcoes_all.keys())
-
-        col_inputs, col_campo = st.columns([1, 2])
-
-        jogadores_sel = []
-        with col_inputs:
-            st.caption("Selecione até 11 jogadores:")
-            current_pos = st.session_state["campinho_posicoes"]
-            saved_ids = list(current_pos.keys())
-            for slot_idx in range(11):
-                default_idx = 0
-                if slot_idx < len(saved_ids):
-                    sid = saved_ids[slot_idx]
-                    for i, label in enumerate(nomes_all):
-                        if i > 0 and opcoes_all.get(label, {}).get("id") == sid:
-                            default_idx = i
-                            break
-                escolha = st.selectbox(
-                    f"Jogador {slot_idx + 1}",
-                    options=nomes_all,
-                    index=default_idx,
-                    key=f"campo_slot_{slot_idx}",
-                    label_visibility="collapsed",
-                )
-                if escolha != "(vazio)":
-                    jogadores_sel.append(opcoes_all[escolha])
-
-        # Montar posições usando session_state
-        posicoes_input = {}
-        for i, j in enumerate(jogadores_sel):
-            if j["id"] in st.session_state["campinho_posicoes"]:
-                posicoes_input[j["id"]] = st.session_state["campinho_posicoes"][j["id"]]
-            else:
-                pos = DEFAULT_POSITIONS[i % len(DEFAULT_POSITIONS)]
-                posicoes_input[j["id"]] = {"x": pos[0], "y": pos[1]}
-
-        # Dados para o componente
+        # Preparar dados dos jogadores disponíveis para o componente
         jogadores_data = [
-            {"id": j["id"], "name": j["name"], "imageUrl": j.get("imageUrl", "")}
-            for j in jogadores_sel
+            {"id": j["id"], "name": j["name"], "imageUrl": j.get("imageUrl", ""), "club": j.get("club", "")}
+            for j in todos_wl
         ]
 
-        # Renderizar componente interativo
-        with col_campo:
-            novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
+        # Preparar slots (11 posições com jogador atribuído ou vazio)
+        slots_data = []
+        if isinstance(campinho_salvo, dict) and campinho_salvo:
+            # Tentar ler formato novo: list de {id, x, y}
+            for i in range(11):
+                slot_key = str(i)
+                if slot_key in campinho_salvo:
+                    s = campinho_salvo[slot_key]
+                    slots_data.append({"playerId": s.get("id", ""), "x": s.get("x", DEFAULT_POSITIONS[i]["x"]), "y": s.get("y", DEFAULT_POSITIONS[i]["y"])})
+                else:
+                    slots_data.append({"playerId": "", "x": DEFAULT_POSITIONS[i]["x"], "y": DEFAULT_POSITIONS[i]["y"]})
+        
+        if not slots_data:
+            slots_data = [{"playerId": "", "x": p["x"], "y": p["y"]} for p in DEFAULT_POSITIONS]
 
-        # Atualizar session_state com posições do componente (só atualiza quando user clica confirmar)
-        if novas_posicoes and novas_posicoes != posicoes_input:
-            st.session_state["campinho_posicoes"] = novas_posicoes
+        # Renderizar componente
+        result = campinho(jogadores=jogadores_data, slots=slots_data, key="campinho_main")
 
-        # Estatísticas do time escalado
-        if jogadores_sel:
-            _idades = []
-            _valor = 0
-            for j in jogadores_sel:
-                nasc = j.get("nascimento")
-                if nasc:
-                    idade, _, _ = calcular_idades(nasc)
-                    _idades.append(idade)
-                _valor += j.get("marketValue") or 0
-            media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
-            valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
-            st.caption(f"{len(jogadores_sel)} jogadores escalados | {media_str} | {valor_str}")
+        # Estatísticas baseadas no resultado
+        if result:
+            ids_no_campo = [s.get("playerId") for s in result if s.get("playerId")]
+            jogadores_no_campo = [j for j in todos_wl if j["id"] in ids_no_campo]
+            if jogadores_no_campo:
+                _idades = []
+                _valor = 0
+                for j in jogadores_no_campo:
+                    nasc = j.get("nascimento")
+                    if nasc:
+                        idade, _, _ = calcular_idades(nasc)
+                        _idades.append(idade)
+                    _valor += j.get("marketValue") or 0
+                media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
+                valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
+                st.caption(f"{len(jogadores_no_campo)} jogadores escalados | {media_str} | {valor_str}")
 
         # Botão salvar no GitHub
         if st.button("💾 Salvar no GitHub", use_container_width=True, disabled=not MODO_EDICAO):
-            wl["_campinho_pos"] = st.session_state["campinho_posicoes"]
-            salvar_watchlist()
-            st.success("Posições salvas!")
+            if result:
+                save_data = {}
+                for i, s in enumerate(result):
+                    save_data[str(i)] = {"id": s.get("playerId", ""), "x": s["x"], "y": s["y"]}
+                wl["_campinho_pos"] = save_data
+                salvar_watchlist()
+                st.success("Posições salvas!")
 
 

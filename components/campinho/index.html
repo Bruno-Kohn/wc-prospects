@@ -1,380 +1,416 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: transparent;
-        overflow: hidden;
-      }
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; overflow: visible; }
 
-      .pitch {
-        position: relative;
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-        aspect-ratio: 4/5;
-        background: linear-gradient(
-          180deg,
-          #1a7a3a 0%,
-          #22914a 25%,
-          #1a7a3a 50%,
-          #22914a 75%,
-          #1a7a3a 100%
-        );
-        border-radius: 12px;
-        border: 3px solid rgba(255, 255, 255, 0.7);
-        overflow: hidden;
-        user-select: none;
-      }
+.pitch {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    aspect-ratio: 4/5;
+    background: linear-gradient(180deg, #1a7a3a 0%, #22914a 25%, #1a7a3a 50%, #22914a 75%, #1a7a3a 100%);
+    border-radius: 12px;
+    border: 3px solid rgba(255,255,255,0.7);
+    overflow: visible;
+    user-select: none;
+}
 
-      /* Field markings */
-      .pitch::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 8%;
-        right: 8%;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.45);
-      }
+.pitch::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 8%; right: 8%;
+    height: 2px;
+    background: rgba(255,255,255,0.45);
+}
 
-      .center-circle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 80px;
-        height: 80px;
-        border: 2px solid rgba(255, 255, 255, 0.4);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-      }
+.center-circle {
+    position: absolute; top: 50%; left: 50%;
+    width: 80px; height: 80px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
 
-      .penalty-area-top {
-        position: absolute;
-        top: 0;
-        left: 25%;
-        right: 25%;
-        height: 14%;
-        border: 2px solid rgba(255, 255, 255, 0.4);
-        border-top: none;
-      }
+.penalty-area-top {
+    position: absolute; top: 0; left: 25%; right: 25%; height: 14%;
+    border: 2px solid rgba(255,255,255,0.4); border-top: none;
+}
 
-      .penalty-area-bottom {
-        position: absolute;
-        bottom: 0;
-        left: 25%;
-        right: 25%;
-        height: 14%;
-        border: 2px solid rgba(255, 255, 255, 0.4);
-        border-bottom: none;
-      }
+.penalty-area-bottom {
+    position: absolute; bottom: 0; left: 25%; right: 25%; height: 14%;
+    border: 2px solid rgba(255,255,255,0.4); border-bottom: none;
+}
 
-      .goal-area-top {
-        position: absolute;
-        top: 0;
-        left: 35%;
-        right: 35%;
-        height: 6%;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top: none;
-      }
+.goal-area-top {
+    position: absolute; top: 0; left: 35%; right: 35%; height: 6%;
+    border: 2px solid rgba(255,255,255,0.3); border-top: none;
+}
 
-      .goal-area-bottom {
-        position: absolute;
-        bottom: 0;
-        left: 35%;
-        right: 35%;
-        height: 6%;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-bottom: none;
-      }
+.goal-area-bottom {
+    position: absolute; bottom: 0; left: 35%; right: 35%; height: 6%;
+    border: 2px solid rgba(255,255,255,0.3); border-bottom: none;
+}
 
-      .player-marker {
-        position: absolute;
-        transform: translate(-50%, -50%);
-        cursor: grab;
-        text-align: center;
-        transition:
-          transform 0.05s ease,
-          box-shadow 0.2s;
-        z-index: 10;
-      }
+.slot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    text-align: center;
+    z-index: 10;
+    transition: transform 0.05s ease;
+}
 
-      .player-marker:active {
-        cursor: grabbing;
-        z-index: 100;
-      }
+.slot:active { cursor: grabbing; }
+.slot.dragging { z-index: 100; transform: translate(-50%, -50%) scale(1.1); }
 
-      .player-marker.dragging {
-        z-index: 100;
-        transform: translate(-50%, -50%) scale(1.15);
-      }
+.slot-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px dashed rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: rgba(255,255,255,0.6); font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
 
-      .player-img {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid white;
-        background: #333;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      }
+.slot-circle:hover { border-color: white; }
 
-      .player-placeholder {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        border: 3px solid white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      }
+.slot-filled {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    border: 3px solid white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: white; font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
 
-      .player-name {
-        margin-top: 2px;
-        font-size: 10px;
-        font-weight: 600;
-        color: white;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-        white-space: nowrap;
-        max-width: 80px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+.slot-img {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    background: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
 
-      .empty-slot {
-        position: absolute;
-        transform: translate(-50%, -50%);
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: 2px dashed rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.05);
-      }
+/* Selector overlay */
+.selector-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
 
-      .save-btn {
-        display: block;
-        margin: 8px auto 0;
-        padding: 8px 24px;
-        background: #1a7a3a;
-        color: white;
-        border: 2px solid white;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .save-btn:hover {
-        background: #22914a;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="pitch" id="pitch">
-      <div class="center-circle"></div>
-      <div class="penalty-area-top"></div>
-      <div class="penalty-area-bottom"></div>
-      <div class="goal-area-top"></div>
-      <div class="goal-area-bottom"></div>
+.selector-overlay.active { display: flex; }
+
+.selector-panel {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 16px;
+    max-height: 70vh;
+    width: 300px;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.selector-title {
+    color: #fff; font-size: 14px; font-weight: 600;
+    margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #333;
+}
+
+.selector-search {
+    width: 100%; padding: 8px 12px; border-radius: 6px;
+    border: 1px solid #444; background: #2a2a2a; color: white;
+    font-size: 13px; margin-bottom: 8px; outline: none;
+}
+
+.selector-search:focus { border-color: #4CAF50; }
+
+.selector-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px; border-radius: 6px; cursor: pointer;
+}
+
+.selector-item:hover { background: #333; }
+.selector-item.disabled { opacity: 0.35; pointer-events: none; }
+
+.selector-item img {
+    width: 32px; height: 32px; border-radius: 50%;
+    object-fit: cover; background: #555;
+}
+
+.selector-item-placeholder {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #555; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #aaa;
+}
+
+.selector-item-name { color: #fff; font-size: 13px; font-weight: 500; }
+.selector-item-club { color: #888; font-size: 11px; }
+
+.selector-clear {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px; border-radius: 6px; cursor: pointer;
+    margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1px solid #333;
+}
+
+.selector-clear:hover { background: #3a2020; }
+.selector-clear span { color: #ff6b6b; font-size: 13px; }
+
+.save-btn {
+    display: block; margin: 10px auto 0; padding: 8px 24px;
+    background: #1a7a3a; color: white; border: 2px solid white;
+    border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+
+.save-btn:hover { background: #22914a; }
+</style>
+</head>
+<body>
+<div class="pitch" id="pitch">
+    <div class="center-circle"></div>
+    <div class="penalty-area-top"></div>
+    <div class="penalty-area-bottom"></div>
+    <div class="goal-area-top"></div>
+    <div class="goal-area-bottom"></div>
+</div>
+<button class="save-btn" onclick="confirmar()">💾 Confirmar posições</button>
+
+<div class="selector-overlay" id="selectorOverlay">
+    <div class="selector-panel">
+        <div class="selector-title">Selecionar jogador</div>
+        <input class="selector-search" id="selectorSearch" placeholder="Buscar..." oninput="filterSelector()"/>
+        <div class="selector-clear" onclick="clearSlot()">
+            <span>✕ Remover jogador</span>
+        </div>
+        <div id="selectorList"></div>
     </div>
-    <button class="save-btn" onclick="confirmarPosicoes()">💾 Confirmar posições</button>
+</div>
 
-    <script>
-      // Streamlit component communication
-      function sendMessageToStreamlitClient(type, data) {
-        const outData = Object.assign(
-          { isStreamlitMessage: true, type: type },
-          data,
-        );
-        window.parent.postMessage(outData, "*");
-      }
+<script>
+function sendMessageToStreamlitClient(type, data) {
+    window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type }, data), "*");
+}
+function init() { sendMessageToStreamlitClient("streamlit:componentReady", { apiVersion: 1 }); }
+function setFrameHeight(h) { sendMessageToStreamlitClient("streamlit:setFrameHeight", { height: h }); }
+function sendValue(v) { sendMessageToStreamlitClient("streamlit:setComponentValue", { value: v }); }
 
-      function init() {
-        sendMessageToStreamlitClient("streamlit:componentReady", {
-          apiVersion: 1,
-        });
-      }
+let jogadores = [];
+let slots = [];
+let activeSlotIdx = -1;
+let dragging = null;
+let dragSlotIdx = -1;
+let offsetX = 0, offsetY = 0;
+let dragStartX = 0, dragStartY = 0, didDrag = false;
 
-      function setFrameHeight(height) {
-        sendMessageToStreamlitClient("streamlit:setFrameHeight", {
-          height: height,
-        });
-      }
+function getAssignedIds() {
+    return slots.filter(s => s.playerId).map(s => s.playerId);
+}
 
-      function sendValue(value) {
-        sendMessageToStreamlitClient("streamlit:setComponentValue", {
-          value: value,
-        });
-      }
+function render() {
+    const pitch = document.getElementById('pitch');
+    pitch.querySelectorAll('.slot').forEach(el => el.remove());
 
-      let jogadores = [];
-      let posicoes = {};
-      let dragging = null;
-      let offsetX = 0,
-        offsetY = 0;
+    slots.forEach((slot, idx) => {
+        const el = document.createElement('div');
+        el.className = 'slot';
+        el.style.left = slot.x + '%';
+        el.style.top = slot.y + '%';
+        el.dataset.slotIdx = idx;
 
-      function render() {
-        const pitch = document.getElementById("pitch");
-        // Remove existing markers
-        pitch.querySelectorAll(".player-marker").forEach((el) => el.remove());
+        const player = slot.playerId ? jogadores.find(j => j.id === slot.playerId) : null;
 
-        jogadores.forEach((j) => {
-          const pos = posicoes[j.id];
-          if (!pos) return;
+        if (player && player.imageUrl) {
+            el.innerHTML = '<img class="slot-img" src="' + player.imageUrl + '" draggable="false"/>';
+        } else if (player) {
+            const initials = player.name.split(' ').map(function(w){return w[0];}).slice(0, 2).join('');
+            el.innerHTML = '<div class="slot-filled">' + initials + '</div>';
+        } else {
+            el.innerHTML = '<div class="slot-circle">' + (idx + 1) + '</div>';
+        }
 
-          const marker = document.createElement("div");
-          marker.className = "player-marker";
-          marker.style.left = pos.x + "%";
-          marker.style.top = pos.y + "%";
-          marker.dataset.playerId = j.id;
+        el.addEventListener('mousedown', function(e) { startDrag(e, idx); });
+        el.addEventListener('touchstart', function(e) { startDragTouch(e, idx); }, { passive: false });
 
-          if (j.imageUrl) {
-            marker.innerHTML = `
-                <img class="player-img" src="${j.imageUrl}" alt="${j.name}" draggable="false"/>
-            `;
-          } else {
-            const initials = j.name
-              .split(" ")
-              .map((w) => w[0])
-              .slice(0, 2)
-              .join("");
-            marker.innerHTML = `
-                <div class="player-placeholder">${initials}</div>
-            `;
-          }
+        pitch.appendChild(el);
+    });
 
-          // Drag events
-          marker.addEventListener("mousedown", startDrag);
-          marker.addEventListener("touchstart", startDragTouch, {
-            passive: false,
-          });
+    setFrameHeight(pitch.offsetHeight + 50);
+}
 
-          pitch.appendChild(marker);
-        });
+function startDrag(e, idx) {
+    e.preventDefault();
+    dragging = e.currentTarget;
+    dragSlotIdx = idx;
+    didDrag = false;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragging.classList.add('dragging');
 
-        setFrameHeight(pitch.offsetHeight + 50);
-      }
+    var pitch = document.getElementById('pitch');
+    var elRect = dragging.getBoundingClientRect();
+    offsetX = e.clientX - (elRect.left + elRect.width / 2);
+    offsetY = e.clientY - (elRect.top + elRect.height / 2);
 
-      function startDrag(e) {
-        e.preventDefault();
-        const marker = e.currentTarget;
-        dragging = marker;
-        marker.classList.add("dragging");
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', endDrag);
+}
 
-        const pitch = document.getElementById("pitch");
-        const rect = pitch.getBoundingClientRect();
-        const markerRect = marker.getBoundingClientRect();
+function startDragTouch(e, idx) {
+    e.preventDefault();
+    dragging = e.currentTarget;
+    dragSlotIdx = idx;
+    didDrag = false;
+    var touch = e.touches[0];
+    dragStartX = touch.clientX;
+    dragStartY = touch.clientY;
+    dragging.classList.add('dragging');
+    offsetX = 0; offsetY = 0;
 
-        offsetX = e.clientX - (markerRect.left + markerRect.width / 2);
-        offsetY = e.clientY - (markerRect.top + markerRect.height / 2);
+    document.addEventListener('touchmove', onDragTouch, { passive: false });
+    document.addEventListener('touchend', endDragTouch);
+}
 
-        document.addEventListener("mousemove", onDrag);
-        document.addEventListener("mouseup", endDrag);
-      }
+function onDrag(e) {
+    if (!dragging) return;
+    var dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
+    if (!didDrag) return;
 
-      function startDragTouch(e) {
-        e.preventDefault();
-        const marker = e.currentTarget;
-        dragging = marker;
-        marker.classList.add("dragging");
-        offsetX = 0;
-        offsetY = 0;
+    var pitch = document.getElementById('pitch');
+    var rect = pitch.getBoundingClientRect();
+    var x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
+    var y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
+    x = Math.max(5, Math.min(95, x));
+    y = Math.max(5, Math.min(95, y));
+    dragging.style.left = x + '%';
+    dragging.style.top = y + '%';
+}
 
-        document.addEventListener("touchmove", onDragTouch, { passive: false });
-        document.addEventListener("touchend", endDragTouch);
-      }
+function onDragTouch(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    var touch = e.touches[0];
+    var dx = touch.clientX - dragStartX, dy = touch.clientY - dragStartY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
+    if (!didDrag) return;
 
-      function onDrag(e) {
-        if (!dragging) return;
-        const pitch = document.getElementById("pitch");
-        const rect = pitch.getBoundingClientRect();
+    var pitch = document.getElementById('pitch');
+    var rect = pitch.getBoundingClientRect();
+    var x = ((touch.clientX - rect.left) / rect.width) * 100;
+    var y = ((touch.clientY - rect.top) / rect.height) * 100;
+    x = Math.max(5, Math.min(95, x));
+    y = Math.max(5, Math.min(95, y));
+    dragging.style.left = x + '%';
+    dragging.style.top = y + '%';
+}
 
-        let x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
-        let y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
+function endDrag(e) {
+    if (!dragging) return;
+    dragging.classList.remove('dragging');
+    if (didDrag) {
+        slots[dragSlotIdx].x = Math.round(parseFloat(dragging.style.left) * 10) / 10;
+        slots[dragSlotIdx].y = Math.round(parseFloat(dragging.style.top) * 10) / 10;
+    } else {
+        openSelector(dragSlotIdx);
+    }
+    dragging = null;
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('mouseup', endDrag);
+}
 
-        x = Math.max(5, Math.min(95, x));
-        y = Math.max(5, Math.min(95, y));
+function endDragTouch(e) {
+    if (!dragging) return;
+    dragging.classList.remove('dragging');
+    if (didDrag) {
+        slots[dragSlotIdx].x = Math.round(parseFloat(dragging.style.left) * 10) / 10;
+        slots[dragSlotIdx].y = Math.round(parseFloat(dragging.style.top) * 10) / 10;
+    } else {
+        openSelector(dragSlotIdx);
+    }
+    dragging = null;
+    document.removeEventListener('touchmove', onDragTouch);
+    document.removeEventListener('touchend', endDragTouch);
+}
 
-        dragging.style.left = x + "%";
-        dragging.style.top = y + "%";
-      }
+function openSelector(slotIdx) {
+    activeSlotIdx = slotIdx;
+    var overlay = document.getElementById('selectorOverlay');
+    var search = document.getElementById('selectorSearch');
+    search.value = '';
+    renderSelectorList('');
+    overlay.classList.add('active');
+    setTimeout(function() { search.focus(); }, 100);
+    overlay.onclick = function(e) { if (e.target === overlay) closeSelector(); };
+}
 
-      function onDragTouch(e) {
-        if (!dragging) return;
-        e.preventDefault();
-        const touch = e.touches[0];
-        const pitch = document.getElementById("pitch");
-        const rect = pitch.getBoundingClientRect();
+function renderSelectorList(filter) {
+    var list = document.getElementById('selectorList');
+    var assigned = getAssignedIds();
+    var lowerFilter = filter.toLowerCase();
+    list.innerHTML = '';
 
-        let x = ((touch.clientX - rect.left) / rect.width) * 100;
-        let y = ((touch.clientY - rect.top) / rect.height) * 100;
+    jogadores.forEach(function(j) {
+        if (lowerFilter && j.name.toLowerCase().indexOf(lowerFilter) === -1 && j.club.toLowerCase().indexOf(lowerFilter) === -1) return;
 
-        x = Math.max(5, Math.min(95, x));
-        y = Math.max(5, Math.min(95, y));
+        var isAssigned = assigned.indexOf(j.id) !== -1 && slots[activeSlotIdx].playerId !== j.id;
+        var item = document.createElement('div');
+        item.className = 'selector-item' + (isAssigned ? ' disabled' : '');
 
-        dragging.style.left = x + "%";
-        dragging.style.top = y + "%";
-      }
+        var imgHtml = j.imageUrl
+            ? '<img src="' + j.imageUrl + '"/>'
+            : '<div class="selector-item-placeholder">' + j.name.split(' ').map(function(w){return w[0];}).slice(0,2).join('') + '</div>';
 
-      function endDrag(e) {
-        if (!dragging) return;
-        dragging.classList.remove("dragging");
-        const playerId = dragging.dataset.playerId;
-        const x = parseFloat(dragging.style.left);
-        const y = parseFloat(dragging.style.top);
-        posicoes[playerId] = {
-          x: Math.round(x * 10) / 10,
-          y: Math.round(y * 10) / 10,
-        };
-        dragging = null;
+        item.innerHTML = imgHtml + '<div><div class="selector-item-name">' + j.name + '</div><div class="selector-item-club">' + j.club + '</div></div>';
 
-        document.removeEventListener("mousemove", onDrag);
-        document.removeEventListener("mouseup", endDrag);
-      }
+        if (!isAssigned) {
+            item.onclick = function() { selectPlayer(j.id); };
+        }
+        list.appendChild(item);
+    });
+}
 
-      function endDragTouch(e) {
-        if (!dragging) return;
-        dragging.classList.remove("dragging");
-        const playerId = dragging.dataset.playerId;
-        const x = parseFloat(dragging.style.left);
-        const y = parseFloat(dragging.style.top);
-        posicoes[playerId] = {
-          x: Math.round(x * 10) / 10,
-          y: Math.round(y * 10) / 10,
-        };
-        dragging = null;
+function filterSelector() {
+    renderSelectorList(document.getElementById('selectorSearch').value);
+}
 
-        document.removeEventListener("touchmove", onDragTouch);
-        document.removeEventListener("touchend", endDragTouch);
-      }
+function selectPlayer(playerId) {
+    slots[activeSlotIdx].playerId = playerId;
+    closeSelector();
+    render();
+}
 
-      // Only send value when user explicitly clicks save
-      function confirmarPosicoes() {
-        sendValue(posicoes);
-      }
+function clearSlot() {
+    slots[activeSlotIdx].playerId = '';
+    closeSelector();
+    render();
+}
 
-      // Listen for data from Streamlit
-      window.addEventListener("message", (event) => {
-        if (event.data.type !== "streamlit:render") return;
-        const args = event.data.args;
-        jogadores = args.jogadores || [];
-        posicoes = args.posicoes || {};
-        render();
-      });
+function closeSelector() {
+    document.getElementById('selectorOverlay').classList.remove('active');
+    activeSlotIdx = -1;
+}
 
-      init();
-    </script>
-  </body>
+function confirmar() {
+    sendValue(slots);
+}
+
+window.addEventListener("message", function(event) {
+    if (event.data.type !== "streamlit:render") return;
+    var args = event.data.args;
+    jogadores = args.jogadores || [];
+    slots = args.slots || [];
+    render();
+});
+
+init();
+</script>
+</body>
 </html>

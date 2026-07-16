@@ -5,22 +5,23 @@ _COMPONENT_DIR = os.path.dirname(os.path.abspath(__file__))
 _component_func = components.declare_component("campinho", path=_COMPONENT_DIR)
 
 
-def campinho(jogadores, posicoes, key=None):
+def campinho(jogadores, slots, key=None):
     """
-    Renders an interactive football pitch with draggable players.
+    Renders an interactive football pitch with 11 draggable slots.
+    Players are selected by clicking on a slot.
 
     Args:
-        jogadores: list of dicts with {id, name, imageUrl, club}
-        posicoes: dict {player_id: {x: float 0-100, y: float 0-100}}
+        jogadores: list of dicts with {id, name, imageUrl, club} - available players
+        slots: list of 11 dicts with {playerId, x, y} - current slot state
         key: unique component key
 
     Returns:
-        Updated posicoes dict after drag operations.
+        Updated slots list after user interactions.
     """
     result = _component_func(
         jogadores=jogadores,
-        posicoes=posicoes,
+        slots=slots,
         key=key,
-        default=posicoes,
+        default=slots,
     )
-    return result if result else posicoes
+    return result if result else slots
