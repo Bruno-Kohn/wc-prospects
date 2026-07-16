@@ -775,12 +775,11 @@ with tab_campo:
     wl = get_watchlist()
     jogadores_campo = wl.get("_jogadores", {})
 
-    # Todos os jogadores do Top Team para escalar
-    todos_top = []
+    # Todos os jogadores da watchlist
+    todos_wl = []
     for pos in POSICOES_DEFAULT:
         for j in jogadores_campo.get(pos, []):
-            if j.get("top_team"):
-                todos_top.append(j)
+            todos_wl.append(j)
 
     # Posições default para distribuir jogadores no campo
     DEFAULT_POSITIONS = [
@@ -792,32 +791,15 @@ with tab_campo:
     posicoes_salvas = wl.get("_campinho_pos", {})
 
     # Seleção de jogadores escalados
-    if not todos_top:
-        st.info("Marque jogadores como ⭐ Top Team na Watchlist para escalá-los aqui.")
+    if not todos_wl:
+        st.info("Adicione jogadores na Watchlist para escalá-los aqui.")
     else:
-        # Estatísticas no topo
-        if posicoes_salvas:
-            escalados = [j for j in todos_top if j["id"] in posicoes_salvas]
-            if escalados:
-                _idades = []
-                _valor = 0
-                for j in escalados:
-                    nasc = j.get("nascimento")
-                    if nasc:
-                        idade, _, _ = calcular_idades(nasc)
-                        _idades.append(idade)
-                    _valor += j.get("marketValue") or 0
-                media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
-                valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
-                st.caption(f"{len(escalados)} jogadores escalados | {media_str} | {valor_str}")
-
         # Layout: inputs à esquerda, campinho à direita
-        opcoes_all = {f"{j['name']} ({j.get('club', '')})": j for j in todos_top}
+        opcoes_all = {f"{j['name']} ({j.get('club', '')})": j for j in todos_wl}
         nomes_all = ["(vazio)"] + list(opcoes_all.keys())
 
         col_inputs, col_campo = st.columns([1, 2])
 
-        novas_posicoes = {}
         jogadores_sel = []
         with col_inputs:
             st.caption("Selecione até 11 jogadores:")
@@ -841,12 +823,6 @@ with tab_campo:
                 if escolha != "(vazio)":
                     jogadores_sel.append(opcoes_all[escolha])
 
-            # Botão salvar
-            if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
-                wl["_campinho_pos"] = novas_posicoes
-                salvar_watchlist()
-                st.success("Posições salvas!")
-
         # Montar posições
         posicoes_input = {}
         for i, j in enumerate(jogadores_sel):
@@ -865,5 +841,25 @@ with tab_campo:
         # Renderizar componente interativo
         with col_campo:
             novas_posicoes = campinho(jogadores=jogadores_data, posicoes=posicoes_input, key="campinho_main")
+
+        # Estatísticas do time escalado
+        if jogadores_sel:
+            _idades = []
+            _valor = 0
+            for j in jogadores_sel:
+                nasc = j.get("nascimento")
+                if nasc:
+                    idade, _, _ = calcular_idades(nasc)
+                    _idades.append(idade)
+                _valor += j.get("marketValue") or 0
+            media_str = f"Média de idade: {sum(_idades)/len(_idades):.1f} anos" if _idades else ""
+            valor_str = f"Valor de mercado total: {formatar_valor(_valor)}"
+            st.caption(f"{len(jogadores_sel)} jogadores escalados | {media_str} | {valor_str}")
+
+        # Botão salvar (depois do componente para ter novas_posicoes)
+        if st.button("💾 Salvar posições", use_container_width=True, disabled=not MODO_EDICAO):
+            wl["_campinho_pos"] = novas_posicoes
+            salvar_watchlist()
+            st.success("Posições salvas!")
 
 
