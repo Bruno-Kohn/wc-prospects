@@ -49,14 +49,11 @@ tbody tr td { font-size: 0.85rem; vertical-align: middle !important; }
 """, unsafe_allow_html=True)
 
 # --- Tabs ---
-from tabs import buscar, watchlist, top_team, comparador, campinho_tab, times
+from tabs import watchlist, top_team, comparador, campinho_tab, times
 
-tab_busca, tab_watchlist, tab_topteam, tab_comparador, tab_campo, tab_times = st.tabs(
-    ["Buscar", "Watchlist", "Top Team", "Comparador", "Campinho", "Times"]
+tab_watchlist, tab_topteam, tab_comparador, tab_campo, tab_times = st.tabs(
+    ["Watchlist", "Top Team", "Comparador", "Campinho", "Times"]
 )
-
-with tab_busca:
-    buscar.render(MODO_EDICAO)
 
 with tab_watchlist:
     watchlist.render(MODO_EDICAO)
