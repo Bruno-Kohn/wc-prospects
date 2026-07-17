@@ -400,7 +400,7 @@ def exibir_card_jogador(perfil, nascimento, mostrar_salvar=True):
 
 
 # --- UI ---
-tab_busca, tab_watchlist, tab_topteam, tab_comparador, tab_campo = st.tabs(["Buscar", "Watchlist", "Top Team", "Comparador", "Campinho"])
+tab_busca, tab_watchlist, tab_topteam, tab_comparador, tab_campo, tab_times = st.tabs(["Buscar", "Watchlist", "Top Team", "Comparador", "Campinho", "Times"])
 
 with tab_busca:
     nome = st.text_input("Nome do jogador", placeholder="Ex: Lamine Yamal")
@@ -846,5 +846,39 @@ with tab_campo:
                 wl["_campinho_pos"] = save_data
                 salvar_watchlist()
                 st.success("Posições salvas!")
+
+with tab_times:
+    wl = get_watchlist()
+    jogadores_times = wl.get("_jogadores", {})
+
+    # Agrupar jogadores por clube
+    clubes = {}
+    for pos in POSICOES_DEFAULT:
+        for j in jogadores_times.get(pos, []):
+            clube = j.get("club", "Sem clube") or "Sem clube"
+            if clube not in clubes:
+                clubes[clube] = []
+            clubes[clube].append(j)
+
+    # Ordenar: mais jogadores primeiro, empate por ordem alfabética
+    clubes_ordenados = sorted(clubes.items(), key=lambda x: (-len(x[1]), x[0]))
+
+    if not clubes_ordenados:
+        st.info("Adicione jogadores na Watchlist para ver os times.")
+    else:
+        for clube, jogadores_clube in clubes_ordenados:
+            with st.expander(f"{clube} ({len(jogadores_clube)})"):
+                for j in sorted(jogadores_clube, key=lambda x: x.get("name", "")):
+                    col_img, col_info = st.columns([1, 5])
+                    with col_img:
+                        if j.get("imageUrl"):
+                            st.image(j["imageUrl"], width=40)
+                    with col_info:
+                        nasc = j.get("nascimento")
+                        idade_str = ""
+                        if nasc:
+                            idade, _, _ = calcular_idades(nasc)
+                            idade_str = f" • {idade} anos"
+                        st.markdown(f"**{j['name']}**{idade_str}")
 
 

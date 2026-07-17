@@ -1,416 +1,612 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; overflow: visible; }
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: transparent;
+        overflow: visible;
+      }
 
-.pitch {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    aspect-ratio: 4/5;
-    background: linear-gradient(180deg, #1a7a3a 0%, #22914a 25%, #1a7a3a 50%, #22914a 75%, #1a7a3a 100%);
-    border-radius: 12px;
-    border: 3px solid rgba(255,255,255,0.7);
-    overflow: visible;
-    user-select: none;
-}
+      .pitch {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        aspect-ratio: 4/5;
+        background: linear-gradient(
+          180deg,
+          #1a7a3a 0%,
+          #22914a 25%,
+          #1a7a3a 50%,
+          #22914a 75%,
+          #1a7a3a 100%
+        );
+        border-radius: 12px;
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        overflow: visible;
+        user-select: none;
+      }
 
-.pitch::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 8%; right: 8%;
-    height: 2px;
-    background: rgba(255,255,255,0.45);
-}
+      .pitch::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        right: 8%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.45);
+      }
 
-.center-circle {
-    position: absolute; top: 50%; left: 50%;
-    width: 80px; height: 80px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-}
+      .center-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80px;
+        height: 80px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-.penalty-area-top {
-    position: absolute; top: 0; left: 25%; right: 25%; height: 14%;
-    border: 2px solid rgba(255,255,255,0.4); border-top: none;
-}
+      .penalty-area-top {
+        position: absolute;
+        top: 0;
+        left: 25%;
+        right: 25%;
+        height: 14%;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top: none;
+      }
 
-.penalty-area-bottom {
-    position: absolute; bottom: 0; left: 25%; right: 25%; height: 14%;
-    border: 2px solid rgba(255,255,255,0.4); border-bottom: none;
-}
+      .penalty-area-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+        height: 14%;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-bottom: none;
+      }
 
-.goal-area-top {
-    position: absolute; top: 0; left: 35%; right: 35%; height: 6%;
-    border: 2px solid rgba(255,255,255,0.3); border-top: none;
-}
+      .goal-area-top {
+        position: absolute;
+        top: 0;
+        left: 35%;
+        right: 35%;
+        height: 6%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: none;
+      }
 
-.goal-area-bottom {
-    position: absolute; bottom: 0; left: 35%; right: 35%; height: 6%;
-    border: 2px solid rgba(255,255,255,0.3); border-bottom: none;
-}
+      .goal-area-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 35%;
+        right: 35%;
+        height: 6%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-bottom: none;
+      }
 
-.slot {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    cursor: grab;
-    text-align: center;
-    z-index: 10;
-    transition: transform 0.05s ease;
-}
+      .slot {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        cursor: grab;
+        text-align: center;
+        z-index: 10;
+        transition: transform 0.05s ease;
+      }
 
-.slot:active { cursor: grabbing; }
-.slot.dragging { z-index: 100; transform: translate(-50%, -50%) scale(1.1); }
+      .slot:active {
+        cursor: grabbing;
+      }
+      .slot.dragging {
+        z-index: 100;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
 
-.slot-circle {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    border: 2px dashed rgba(255,255,255,0.5);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: rgba(255,255,255,0.6); font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+      .slot-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px dashed rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
 
-.slot-circle:hover { border-color: white; }
+      .slot-circle:hover {
+        border-color: white;
+      }
 
-.slot-filled {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    border: 3px solid white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: white; font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
+      .slot-filled {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        border: 3px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
 
-.slot-img {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid white;
-    background: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
+      .slot-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        background: #333;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
 
-/* Selector overlay */
-.selector-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
+      /* Selector overlay */
+      .selector-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
 
-.selector-overlay.active { display: flex; }
+      .selector-overlay.active {
+        display: flex;
+      }
 
-.selector-panel {
-    background: #1e1e1e;
-    border-radius: 12px;
-    padding: 16px;
-    max-height: 70vh;
-    width: 300px;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-}
+      .selector-panel {
+        background: #1e1e1e;
+        border-radius: 12px;
+        padding: 16px;
+        max-height: 70vh;
+        width: 300px;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      }
 
-.selector-title {
-    color: #fff; font-size: 14px; font-weight: 600;
-    margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #333;
-}
+      .selector-title {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #333;
+      }
 
-.selector-search {
-    width: 100%; padding: 8px 12px; border-radius: 6px;
-    border: 1px solid #444; background: #2a2a2a; color: white;
-    font-size: 13px; margin-bottom: 8px; outline: none;
-}
+      .selector-search {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background: #2a2a2a;
+        color: white;
+        font-size: 13px;
+        margin-bottom: 8px;
+        outline: none;
+      }
 
-.selector-search:focus { border-color: #4CAF50; }
+      .selector-search:focus {
+        border-color: #4caf50;
+      }
 
-.selector-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px; border-radius: 6px; cursor: pointer;
-}
+      .selector-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
 
-.selector-item:hover { background: #333; }
-.selector-item.disabled { opacity: 0.35; pointer-events: none; }
+      .selector-item:hover {
+        background: #333;
+      }
+      .selector-item.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+      }
 
-.selector-item img {
-    width: 32px; height: 32px; border-radius: 50%;
-    object-fit: cover; background: #555;
-}
+      .selector-item img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #555;
+      }
 
-.selector-item-placeholder {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #555; display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: #aaa;
-}
+      .selector-item-placeholder {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: #aaa;
+      }
 
-.selector-item-name { color: #fff; font-size: 13px; font-weight: 500; }
-.selector-item-club { color: #888; font-size: 11px; }
+      .selector-item-name {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .selector-item-club {
+        color: #888;
+        font-size: 11px;
+      }
 
-.selector-clear {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px; border-radius: 6px; cursor: pointer;
-    margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1px solid #333;
-}
+      .selector-clear {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 8px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #333;
+      }
 
-.selector-clear:hover { background: #3a2020; }
-.selector-clear span { color: #ff6b6b; font-size: 13px; }
+      .selector-clear:hover {
+        background: #3a2020;
+      }
+      .selector-clear span {
+        color: #ff6b6b;
+        font-size: 13px;
+      }
 
-.save-btn {
-    display: block; margin: 10px auto 0; padding: 8px 24px;
-    background: #1a7a3a; color: white; border: 2px solid white;
-    border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
-}
+      .save-btn {
+        display: block;
+        margin: 10px auto 0;
+        padding: 8px 24px;
+        background: #1a7a3a;
+        color: white;
+        border: 2px solid white;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
 
-.save-btn:hover { background: #22914a; }
-</style>
-</head>
-<body>
-<div class="pitch" id="pitch">
-    <div class="center-circle"></div>
-    <div class="penalty-area-top"></div>
-    <div class="penalty-area-bottom"></div>
-    <div class="goal-area-top"></div>
-    <div class="goal-area-bottom"></div>
-</div>
-<button class="save-btn" onclick="confirmar()">💾 Confirmar posições</button>
+      .save-btn:hover {
+        background: #22914a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pitch" id="pitch">
+      <div class="center-circle"></div>
+      <div class="penalty-area-top"></div>
+      <div class="penalty-area-bottom"></div>
+      <div class="goal-area-top"></div>
+      <div class="goal-area-bottom"></div>
+    </div>
+    <button class="save-btn" onclick="confirmar()">
+      💾 Confirmar posições
+    </button>
 
-<div class="selector-overlay" id="selectorOverlay">
-    <div class="selector-panel">
+    <div class="selector-overlay" id="selectorOverlay">
+      <div class="selector-panel">
         <div class="selector-title">Selecionar jogador</div>
-        <input class="selector-search" id="selectorSearch" placeholder="Buscar..." oninput="filterSelector()"/>
+        <input
+          class="selector-search"
+          id="selectorSearch"
+          placeholder="Buscar..."
+          oninput="filterSelector()"
+        />
         <div class="selector-clear" onclick="clearSlot()">
-            <span>✕ Remover jogador</span>
+          <span>✕ Remover jogador</span>
         </div>
         <div id="selectorList"></div>
+      </div>
     </div>
-</div>
 
-<script>
-function sendMessageToStreamlitClient(type, data) {
-    window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type }, data), "*");
-}
-function init() { sendMessageToStreamlitClient("streamlit:componentReady", { apiVersion: 1 }); }
-function setFrameHeight(h) { sendMessageToStreamlitClient("streamlit:setFrameHeight", { height: h }); }
-function sendValue(v) { sendMessageToStreamlitClient("streamlit:setComponentValue", { value: v }); }
+    <script>
+      function sendMessageToStreamlitClient(type, data) {
+        window.parent.postMessage(
+          Object.assign({ isStreamlitMessage: true, type }, data),
+          "*",
+        );
+      }
+      function init() {
+        sendMessageToStreamlitClient("streamlit:componentReady", {
+          apiVersion: 1,
+        });
+      }
+      function setFrameHeight(h) {
+        sendMessageToStreamlitClient("streamlit:setFrameHeight", { height: h });
+      }
+      function sendValue(v) {
+        sendMessageToStreamlitClient("streamlit:setComponentValue", {
+          value: v,
+        });
+      }
 
-let jogadores = [];
-let slots = [];
-let activeSlotIdx = -1;
-let dragging = null;
-let dragSlotIdx = -1;
-let offsetX = 0, offsetY = 0;
-let dragStartX = 0, dragStartY = 0, didDrag = false;
+      let jogadores = [];
+      let slots = [];
+      let activeSlotIdx = -1;
+      let dragging = null;
+      let dragSlotIdx = -1;
+      let offsetX = 0,
+        offsetY = 0;
+      let dragStartX = 0,
+        dragStartY = 0,
+        didDrag = false;
 
-function getAssignedIds() {
-    return slots.filter(s => s.playerId).map(s => s.playerId);
-}
+      function getAssignedIds() {
+        return slots.filter((s) => s.playerId).map((s) => s.playerId);
+      }
 
-function render() {
-    const pitch = document.getElementById('pitch');
-    pitch.querySelectorAll('.slot').forEach(el => el.remove());
+      function render() {
+        const pitch = document.getElementById("pitch");
+        pitch.querySelectorAll(".slot").forEach((el) => el.remove());
 
-    slots.forEach((slot, idx) => {
-        const el = document.createElement('div');
-        el.className = 'slot';
-        el.style.left = slot.x + '%';
-        el.style.top = slot.y + '%';
-        el.dataset.slotIdx = idx;
+        slots.forEach((slot, idx) => {
+          const el = document.createElement("div");
+          el.className = "slot";
+          el.style.left = slot.x + "%";
+          el.style.top = slot.y + "%";
+          el.dataset.slotIdx = idx;
 
-        const player = slot.playerId ? jogadores.find(j => j.id === slot.playerId) : null;
+          const player = slot.playerId
+            ? jogadores.find((j) => j.id === slot.playerId)
+            : null;
 
-        if (player && player.imageUrl) {
-            el.innerHTML = '<img class="slot-img" src="' + player.imageUrl + '" draggable="false"/>';
-        } else if (player) {
-            const initials = player.name.split(' ').map(function(w){return w[0];}).slice(0, 2).join('');
-            el.innerHTML = '<div class="slot-filled">' + initials + '</div>';
+          if (player && player.imageUrl) {
+            el.innerHTML =
+              '<img class="slot-img" src="' +
+              player.imageUrl +
+              '" draggable="false"/>';
+          } else if (player) {
+            const initials = player.name
+              .split(" ")
+              .map(function (w) {
+                return w[0];
+              })
+              .slice(0, 2)
+              .join("");
+            el.innerHTML = '<div class="slot-filled">' + initials + "</div>";
+          } else {
+            el.innerHTML = '<div class="slot-circle">' + (idx + 1) + "</div>";
+          }
+
+          el.addEventListener("mousedown", function (e) {
+            startDrag(e, idx);
+          });
+          el.addEventListener(
+            "touchstart",
+            function (e) {
+              startDragTouch(e, idx);
+            },
+            { passive: false },
+          );
+
+          pitch.appendChild(el);
+        });
+
+        setFrameHeight(pitch.offsetHeight + 50);
+      }
+
+      function startDrag(e, idx) {
+        e.preventDefault();
+        dragging = e.currentTarget;
+        dragSlotIdx = idx;
+        didDrag = false;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragging.classList.add("dragging");
+
+        var pitch = document.getElementById("pitch");
+        var elRect = dragging.getBoundingClientRect();
+        offsetX = e.clientX - (elRect.left + elRect.width / 2);
+        offsetY = e.clientY - (elRect.top + elRect.height / 2);
+
+        document.addEventListener("mousemove", onDrag);
+        document.addEventListener("mouseup", endDrag);
+      }
+
+      function startDragTouch(e, idx) {
+        e.preventDefault();
+        dragging = e.currentTarget;
+        dragSlotIdx = idx;
+        didDrag = false;
+        var touch = e.touches[0];
+        dragStartX = touch.clientX;
+        dragStartY = touch.clientY;
+        dragging.classList.add("dragging");
+        offsetX = 0;
+        offsetY = 0;
+
+        document.addEventListener("touchmove", onDragTouch, { passive: false });
+        document.addEventListener("touchend", endDragTouch);
+      }
+
+      function onDrag(e) {
+        if (!dragging) return;
+        var dx = e.clientX - dragStartX,
+          dy = e.clientY - dragStartY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
+        if (!didDrag) return;
+
+        var pitch = document.getElementById("pitch");
+        var rect = pitch.getBoundingClientRect();
+        var x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
+        var y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
+        x = Math.max(5, Math.min(95, x));
+        y = Math.max(5, Math.min(95, y));
+        dragging.style.left = x + "%";
+        dragging.style.top = y + "%";
+      }
+
+      function onDragTouch(e) {
+        if (!dragging) return;
+        e.preventDefault();
+        var touch = e.touches[0];
+        var dx = touch.clientX - dragStartX,
+          dy = touch.clientY - dragStartY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
+        if (!didDrag) return;
+
+        var pitch = document.getElementById("pitch");
+        var rect = pitch.getBoundingClientRect();
+        var x = ((touch.clientX - rect.left) / rect.width) * 100;
+        var y = ((touch.clientY - rect.top) / rect.height) * 100;
+        x = Math.max(5, Math.min(95, x));
+        y = Math.max(5, Math.min(95, y));
+        dragging.style.left = x + "%";
+        dragging.style.top = y + "%";
+      }
+
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging.classList.remove("dragging");
+        if (didDrag) {
+          slots[dragSlotIdx].x =
+            Math.round(parseFloat(dragging.style.left) * 10) / 10;
+          slots[dragSlotIdx].y =
+            Math.round(parseFloat(dragging.style.top) * 10) / 10;
         } else {
-            el.innerHTML = '<div class="slot-circle">' + (idx + 1) + '</div>';
+          openSelector(dragSlotIdx);
         }
+        dragging = null;
+        document.removeEventListener("mousemove", onDrag);
+        document.removeEventListener("mouseup", endDrag);
+      }
 
-        el.addEventListener('mousedown', function(e) { startDrag(e, idx); });
-        el.addEventListener('touchstart', function(e) { startDragTouch(e, idx); }, { passive: false });
+      function endDragTouch(e) {
+        if (!dragging) return;
+        dragging.classList.remove("dragging");
+        if (didDrag) {
+          slots[dragSlotIdx].x =
+            Math.round(parseFloat(dragging.style.left) * 10) / 10;
+          slots[dragSlotIdx].y =
+            Math.round(parseFloat(dragging.style.top) * 10) / 10;
+        } else {
+          openSelector(dragSlotIdx);
+        }
+        dragging = null;
+        document.removeEventListener("touchmove", onDragTouch);
+        document.removeEventListener("touchend", endDragTouch);
+      }
 
-        pitch.appendChild(el);
-    });
+      function openSelector(slotIdx) {
+        activeSlotIdx = slotIdx;
+        var overlay = document.getElementById("selectorOverlay");
+        var search = document.getElementById("selectorSearch");
+        search.value = "";
+        renderSelectorList("");
+        overlay.classList.add("active");
+        setTimeout(function () {
+          search.focus();
+        }, 100);
+        overlay.onclick = function (e) {
+          if (e.target === overlay) closeSelector();
+        };
+      }
 
-    setFrameHeight(pitch.offsetHeight + 50);
-}
+      function renderSelectorList(filter) {
+        var list = document.getElementById("selectorList");
+        var assigned = getAssignedIds();
+        var lowerFilter = filter.toLowerCase();
+        list.innerHTML = "";
 
-function startDrag(e, idx) {
-    e.preventDefault();
-    dragging = e.currentTarget;
-    dragSlotIdx = idx;
-    didDrag = false;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    dragging.classList.add('dragging');
+        jogadores.forEach(function (j) {
+          if (
+            lowerFilter &&
+            j.name.toLowerCase().indexOf(lowerFilter) === -1 &&
+            j.club.toLowerCase().indexOf(lowerFilter) === -1
+          )
+            return;
 
-    var pitch = document.getElementById('pitch');
-    var elRect = dragging.getBoundingClientRect();
-    offsetX = e.clientX - (elRect.left + elRect.width / 2);
-    offsetY = e.clientY - (elRect.top + elRect.height / 2);
+          var isAssigned =
+            assigned.indexOf(j.id) !== -1 &&
+            slots[activeSlotIdx].playerId !== j.id;
+          var item = document.createElement("div");
+          item.className = "selector-item" + (isAssigned ? " disabled" : "");
 
-    document.addEventListener('mousemove', onDrag);
-    document.addEventListener('mouseup', endDrag);
-}
-
-function startDragTouch(e, idx) {
-    e.preventDefault();
-    dragging = e.currentTarget;
-    dragSlotIdx = idx;
-    didDrag = false;
-    var touch = e.touches[0];
-    dragStartX = touch.clientX;
-    dragStartY = touch.clientY;
-    dragging.classList.add('dragging');
-    offsetX = 0; offsetY = 0;
-
-    document.addEventListener('touchmove', onDragTouch, { passive: false });
-    document.addEventListener('touchend', endDragTouch);
-}
-
-function onDrag(e) {
-    if (!dragging) return;
-    var dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
-    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
-    if (!didDrag) return;
-
-    var pitch = document.getElementById('pitch');
-    var rect = pitch.getBoundingClientRect();
-    var x = ((e.clientX - offsetX - rect.left) / rect.width) * 100;
-    var y = ((e.clientY - offsetY - rect.top) / rect.height) * 100;
-    x = Math.max(5, Math.min(95, x));
-    y = Math.max(5, Math.min(95, y));
-    dragging.style.left = x + '%';
-    dragging.style.top = y + '%';
-}
-
-function onDragTouch(e) {
-    if (!dragging) return;
-    e.preventDefault();
-    var touch = e.touches[0];
-    var dx = touch.clientX - dragStartX, dy = touch.clientY - dragStartY;
-    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
-    if (!didDrag) return;
-
-    var pitch = document.getElementById('pitch');
-    var rect = pitch.getBoundingClientRect();
-    var x = ((touch.clientX - rect.left) / rect.width) * 100;
-    var y = ((touch.clientY - rect.top) / rect.height) * 100;
-    x = Math.max(5, Math.min(95, x));
-    y = Math.max(5, Math.min(95, y));
-    dragging.style.left = x + '%';
-    dragging.style.top = y + '%';
-}
-
-function endDrag(e) {
-    if (!dragging) return;
-    dragging.classList.remove('dragging');
-    if (didDrag) {
-        slots[dragSlotIdx].x = Math.round(parseFloat(dragging.style.left) * 10) / 10;
-        slots[dragSlotIdx].y = Math.round(parseFloat(dragging.style.top) * 10) / 10;
-    } else {
-        openSelector(dragSlotIdx);
-    }
-    dragging = null;
-    document.removeEventListener('mousemove', onDrag);
-    document.removeEventListener('mouseup', endDrag);
-}
-
-function endDragTouch(e) {
-    if (!dragging) return;
-    dragging.classList.remove('dragging');
-    if (didDrag) {
-        slots[dragSlotIdx].x = Math.round(parseFloat(dragging.style.left) * 10) / 10;
-        slots[dragSlotIdx].y = Math.round(parseFloat(dragging.style.top) * 10) / 10;
-    } else {
-        openSelector(dragSlotIdx);
-    }
-    dragging = null;
-    document.removeEventListener('touchmove', onDragTouch);
-    document.removeEventListener('touchend', endDragTouch);
-}
-
-function openSelector(slotIdx) {
-    activeSlotIdx = slotIdx;
-    var overlay = document.getElementById('selectorOverlay');
-    var search = document.getElementById('selectorSearch');
-    search.value = '';
-    renderSelectorList('');
-    overlay.classList.add('active');
-    setTimeout(function() { search.focus(); }, 100);
-    overlay.onclick = function(e) { if (e.target === overlay) closeSelector(); };
-}
-
-function renderSelectorList(filter) {
-    var list = document.getElementById('selectorList');
-    var assigned = getAssignedIds();
-    var lowerFilter = filter.toLowerCase();
-    list.innerHTML = '';
-
-    jogadores.forEach(function(j) {
-        if (lowerFilter && j.name.toLowerCase().indexOf(lowerFilter) === -1 && j.club.toLowerCase().indexOf(lowerFilter) === -1) return;
-
-        var isAssigned = assigned.indexOf(j.id) !== -1 && slots[activeSlotIdx].playerId !== j.id;
-        var item = document.createElement('div');
-        item.className = 'selector-item' + (isAssigned ? ' disabled' : '');
-
-        var imgHtml = j.imageUrl
+          var imgHtml = j.imageUrl
             ? '<img src="' + j.imageUrl + '"/>'
-            : '<div class="selector-item-placeholder">' + j.name.split(' ').map(function(w){return w[0];}).slice(0,2).join('') + '</div>';
+            : '<div class="selector-item-placeholder">' +
+              j.name
+                .split(" ")
+                .map(function (w) {
+                  return w[0];
+                })
+                .slice(0, 2)
+                .join("") +
+              "</div>";
 
-        item.innerHTML = imgHtml + '<div><div class="selector-item-name">' + j.name + '</div><div class="selector-item-club">' + j.club + '</div></div>';
+          item.innerHTML =
+            imgHtml +
+            '<div><div class="selector-item-name">' +
+            j.name +
+            '</div><div class="selector-item-club">' +
+            j.club +
+            "</div></div>";
 
-        if (!isAssigned) {
-            item.onclick = function() { selectPlayer(j.id); };
-        }
-        list.appendChild(item);
-    });
-}
+          if (!isAssigned) {
+            item.onclick = function () {
+              selectPlayer(j.id);
+            };
+          }
+          list.appendChild(item);
+        });
+      }
 
-function filterSelector() {
-    renderSelectorList(document.getElementById('selectorSearch').value);
-}
+      function filterSelector() {
+        renderSelectorList(document.getElementById("selectorSearch").value);
+      }
 
-function selectPlayer(playerId) {
-    slots[activeSlotIdx].playerId = playerId;
-    closeSelector();
-    render();
-}
+      function selectPlayer(playerId) {
+        slots[activeSlotIdx].playerId = playerId;
+        closeSelector();
+        render();
+      }
 
-function clearSlot() {
-    slots[activeSlotIdx].playerId = '';
-    closeSelector();
-    render();
-}
+      function clearSlot() {
+        slots[activeSlotIdx].playerId = "";
+        closeSelector();
+        render();
+      }
 
-function closeSelector() {
-    document.getElementById('selectorOverlay').classList.remove('active');
-    activeSlotIdx = -1;
-}
+      function closeSelector() {
+        document.getElementById("selectorOverlay").classList.remove("active");
+        activeSlotIdx = -1;
+      }
 
-function confirmar() {
-    sendValue(slots);
-}
+      function confirmar() {
+        sendValue(slots);
+      }
 
-window.addEventListener("message", function(event) {
-    if (event.data.type !== "streamlit:render") return;
-    var args = event.data.args;
-    jogadores = args.jogadores || [];
-    slots = args.slots || [];
-    render();
-});
+      window.addEventListener("message", function (event) {
+        if (event.data.type !== "streamlit:render") return;
+        var args = event.data.args;
+        jogadores = args.jogadores || [];
+        slots = args.slots || [];
+        render();
+      });
 
-init();
-</script>
-</body>
+      init();
+    </script>
+  </body>
 </html>
