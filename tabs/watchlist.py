@@ -4,7 +4,9 @@ from datetime import datetime
 from utils import POSICOES_DEFAULT, TOP_TEAM_LIMITES, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe
 from github_api import get_watchlist, salvar_watchlist, carregar_stats_cache
 
-SOFASCORE_BASE = "https://www.sofascore.com/api/v1"
+def _get_sofascore_base():
+    return st.secrets.get("SOFASCORE_PROXY_URL", "https://www.sofascore.com/api/v1")
+
 SOFASCORE_HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
@@ -35,7 +37,7 @@ def render(modo_edicao: bool):
                         sf_id = j.get("sofascore_id")
                         if sf_id:
                             try:
-                                resp = requests.get(f"{SOFASCORE_BASE}/player/{sf_id}", headers=SOFASCORE_HEADERS, timeout=10)
+                                resp = requests.get(f"{_get_sofascore_base()}/player/{sf_id}", headers=SOFASCORE_HEADERS, timeout=10)
                                 if resp.status_code == 200:
                                     p = resp.json().get("player", {})
                                     j["name"] = p.get("name", j["name"])

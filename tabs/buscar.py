@@ -4,7 +4,10 @@ from datetime import datetime
 from utils import POSICOES_DEFAULT, calcular_idades, formatar_valor, badge, traduzir_pe
 from github_api import get_watchlist, salvar_watchlist
 
-SOFASCORE_BASE = "https://www.sofascore.com/api/v1"
+def _get_sofascore_base():
+    """Use Cloudflare Worker proxy if configured, else direct."""
+    return st.secrets.get("SOFASCORE_PROXY_URL", "https://www.sofascore.com/api/v1")
+
 SOFASCORE_HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 SOFASCORE_POSITION_MAP = {
@@ -26,7 +29,7 @@ def _buscar_sofascore(nome: str) -> list:
     """Busca jogadores no SofaScore."""
     try:
         resp = requests.get(
-            f"{SOFASCORE_BASE}/search/all",
+            f"{_get_sofascore_base()}/search/all",
             params={"q": nome, "page": 0},
             headers=SOFASCORE_HEADERS,
             timeout=10,
@@ -46,7 +49,7 @@ def _buscar_perfil_sofascore(player_id: int) -> dict | None:
     """Busca perfil completo do jogador no SofaScore."""
     try:
         resp = requests.get(
-            f"{SOFASCORE_BASE}/player/{player_id}",
+            f"{_get_sofascore_base()}/player/{player_id}",
             headers=SOFASCORE_HEADERS,
             timeout=10,
         )
