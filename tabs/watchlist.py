@@ -1,7 +1,11 @@
 import streamlit as st
-import pandas as pd
-from utils import POSICOES_DEFAULT, TOP_TEAM_LIMITES, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe, extrair_nascimento
-from github_api import get_watchlist, salvar_watchlist, buscar_perfil, buscar_clube, buscar_historico_valor, carregar_stats_cache
+import requests
+from datetime import datetime
+from utils import POSICOES_DEFAULT, TOP_TEAM_LIMITES, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe
+from github_api import get_watchlist, salvar_watchlist, carregar_stats_cache
+
+SOFASCORE_BASE = "https://www.sofascore.com/api/v1"
+SOFASCORE_HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
 def render(modo_edicao: bool):
@@ -15,7 +19,7 @@ def render(modo_edicao: bool):
 
     @st.dialog("Atualizar dados dos jogadores")
     def modal_atualizar():
-        st.write("Esta ação irá buscar os dados mais recentes de todos os jogadores salvos na sua Watchlist (clube, valor de mercado, etc).")
+        st.write("Esta ação irá buscar os dados mais recentes de todos os jogadores via SofaScore (clube, valor de mercado, etc).")
         st.write("Dependendo da quantidade de jogadores, isso pode levar alguns segundos.")
         col_cancel, col_confirm = st.columns(2)
         with col_cancel:
@@ -28,23 +32,26 @@ def render(modo_edicao: bool):
                 count = 0
                 for pos, lista in jogadores.items():
                     for j in lista:
-                        perfil = buscar_perfil(j["id"])
-                        if perfil:
-                            nascimento = extrair_nascimento(perfil.get("description"))
-                            j["name"] = perfil.get("fullName") or perfil.get("name") or j["name"]
-                            j["club"] = perfil.get("club", {}).get("name", "N/A")
-                            j["imageUrl"] = perfil.get("imageUrl")
-                            j["marketValue"] = perfil.get("marketValue")
-                            j["position"] = perfil.get("position", {}).get("main", "N/A")
-                            j["foot"] = perfil.get("foot", "N/A")
-                            j["height"] = perfil.get("height")
-                            if nascimento:
-                                j["nascimento"] = nascimento
-                            club_id = perfil.get("club", {}).get("id")
-                            if club_id:
-                                club_data = buscar_clube(str(club_id))
-                                if club_data:
-                                    j["clubCountry"] = club_data.get("league", {}).get("countryName", "")
+                        sf_id = j.get("sofascore_id")
+                        if sf_id:
+                            try:
+                                resp = requests.get(f"{SOFASCORE_BASE}/player/{sf_id}", headers=SOFASCORE_HEADERS, timeout=10)
+                                if resp.status_code == 200:
+                                    p = resp.json().get("player", {})
+                                    j["name"] = p.get("name", j["name"])
+                                    j["club"] = p.get("team", {}).get("name", j.get("club", "N/A"))
+                                    j["clubCountry"] = p.get("team", {}).get("country", {}).get("name", "")
+                                    j["imageUrl"] = f"https://api.sofascore.app/api/v1/player/{sf_id}/image"
+                                    j["marketValue"] = p.get("proposedMarketValue")
+                                    j["position"] = p.get("position", j.get("position", ""))
+                                    foot = p.get("preferredFoot", "")
+                                    j["foot"] = {"Left": "left", "Right": "right", "Both": "both"}.get(foot, j.get("foot", ""))
+                                    j["height"] = p.get("height", j.get("height"))
+                                    ts = p.get("dateOfBirthTimestamp")
+                                    if ts:
+                                        j["nascimento"] = datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
+                            except Exception:
+                                pass
                         count += 1
                         progress.progress(count / total, text=f"Atualizando {count}/{total}...")
                 salvar_watchlist()
@@ -196,16 +203,6 @@ def render(modo_edicao: bool):
                             st.caption(f"{label}: {valor}")
                     else:
                         st.caption("Estatísticas não disponíveis. Execute 'python coletar_stats.py' localmente.")
-
-                    historico = buscar_historico_valor(j["id"])
-                    if historico:
-                        st.markdown("**Evolução do valor de mercado**")
-                        datas = [h.get("date", "") for h in historico]
-                        valores = [h.get("value", 0) for h in historico]
-                        df = pd.DataFrame({"Data": datas, "Valor (€)": valores})
-                        df["Data"] = pd.to_datetime(df["Data"], errors="coerce")
-                        df = df.dropna(subset=["Data"]).sort_values("Data")
-                        st.line_chart(df.set_index("Data")["Valor (€)"])
 
         if st.session_state.pop(f"top_team_full_{posicao}", False):
             limite = TOP_TEAM_LIMITES.get(posicao, 0)

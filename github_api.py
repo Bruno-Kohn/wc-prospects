@@ -3,7 +3,7 @@ import requests
 import json
 import base64
 
-from utils import GITHUB_REPO, WATCHLIST_PATH, POSICOES_DEFAULT, BASE_URL
+from utils import GITHUB_REPO, WATCHLIST_PATH, POSICOES_DEFAULT
 
 
 def _github_headers():
@@ -59,50 +59,6 @@ def get_watchlist() -> dict:
 def salvar_watchlist():
     wl = st.session_state["watchlist"]
     _salvar_watchlist_github(wl)
-
-
-# --- Transfermarkt API ---
-@st.cache_data(ttl=3600)
-def buscar_jogadores(nome: str) -> list:
-    try:
-        resp = requests.get(f"{BASE_URL}/players/search/{nome}", timeout=10)
-        resp.raise_for_status()
-        return resp.json().get("results", [])
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro de conexão: {e}")
-        return []
-
-
-@st.cache_data(ttl=3600)
-def buscar_perfil(player_id: str) -> dict | None:
-    try:
-        resp = requests.get(f"{BASE_URL}/players/{player_id}/profile", timeout=10)
-        resp.raise_for_status()
-        return resp.json()
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro de conexão: {e}")
-        return None
-
-
-@st.cache_data(ttl=3600)
-def buscar_clube(club_id: str) -> dict | None:
-    try:
-        resp = requests.get(f"{BASE_URL}/clubs/{club_id}/profile", timeout=10)
-        resp.raise_for_status()
-        return resp.json()
-    except Exception:
-        return None
-
-
-@st.cache_data(ttl=3600)
-def buscar_historico_valor(player_id: str) -> list:
-    try:
-        resp = requests.get(f"{BASE_URL}/players/{player_id}/market_value", timeout=10)
-        resp.raise_for_status()
-        data = resp.json()
-        return data.get("marketValueHistory", [])
-    except Exception:
-        return []
 
 
 @st.cache_data(ttl=300)

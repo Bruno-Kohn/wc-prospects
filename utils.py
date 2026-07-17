@@ -27,7 +27,7 @@ TOP_TEAM_LIMITES = {
     "Atacantes": 3,
 }
 
-BASE_URL = "https://transfermarkt-api.fly.dev"
+BASE_URL = "https://www.sofascore.com/api/v1"
 GITHUB_REPO = "Bruno-Kohn/wc-prospects"
 WATCHLIST_PATH = "watchlist.json"
 
