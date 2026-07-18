@@ -272,17 +272,36 @@ COPAS = {
 def render(modo_edicao: bool):
     st.subheader("🇧🇷 Brasil em Copas do Mundo")
 
-    for copa, dados in COPAS.items():
+    copas_keys = list(COPAS.keys())
+
+    for idx, copa in enumerate(copas_keys):
+        dados = COPAS[copa]
         resultado = dados["resultado"]
         tecnico = dados["tecnico"]
         jogadores = dados["jogadores"]
+        nomes_atual = {j["nome"] for j in jogadores}
 
-        emoji = "🏆" if "Campeão" in resultado else ""
-        with st.expander(f"{copa} — {resultado} ({tecnico})"):
+        # Calcular remanescentes da copa anterior
+        remanescentes_info = ""
+        remanescentes_nomes = []
+        if idx < len(copas_keys) - 1:
+            copa_anterior = copas_keys[idx + 1]
+            nomes_anterior = {j["nome"] for j in COPAS[copa_anterior]["jogadores"]}
+            remanescentes_nomes = sorted(nomes_atual & nomes_anterior)
+            qtd = len(remanescentes_nomes)
+            total_anterior = len(nomes_anterior)
+            pct = (qtd / total_anterior * 100) if total_anterior else 0
+            remanescentes_info = f" | {qtd}/{total_anterior} da copa anterior ({pct:.0f}%)"
+
+        with st.expander(f"{copa} — {resultado} ({tecnico}){remanescentes_info}"):
             # Agrupar por posição
-            posicoes_ordem = ["Goleiro", "Lateral Direito", "Lateral Esquerdo", "Zagueiro", "Volante", "Meia", "Ponta", "Atacante"]
+            posicoes_ordem = ["Goleiro", "Lateral Direito", "Lateral Esquerdo", "Lateral", "Zagueiro", "Volante", "Meia", "Ponta", "Atacante"]
             for pos in posicoes_ordem:
                 jogadores_pos = [j for j in jogadores if j["posicao"] == pos]
                 if jogadores_pos:
                     nomes = ", ".join([f"**{j['nome']}** ({j['clube']})" for j in jogadores_pos])
                     st.markdown(f"**{pos}:** {nomes}")
+
+            if remanescentes_nomes:
+                st.divider()
+                st.caption(f"Remanescentes da copa anterior: {', '.join(remanescentes_nomes)}")
