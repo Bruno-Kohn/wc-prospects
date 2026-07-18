@@ -238,34 +238,34 @@ COPAS = {
             {"nome": "Giovanni", "posicao": "Atacante", "clube": "Barcelona"},
         ],
     },
-    # "1994 🇺🇸": {
-    #     "resultado": "🏆 Campeão",
-    #     "tecnico": "Carlos Alberto Parreira",
-    #     "jogadores": [
-    #         {"nome": "Taffarel", "posicao": "Goleiro", "clube": "Reggiana"},
-    #         {"nome": "Zetti", "posicao": "Goleiro", "clube": "São Paulo"},
-    #         {"nome": "Gilmar Rinaldi", "posicao": "Goleiro", "clube": "Flamengo"},
-    #         {"nome": "Jorginho", "posicao": "Lateral Direito", "clube": "Bayern"},
-    #         {"nome": "Cafu", "posicao": "Lateral Direito", "clube": "São Paulo"},
-    #         {"nome": "Branco", "posicao": "Lateral Esquerdo", "clube": "Fluminense"},
-    #         {"nome": "Leonardo", "posicao": "Lateral Esquerdo", "clube": "São Paulo"},
-    #         {"nome": "Aldair", "posicao": "Zagueiro", "clube": "Roma"},
-    #         {"nome": "Ricardo Rocha", "posicao": "Zagueiro", "clube": "Vasco da Gama"},
-    #         {"nome": "Márcio Santos", "posicao": "Zagueiro", "clube": "Bordeaux"},
-    #         {"nome": "Ronaldão", "posicao": "Zagueiro", "clube": "Shimizu S-Pulse"},
-    #         {"nome": "Dunga", "posicao": "Volante", "clube": "Stuttgart"},
-    #         {"nome": "Mauro Silva", "posicao": "Volante", "clube": "Deportivo La Coruña"},
-    #         {"nome": "Mazinho", "posicao": "Volante", "clube": "Palmeiras"},
-    #         {"nome": "Zinho", "posicao": "Meia", "clube": "Palmeiras"},
-    #         {"nome": "Raí", "posicao": "Meia", "clube": "PSG"},
-    #         {"nome": "Paulo Sérgio", "posicao": "Meia", "clube": "Bayer Leverkusen"},
-    #         {"nome": "Bebeto", "posicao": "Atacante", "clube": "Deportivo La Coruña"},
-    #         {"nome": "Romário", "posicao": "Atacante", "clube": "Barcelona"},
-    #         {"nome": "Müller", "posicao": "Atacante", "clube": "São Paulo"},
-    #         {"nome": "Rolando", "posicao": "Atacante", "clube": "Cruzeiro"},
-    #         {"nome": "Viola", "posicao": "Atacante", "clube": "Corinthians"},
-    #     ],
-    # },
+    "1994 🇺🇸": {
+        "resultado": "🏆 Campeão",
+        "tecnico": "Carlos Alberto Parreira",
+        "jogadores": [
+            {"nome": "Taffarel", "posicao": "Goleiro", "clube": "Reggiana"},
+            {"nome": "Zetti", "posicao": "Goleiro", "clube": "São Paulo"},
+            {"nome": "Gilmar Rinaldi", "posicao": "Goleiro", "clube": "Flamengo"},
+            {"nome": "Jorginho", "posicao": "Lateral Direito", "clube": "Bayern"},
+            {"nome": "Cafu", "posicao": "Lateral Direito", "clube": "São Paulo"},
+            {"nome": "Branco", "posicao": "Lateral Esquerdo", "clube": "Fluminense"},
+            {"nome": "Leonardo", "posicao": "Lateral Esquerdo", "clube": "São Paulo"},
+            {"nome": "Aldair", "posicao": "Zagueiro", "clube": "Roma"},
+            {"nome": "Ricardo Rocha", "posicao": "Zagueiro", "clube": "Vasco da Gama"},
+            {"nome": "Márcio Santos", "posicao": "Zagueiro", "clube": "Bordeaux"},
+            {"nome": "Ronaldão", "posicao": "Zagueiro", "clube": "Shimizu S-Pulse"},
+            {"nome": "Dunga", "posicao": "Volante", "clube": "Stuttgart"},
+            {"nome": "Mauro Silva", "posicao": "Volante", "clube": "Deportivo La Coruña"},
+            {"nome": "Mazinho", "posicao": "Volante", "clube": "Palmeiras"},
+            {"nome": "Zinho", "posicao": "Meia", "clube": "Palmeiras"},
+            {"nome": "Raí", "posicao": "Meia", "clube": "PSG"},
+            {"nome": "Paulo Sérgio", "posicao": "Meia", "clube": "Bayer Leverkusen"},
+            {"nome": "Bebeto", "posicao": "Atacante", "clube": "Deportivo La Coruña"},
+            {"nome": "Romário", "posicao": "Atacante", "clube": "Barcelona"},
+            {"nome": "Müller", "posicao": "Atacante", "clube": "São Paulo"},
+            {"nome": "Rolando", "posicao": "Atacante", "clube": "Cruzeiro"},
+            {"nome": "Viola", "posicao": "Atacante", "clube": "Corinthians"},
+        ],
+    },
     "1990 🇮🇹": {
         "resultado": "Oitavas de final",
         "tecnico": "Sebastião Lazaroni",
@@ -302,6 +302,16 @@ def render(modo_edicao: bool):
 
     copas_keys = list(COPAS.keys())
 
+    # Seletor de copas
+    copas_selecionadas = st.multiselect(
+        "Selecione as copas para exibir",
+        options=copas_keys,
+        default=copas_keys,
+        key="copas_filtro",
+    )
+
+    copas_filtradas = [c for c in copas_keys if c in copas_selecionadas]
+
     # Calcular percentuais primeiro para a média
     percentuais = []
     for idx, copa in enumerate(copas_keys):
@@ -315,9 +325,11 @@ def render(modo_edicao: bool):
 
     if percentuais:
         media_pct = sum(percentuais) / len(percentuais)
-        st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** (de 1998 a 2026)")
+        st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** (de 1994 a 2026)")
 
     for idx, copa in enumerate(copas_keys):
+        if copa not in copas_filtradas:
+            continue
         dados = COPAS[copa]
         resultado = dados["resultado"]
         tecnico = dados["tecnico"]
