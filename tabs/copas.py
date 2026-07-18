@@ -274,6 +274,21 @@ def render(modo_edicao: bool):
 
     copas_keys = list(COPAS.keys())
 
+    # Calcular percentuais primeiro para a média
+    percentuais = []
+    for idx, copa in enumerate(copas_keys):
+        if idx < len(copas_keys) - 1:
+            nomes_atual = {j["nome"] for j in COPAS[copa]["jogadores"]}
+            nomes_anterior = {j["nome"] for j in COPAS[copas_keys[idx + 1]]["jogadores"]}
+            remanescentes = nomes_atual & nomes_anterior
+            total_anterior = len(nomes_anterior)
+            pct = (len(remanescentes) / total_anterior * 100) if total_anterior else 0
+            percentuais.append(pct)
+
+    if percentuais:
+        media_pct = sum(percentuais) / len(percentuais)
+        st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** (de 1998 a 2026)")
+
     for idx, copa in enumerate(copas_keys):
         dados = COPAS[copa]
         resultado = dados["resultado"]
