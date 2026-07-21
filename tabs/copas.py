@@ -349,16 +349,6 @@ def render(modo_edicao: bool):
 
     copas_keys = sorted(COPAS.keys(), key=lambda x: int(x[:4]), reverse=True)
 
-    # Seletor de copas
-    copas_selecionadas = st.multiselect(
-        "Selecione as copas para exibir",
-        options=copas_keys,
-        default=copas_keys,
-        key="copas_filtro",
-    )
-
-    copas_filtradas = [c for c in copas_keys if c in copas_selecionadas]
-
     # Calcular percentuais primeiro para a média
     percentuais = []
     for idx, copa in enumerate(copas_keys):
@@ -375,8 +365,6 @@ def render(modo_edicao: bool):
         st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** ({len(percentuais)} transições analisadas)")
 
     for idx, copa in enumerate(copas_keys):
-        if copa not in copas_filtradas:
-            continue
         dados = COPAS[copa]
         resultado = dados["resultado"]
         tecnico = dados["tecnico"]
