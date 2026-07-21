@@ -372,7 +372,7 @@ def render(modo_edicao: bool):
 
     if percentuais:
         media_pct = sum(percentuais) / len(percentuais)
-        st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** (de 1994 a 2026)")
+        st.caption(f"Média de remanescentes entre copas: **{media_pct:.0f}%** ({len(percentuais)} transições analisadas)")
 
     for idx, copa in enumerate(copas_keys):
         if copa not in copas_filtradas:
