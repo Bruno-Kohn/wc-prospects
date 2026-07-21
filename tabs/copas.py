@@ -347,7 +347,7 @@ if os.path.exists(_HISTORICO_PATH):
 def render(modo_edicao: bool):
     st.subheader("🇧🇷 Brasil em Copas do Mundo")
 
-    copas_keys = sorted(COPAS.keys(), key=lambda x: int(x[:4]))
+    copas_keys = sorted(COPAS.keys(), key=lambda x: int(x[:4]), reverse=True)
 
     # Seletor de copas
     copas_selecionadas = st.multiselect(
