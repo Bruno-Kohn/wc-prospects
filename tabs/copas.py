@@ -294,7 +294,54 @@ COPAS = {
             {"nome": "Renato Gaúcho", "posicao": "Atacante", "clube": "Flamengo"},
         ],
     },
+    "1986 🇲🇽": {
+        "resultado": "Quartas de final",
+        "tecnico": "Telê Santana",
+        "jogadores": [
+            {"nome": "Carlos", "posicao": "Goleiro", "clube": "São Paulo"},
+            {"nome": "Paulo Victor", "posicao": "Goleiro", "clube": "Botafogo"},
+            {"nome": "Josimar", "posicao": "Lateral Direito", "clube": "Botafogo"},
+            {"nome": "Édson", "posicao": "Lateral Direito", "clube": "Fluminense"},
+            {"nome": "Branco", "posicao": "Lateral Esquerdo", "clube": "Fluminense"},
+            {"nome": "Júnior", "posicao": "Lateral Esquerdo", "clube": "Flamengo"},
+            {"nome": "Edinho", "posicao": "Zagueiro", "clube": "Udinese"},
+            {"nome": "Júlio César", "posicao": "Zagueiro", "clube": "Flamengo"},
+            {"nome": "Mauro Galvão", "posicao": "Zagueiro", "clube": "Internacional"},
+            {"nome": "Falcão", "posicao": "Volante", "clube": "São Paulo"},
+            {"nome": "Alemão", "posicao": "Volante", "clube": "Botafogo"},
+            {"nome": "Elzo", "posicao": "Volante", "clube": "Guarani"},
+            {"nome": "Sócrates", "posicao": "Meia", "clube": "Flamengo"},
+            {"nome": "Zico", "posicao": "Meia", "clube": "Flamengo"},
+            {"nome": "Valdo", "posicao": "Meia", "clube": "Grêmio"},
+            {"nome": "Casagrande", "posicao": "Atacante", "clube": "São Paulo"},
+            {"nome": "Careca", "posicao": "Atacante", "clube": "São Paulo"},
+            {"nome": "Müller", "posicao": "Atacante", "clube": "São Paulo"},
+            {"nome": "Silas", "posicao": "Meia", "clube": "São Paulo"},
+            {"nome": "Douglas", "posicao": "Meia", "clube": "Vasco da Gama"},
+            {"nome": "Toninho Cerezo", "posicao": "Volante", "clube": "Roma"},
+            {"nome": "Leandro", "posicao": "Lateral Direito", "clube": "Flamengo"},
+        ],
+    },
 }
+
+# Carregar dados históricos (1930-1986) do JSON gerado a partir do CSV público
+import json
+import os
+
+_HISTORICO_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "copas_brasil_historico.json")
+if os.path.exists(_HISTORICO_PATH):
+    with open(_HISTORICO_PATH, "r", encoding="utf-8") as _f:
+        _historico = json.load(_f)
+    # Flags para os anos históricos
+    _FLAGS = {
+        "1930": "🇺🇾", "1934": "🇮🇹", "1938": "🇫🇷", "1950": "🇧🇷",
+        "1954": "🇨🇭", "1958": "🇸🇪", "1962": "🇨🇱", "1966": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "1970": "🇲🇽", "1974": "🇩🇪", "1978": "🇦🇷", "1982": "🇪🇸", "1986": "🇲🇽",
+    }
+    for year, dados in sorted(_historico.items()):
+        key = f"{year} {_FLAGS.get(year, '')}"
+        if key not in COPAS:
+            COPAS[key] = dados
 
 
 def render(modo_edicao: bool):

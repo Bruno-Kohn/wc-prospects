@@ -1,0 +1,1505 @@
+{
+  "1930": {
+    "tecnico": "Píndaro de Carvalho",
+    "resultado": "Fase de grupos",
+    "jogadores": [
+      {
+        "nome": "Araken",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Benedicto",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Benvenuto",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Brilhante",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Doca",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Fausto",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Fernando",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Fortes",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Hermógenes",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Itália",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Joel",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Carvalho Leite",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Manoelzinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Ivan Mariz",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Moderato",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Nilo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Oscarino",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Pamplona",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Poly",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Preguinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Russinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Teóphilo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Velloso",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zé Luiz",
+        "posicao": "Zagueiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1934": {
+    "tecnico": "Luiz Vinhaes",
+    "resultado": "1a fase",
+    "jogadores": [
+      {
+        "nome": "Almeida",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Ariel",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Armandinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Áttila",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Canalli",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Waldemar de Brito",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Germano",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Sylvio Hoffmann",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Carvalho Leite",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Leônidas",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Luisinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Luiz Luz",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Martim",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Octacílio",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Pamplona",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Patesko",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pedrosa",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Tinoco",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Waldyr",
+        "posicao": "Meia",
+        "clube": ""
+      }
+    ]
+  },
+  "1938": {
+    "tecnico": "Adhemar Pimenta",
+    "resultado": "3o lugar",
+    "jogadores": [
+      {
+        "nome": "Afonsinho",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Argemiro",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Batatais",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Brandão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Britto",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Domingos da Guia",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Hércules",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Jaú",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Leônidas",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Lopes",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Luisinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Machado",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Martim",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Nariz",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Niginho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Patesko",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Perácio",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Roberto",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Romeu",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Tim",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Walter",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zezé Procópio",
+        "posicao": "Meia",
+        "clube": ""
+      }
+    ]
+  },
+  "1950": {
+    "tecnico": "Flávio Costa",
+    "resultado": "Vice-campeão",
+    "jogadores": [
+      {
+        "nome": "Adãozinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Ademir",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Alfredo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Augusto",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Baltazar",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Barbosa",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Bauer",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Bigode",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Carlos José Castilho",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Chico",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Danilo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Ely",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Friaça",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Jair",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Juvenal",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Maneca",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Nena",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Noronha",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Rodrigues",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rui",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Nílton Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zizinho",
+        "posicao": "Atacante",
+        "clube": ""
+      }
+    ]
+  },
+  "1954": {
+    "tecnico": "Zezé Moreira",
+    "resultado": "Quartas de final",
+    "jogadores": [
+      {
+        "nome": "Carlos José Castilho",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Djalma Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Nílton Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Brandãozinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Pinheiro",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Bauer",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Julinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Didi",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Baltazar",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pinga",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rodrigues",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Paulinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Alfredo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Ely",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Mauro Ramos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Dequinha",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Maurinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Humberto",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Índio",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rubens",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Veludo",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Cabeção",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1958": {
+    "tecnico": "Vicente Feola",
+    "resultado": "Campeão",
+    "jogadores": [
+      {
+        "nome": "Carlos José Castilho",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Hilderaldo Bellini",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Gilmar",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Djalma Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Dino Sani",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Didi",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Mário Zagallo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Oreco",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Zózimo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Pelé",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Garrincha",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Nílton Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Moacir",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "De Sordi",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Orlando",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Mauro Ramos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Joel Antônio Martins",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "José Altafini",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Zito",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Vavá",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Dida",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pepe",
+        "posicao": "Atacante",
+        "clube": ""
+      }
+    ]
+  },
+  "1962": {
+    "tecnico": "Aymoré Moreira",
+    "resultado": "Campeão",
+    "jogadores": [
+      {
+        "nome": "Gilmar",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Djalma Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Mauro Ramos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zito",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Zózimo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Nílton Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Garrincha",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Didi",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Coutinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pelé",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pepe",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Jair Marinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Hilderaldo Bellini",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Jurandir",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Altair",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zequinha",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Mengálvio",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Jair da Costa",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Vavá",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Amarildo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Mário Zagallo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Carlos José Castilho",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1966": {
+    "tecnico": "Vicente Feola",
+    "resultado": "Fase de grupos",
+    "jogadores": [
+      {
+        "nome": "Gilmar",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Djalma Santos",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Fidélis",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Hilderaldo Bellini",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Brito",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Altair",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Orlando",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Paulo Henrique",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Rildo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Pelé",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Gérson",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Manga",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Denílson",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Lima",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Zito",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Garrincha",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Jairzinho",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Alcindo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Silva",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Tostão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Paraná",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Edu",
+        "posicao": "Atacante",
+        "clube": ""
+      }
+    ]
+  },
+  "1970": {
+    "tecnico": "Mário Zagallo",
+    "resultado": "Campeão",
+    "jogadores": [
+      {
+        "nome": "Félix",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Brito",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Piazza",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Carlos Alberto",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Clodoaldo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Marco Antônio",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Jairzinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Gérson",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Tostão",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Pelé",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rivellino",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Ado",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Roberto",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Baldocchi",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Fontana",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Everaldo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Joel",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Caju",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Edu",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Dario",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Zé Maria",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Leão",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1974": {
+    "tecnico": "Mário Zagallo",
+    "resultado": "4o lugar",
+    "jogadores": [
+      {
+        "nome": "Leão",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Luís Pereira",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Marinho Peres",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zé Maria",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Piazza",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Marinho Chagas",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Jairzinho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Leivinha",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "César",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rivellino",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Caju",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Renato",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Valdomiro",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Nelinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Alfredo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Marco Antônio",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Carpegiani",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Ademir da Guia",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Mirandinha",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Edu",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Dirceu",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Waldir Peres",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1978": {
+    "tecnico": "Cláudio Coutinho",
+    "resultado": "3o lugar",
+    "jogadores": [
+      {
+        "nome": "Leão",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Toninho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Oscar",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Amaral",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Toninho Cerezo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Edinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Zé Sérgio",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Zico",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Reinaldo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Rivellino",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Dirceu",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Carlos",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Nelinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Abel",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Polozzi",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Rodrigues Neto",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Batista",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Gil",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Jorge Mendonça",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Roberto Dinamite",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Chicão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Waldir Peres",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1982": {
+    "tecnico": "Telê Santana",
+    "resultado": "2a fase",
+    "jogadores": [
+      {
+        "nome": "Waldir Peres",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Leandro",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Oscar",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Luizinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Toninho Cerezo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Júnior",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Paulo Isidoro",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Sócrates",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Serginho",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Zico",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Éder",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Paulo Sérgio",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Edevaldo",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Juninho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Falcão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Edinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Pedrinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Batista",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Renato",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Roberto Dinamite",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Dirceu",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Carlos",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  },
+  "1986": {
+    "tecnico": "Telê Santana",
+    "resultado": "Quartas de final",
+    "jogadores": [
+      {
+        "nome": "Carlos",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Édson",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Oscar",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Edinho",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Falcão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Júnior",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Müller",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Casagrande",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Careca",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Zico",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Edivaldo",
+        "posicao": "Atacante",
+        "clube": ""
+      },
+      {
+        "nome": "Paulo Vítor",
+        "posicao": "Goleiro",
+        "clube": ""
+      },
+      {
+        "nome": "Josimar",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Júlio César",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Alemão",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Mauro Galvão",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Branco",
+        "posicao": "Zagueiro",
+        "clube": ""
+      },
+      {
+        "nome": "Sócrates",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Elzo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Paulo Silas",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Valdo",
+        "posicao": "Meia",
+        "clube": ""
+      },
+      {
+        "nome": "Leão",
+        "posicao": "Goleiro",
+        "clube": ""
+      }
+    ]
+  }
+}
