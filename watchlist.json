@@ -740,19 +740,6 @@
         "sofascore_id": 1186587
       },
       {
-        "id": "546213",
-        "name": "Lucas Silva",
-        "club": "Cruzeiro",
-        "clubCountry": "Brazil",
-        "nascimento": "1993-02-16",
-        "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/546213-1762259656.png?lm=1",
-        "marketValue": 405000,
-        "position": "Zagueiro",
-        "foot": "right",
-        "height": 182,
-        "sofascore_id": 245159
-      },
-      {
         "id": "1233473",
         "name": "Arthur Dias",
         "club": "Athletico U20",
@@ -784,13 +771,13 @@
         "name": "João Paulo",
         "club": "Santos",
         "clubCountry": "Brazil",
-        "nascimento": "1995-06-29",
+        "nascimento": "2007-02-12",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1256755-1773445527.png?lm=1",
         "marketValue": 1900000,
         "position": "Zagueiro",
         "foot": "right",
         "height": 188,
-        "sofascore_id": 795177
+        "sofascore_id": null
       },
       {
         "id": "1355486",
@@ -849,17 +836,17 @@
       },
       {
         "id": "411295",
-        "name": "Raphael Aguiar Serafim Dias",
-        "club": "No team",
-        "clubCountry": "",
-        "nascimento": "1988-02-12",
+        "name": "Raphinha",
+        "club": "Barcelona",
+        "clubCountry": "Spain",
+        "nascimento": "1996-12-14",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/411295-1729754479.png?lm=1",
         "marketValue": 70000000,
         "position": "Ponta Direita",
-        "foot": "right",
-        "height": 179,
+        "foot": "left",
+        "height": 176,
         "top_team": true,
-        "sofascore_id": 40088
+        "sofascore_id": 831005
       },
       {
         "id": "800175",
@@ -1023,8 +1010,8 @@
       },
       {
         "id": "891353",
-        "name": "Eduardo  Soares Araújo",
-        "club": "Vasco da Ipueiras dos Balacós",
+        "name": "Luis Eduardo",
+        "club": "Vasco da Gama",
         "clubCountry": "Brazil",
         "nascimento": "1991-07-31",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/891353-1723245970.jpg?lm=1",
@@ -1032,7 +1019,7 @@
         "position": "Lateral Esquerdo",
         "foot": "left",
         "height": 179,
-        "sofascore_id": 2329411
+        "sofascore_id": null
       },
       {
         "id": "585982",
@@ -1130,16 +1117,16 @@
       },
       {
         "id": "401529",
-        "name": "Jean Carlos Cordeiro dos Santos",
-        "club": "No team",
-        "clubCountry": "",
-        "nascimento": "2007-06-10",
+        "name": "Dodô",
+        "club": "Fiorentina",
+        "clubCountry": "Italy",
+        "nascimento": "1998-11-17",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/401529-1663591985.jpg?lm=1",
         "marketValue": 16000000,
         "position": "Lateral Direito",
         "foot": "right",
         "height": 166,
-        "sofascore_id": 1870973
+        "sofascore_id": null
       },
       {
         "id": "627228",
@@ -1209,16 +1196,16 @@
       },
       {
         "id": "468249",
-        "name": "Victor Hugo",
-        "club": "Atlético Mineiro",
+        "name": "Victor Alexander",
+        "club": "Botafogo",
         "clubCountry": "Brazil",
-        "nascimento": "2004-05-11",
+        "nascimento": "1999-07-23",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/468249-1626767682.jpg?lm=1",
         "marketValue": 7200000,
         "position": "Lateral Direito",
         "foot": "left",
         "height": 184,
-        "sofascore_id": 1170954
+        "sofascore_id": null
       },
       {
         "id": "1388409",
@@ -1318,17 +1305,17 @@
       },
       {
         "id": "1228661",
-        "name": "João Gabriel Alves Ladeira de Carvalho",
-        "club": "Grêmio U17",
+        "name": "Gabriel Ferreira de Carvalho",
+        "club": "Grêmio",
         "clubCountry": "Brazil",
-        "nascimento": "2010-02-09",
+        "nascimento": "2008-04-11",
         "imageUrl": "https://img.a.transfermarkt.technology/portrait/header/1228661-1757072570.png?lm=1",
         "marketValue": 16000000,
         "position": "Meia",
         "foot": "both",
         "height": 173,
         "top_team": false,
-        "sofascore_id": 2137959
+        "sofascore_id": null
       },
       {
         "id": "1056993",
@@ -1356,19 +1343,6 @@
         "foot": "left",
         "height": 179,
         "sofascore_id": 1633503
-      },
-      {
-        "id": "1550076",
-        "name": "Lucas Paquetá",
-        "club": "Flamengo",
-        "clubCountry": "Brazil",
-        "nascimento": "1997-08-27",
-        "imageUrl": "https://placehold.co/90x90/333/fff?text=Sem+foto",
-        "marketValue": 36000000,
-        "position": "Meia",
-        "foot": "left",
-        "height": 180,
-        "sofascore_id": 839981
       },
       {
         "id": "1219752",
