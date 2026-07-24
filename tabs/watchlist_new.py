@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import re
 from datetime import datetime
 from utils import POSICOES_DEFAULT, TOP_TEAM_LIMITES, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe
 from github_api import get_watchlist_new, salvar_watchlist_new
@@ -177,32 +178,39 @@ def render(modo_edicao: bool):
     jogadores = wl["_jogadores"]
 
     # --- Busca ---
-    st.subheader("Buscar jogador")
+    st.subheader("Adicionar jogador")
     if not modo_edicao:
         st.info("Desbloqueie o modo edição para adicionar jogadores.")
 
-    query = st.text_input("Nome do jogador", key="busca_sofascore_query")
+    st.caption("Cole a URL do SofaScore ou o ID do jogador")
+    st.caption("Ex: https://www.sofascore.com/football/player/alisson/243609 ou apenas 243609")
+    url_input = st.text_input("URL ou ID do SofaScore", key="sofascore_url_input")
 
-    if st.button("Buscar", disabled=not query):
-        with st.spinner("Buscando..."):
-            resultados = _buscar_jogadores(query)
-        st.session_state["busca_resultados"] = resultados
+    if st.button("Buscar jogador", disabled=not url_input or not modo_edicao):
+        # Extrair ID da URL ou usar direto
+        match = re.search(r"/(\d+)$", url_input.strip())
+        if match:
+            sf_id = int(match.group(1))
+        elif url_input.strip().isdigit():
+            sf_id = int(url_input.strip())
+        else:
+            st.error("Formato inválido. Cole a URL do SofaScore ou o ID numérico.")
+            sf_id = None
 
-    resultados = st.session_state.get("busca_resultados", [])
-
-    if resultados:
-        st.caption(f"{len(resultados)} resultado(s)")
-        for i, r in enumerate(resultados):
-            with st.container(border=True):
-                col_info, col_btn = st.columns([4, 1])
-                with col_info:
-                    st.markdown(
-                        f"**{r['name']}** | {r['team']} ({r['team_country']})  \n"
-                        f"Posição: {r['position']} | País: {r['country']}"
-                    )
-                with col_btn:
-                    if st.button("Adicionar", key=f"add_{r['sofascore_id']}_{i}", disabled=not modo_edicao):
-                        st.session_state["jogador_selecionado"] = r
+        if sf_id:
+            with st.spinner("Buscando dados do jogador..."):
+                perfil = _buscar_perfil(sf_id)
+            if perfil:
+                st.session_state["jogador_selecionado"] = {
+                    "sofascore_id": sf_id,
+                    "name": perfil.get("name", ""),
+                    "team": perfil.get("team", {}).get("name", ""),
+                    "team_country": perfil.get("team", {}).get("country", {}).get("name", ""),
+                    "position": POSICAO_SOFASCORE_MAP.get(perfil.get("position", ""), perfil.get("position", "")),
+                    "country": perfil.get("country", {}).get("name", ""),
+                }
+            else:
+                st.error("Jogador não encontrado. Verifique o ID.")
 
     if "jogador_selecionado" in st.session_state:
         _modal_adicionar(st.session_state["jogador_selecionado"])
