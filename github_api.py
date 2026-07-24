@@ -61,6 +61,51 @@ def salvar_watchlist():
     _salvar_watchlist_github(wl)
 
 
+# --- Nova Watchlist ---
+WATCHLIST_NEW_PATH = "watchlist_new.json"
+
+
+def _carregar_watchlist_new_github() -> dict:
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{WATCHLIST_NEW_PATH}"
+    try:
+        resp = requests.get(url, headers=_github_headers(), timeout=10)
+        if resp.status_code == 200:
+            content = base64.b64decode(resp.json()["content"]).decode()
+            return json.loads(content)
+        return {"_ordem_posicoes": POSICOES_DEFAULT, "_jogadores": {}}
+    except Exception:
+        return {"_ordem_posicoes": POSICOES_DEFAULT, "_jogadores": {}}
+
+
+def _salvar_watchlist_new_github(data: dict):
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{WATCHLIST_NEW_PATH}"
+    content_b64 = base64.b64encode(json.dumps(data, ensure_ascii=False, indent=2).encode()).decode()
+    payload = {"message": "Update watchlist_new", "content": content_b64}
+    try:
+        resp = requests.get(url, headers=_github_headers(), timeout=10)
+        if resp.status_code == 200:
+            payload["sha"] = resp.json()["sha"]
+    except Exception:
+        pass
+    requests.put(url, headers=_github_headers(), json=payload, timeout=10)
+
+
+def get_watchlist_new() -> dict:
+    if "watchlist_new" not in st.session_state:
+        st.session_state["watchlist_new"] = _carregar_watchlist_new_github()
+    wl = st.session_state["watchlist_new"]
+    if "_ordem_posicoes" not in wl:
+        wl["_ordem_posicoes"] = POSICOES_DEFAULT
+    if "_jogadores" not in wl:
+        wl["_jogadores"] = {}
+    return wl
+
+
+def salvar_watchlist_new():
+    wl = st.session_state["watchlist_new"]
+    _salvar_watchlist_new_github(wl)
+
+
 @st.cache_data(ttl=300)
 def carregar_stats_cache() -> dict:
     """Carrega stats_cache.json do repositório via GitHub."""
