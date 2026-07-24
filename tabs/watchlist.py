@@ -195,17 +195,6 @@ def render(modo_edicao: bool):
                         salvar_watchlist()
                         st.rerun()
 
-                with st.expander("Mais detalhes", expanded=False):
-                    stats_cache = carregar_stats_cache()
-                    player_stats = stats_cache.get(j["id"], {})
-                    metricas = player_stats.get("metricas", {})
-                    if metricas:
-                        st.markdown(f"**Estatísticas de carreira** ({player_stats.get('sofascore_name', '')})")
-                        for label, valor in metricas.items():
-                            st.caption(f"{label}: {valor}")
-                    else:
-                        st.caption("Estatísticas não disponíveis. Execute 'python coletar_stats.py' localmente.")
-
         if st.session_state.pop(f"top_team_full_{posicao}", False):
             limite = TOP_TEAM_LIMITES.get(posicao, 0)
             st.warning(f"Limite de {limite} jogadores para {posicao} atingido. Remova um antes de adicionar outro.")
