@@ -1,30 +1,7 @@
 import streamlit as st
-import requests
-import re
-from datetime import datetime
-from utils import POSICOES_DEFAULT, TOP_TEAM_LIMITES, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe
-from github_api import get_watchlist_new, salvar_watchlist_new
+from utils import POSICOES_DEFAULT, calcular_idades, formatar_valor, traduzir_posicao, traduzir_pe
+from github_api import get_watchlist, get_watchlist_new, salvar_watchlist_new
 
-
-def _get_sofascore_base():
-    return st.secrets.get("SOFASCORE_PROXY_URL", "https://www.sofascore.com/api/v1")
-
-
-SOFASCORE_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-    "Referer": "https://www.sofascore.com/",
-    "Origin": "https://www.sofascore.com",
-    "Cache-Control": "no-cache",
-}
-
-POSICAO_SOFASCORE_MAP = {
-    "G": "Goleiro",
-    "D": "Zagueiro",
-    "M": "Volante",
-    "F": "Atacante",
-}
 
 POSICAO_GRUPO_MAP = {
     "Goleiro": "Goleiros",
@@ -38,87 +15,16 @@ POSICAO_GRUPO_MAP = {
     "Ponta Direita": "Pontas Direitas",
     "Atacante": "Atacantes",
     "Centroavante": "Atacantes",
-    "Segundo Atacante": "Atacantes",
 }
 
 
-def _buscar_jogadores(query: str) -> list[dict]:
-    """Busca jogadores no SofaScore."""
-    try:
-        resp = requests.get(
-            f"{_get_sofascore_base()}/search/all",
-            params={"q": query, "type": "player"},
-            headers=SOFASCORE_HEADERS,
-            timeout=10,
-        )
-        resp.raise_for_status()
-        results = resp.json().get("results", [])
-        jogadores = []
-        for r in results:
-            entity = r.get("entity", {})
-            team = entity.get("team", {})
-            sport = team.get("sport", {})
-            if sport.get("slug") == "football" and r.get("type") == "player":
-                jogadores.append({
-                    "sofascore_id": entity["id"],
-                    "name": entity.get("name", ""),
-                    "team": team.get("name", ""),
-                    "team_country": team.get("country", {}).get("name", ""),
-                    "position": POSICAO_SOFASCORE_MAP.get(entity.get("position", ""), entity.get("position", "")),
-                    "country": entity.get("country", {}).get("name", ""),
-                })
-        return jogadores
-    except Exception as e:
-        st.error(f"Erro na busca: {e}")
-        return []
-
-
-def _buscar_perfil(sofascore_id: int) -> dict | None:
-    """Busca perfil completo do jogador."""
-    try:
-        resp = requests.get(
-            f"{_get_sofascore_base()}/player/{sofascore_id}",
-            headers=SOFASCORE_HEADERS,
-            timeout=10,
-        )
-        resp.raise_for_status()
-        return resp.json().get("player", {})
-    except Exception:
-        return None
-
-
-def _montar_jogador(perfil: dict, sofascore_id: int) -> dict:
-    """Monta dict do jogador no formato da watchlist."""
-    nascimento = ""
-    ts = perfil.get("dateOfBirthTimestamp")
-    if ts:
-        nascimento = datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
-
-    foot_map = {"Left": "left", "Right": "right", "Both": "both"}
-    foot = foot_map.get(perfil.get("preferredFoot", ""), "")
-
-    return {
-        "id": str(sofascore_id),
-        "name": perfil.get("name", ""),
-        "club": perfil.get("team", {}).get("name", "N/A"),
-        "clubCountry": perfil.get("team", {}).get("country", {}).get("name", ""),
-        "nascimento": nascimento,
-        "imageUrl": f"https://api.sofascore.app/api/v1/player/{sofascore_id}/image",
-        "marketValue": perfil.get("proposedMarketValue"),
-        "position": perfil.get("position", ""),
-        "foot": foot,
-        "height": perfil.get("height"),
-        "sofascore_id": sofascore_id,
-    }
-
-
 @st.dialog("Adicionar jogador")
-def _modal_adicionar(jogador_sel: dict):
-    st.write(f"**{jogador_sel['name']}** — {jogador_sel['team']}")
+def _modal_adicionar_backup(jogador_sel: dict):
+    st.write(f"**{jogador_sel['name']}** — {jogador_sel.get('club', 'N/A')}")
 
     posicoes_disponiveis = POSICOES_DEFAULT
-    posicao_sugerida = POSICAO_GRUPO_MAP.get(jogador_sel.get("position", ""), "Atacantes")
-    idx_default = posicoes_disponiveis.index(posicao_sugerida) if posicao_sugerida in posicoes_disponiveis else 0
+    pos_backup = jogador_sel.get("_pos_backup", "")
+    idx_default = posicoes_disponiveis.index(pos_backup) if pos_backup in posicoes_disponiveis else 0
 
     grupo = st.selectbox("Posição na Watchlist", options=posicoes_disponiveis, index=idx_default)
 
@@ -130,46 +36,41 @@ def _modal_adicionar(jogador_sel: dict):
     col_cancel, col_confirm = st.columns(2)
     with col_cancel:
         if st.button("Cancelar", use_container_width=True):
-            del st.session_state["jogador_selecionado"]
+            del st.session_state["jogador_selecionado_backup"]
             st.rerun()
     with col_confirm:
         if st.button("Confirmar", use_container_width=True, type="primary"):
-            with st.spinner("Buscando dados completos..."):
-                perfil = _buscar_perfil(jogador_sel["sofascore_id"])
-
-            if perfil:
-                jogador = _montar_jogador(perfil, jogador_sel["sofascore_id"])
-                jogador["position"] = posicao_individual or jogador["position"]
-            else:
-                jogador = {
-                    "id": str(jogador_sel["sofascore_id"]),
-                    "name": jogador_sel["name"],
-                    "club": jogador_sel["team"],
-                    "clubCountry": jogador_sel["team_country"],
-                    "nascimento": "",
-                    "imageUrl": f"https://api.sofascore.app/api/v1/player/{jogador_sel['sofascore_id']}/image",
-                    "marketValue": None,
-                    "position": posicao_individual or jogador_sel.get("position", ""),
-                    "foot": "",
-                    "height": None,
-                    "sofascore_id": jogador_sel["sofascore_id"],
-                }
+            # Copiar dados do backup
+            jogador = {
+                "id": jogador_sel.get("id", str(jogador_sel.get("sofascore_id", ""))),
+                "name": jogador_sel["name"],
+                "club": jogador_sel.get("club", "N/A"),
+                "clubCountry": jogador_sel.get("clubCountry", ""),
+                "nascimento": jogador_sel.get("nascimento", ""),
+                "imageUrl": jogador_sel.get("imageUrl", ""),
+                "marketValue": jogador_sel.get("marketValue"),
+                "position": posicao_individual or jogador_sel.get("position", ""),
+                "foot": jogador_sel.get("foot", ""),
+                "height": jogador_sel.get("height"),
+                "sofascore_id": jogador_sel.get("sofascore_id"),
+            }
+            if jogador_sel.get("top_team"):
+                jogador["top_team"] = True
 
             wl = get_watchlist_new()
-            jogadores = wl["_jogadores"]
-            if grupo not in jogadores:
-                jogadores[grupo] = []
+            jogadores_wl = wl["_jogadores"]
+            if grupo not in jogadores_wl:
+                jogadores_wl[grupo] = []
 
             # Verificar duplicata
-            ids_existentes = [j.get("sofascore_id") for j in jogadores[grupo]]
-            if jogador["sofascore_id"] in ids_existentes:
+            ids_existentes = [j.get("sofascore_id") for j in jogadores_wl[grupo]]
+            if jogador.get("sofascore_id") in ids_existentes:
                 st.error("Jogador já existe nessa posição!")
             else:
-                jogadores[grupo].append(jogador)
+                jogadores_wl[grupo].append(jogador)
                 salvar_watchlist_new()
                 st.success(f"{jogador['name']} adicionado em {grupo}!")
-                del st.session_state["jogador_selecionado"]
-                st.session_state.pop("busca_resultados", None)
+                del st.session_state["jogador_selecionado_backup"]
                 st.rerun()
 
 
@@ -177,45 +78,60 @@ def render(modo_edicao: bool):
     wl = get_watchlist_new()
     jogadores = wl["_jogadores"]
 
-    # --- Busca ---
+    # --- Adicionar do Backup ---
     st.subheader("Adicionar jogador")
     if not modo_edicao:
         st.info("Desbloqueie o modo edição para adicionar jogadores.")
 
-    st.markdown("[🔍 Buscar no SofaScore](https://www.sofascore.com/search?q=)", unsafe_allow_html=True)
-    st.caption("Busque o jogador no SofaScore e cole a URL aqui (ex: https://www.sofascore.com/football/player/alisson/243609)")
+    # Listar todos os jogadores do backup para busca
+    backup = get_watchlist()
+    backup_jogadores = backup.get("_jogadores", {})
 
-    url_input = st.text_input("URL do SofaScore", key="sofascore_url_input", placeholder="https://www.sofascore.com/football/player/.../12345")
+    # Montar lista flat para busca
+    todos_backup = []
+    for pos, lista in backup_jogadores.items():
+        for j in lista:
+            todos_backup.append({**j, "_pos_backup": pos})
 
-    if st.button("Adicionar", disabled=not url_input or not modo_edicao):
-        # Extrair ID da URL
-        import re
-        match = re.search(r"/(\d+)$", url_input.strip())
-        if match:
-            sf_id = int(match.group(1))
-        elif url_input.strip().isdigit():
-            sf_id = int(url_input.strip())
-        else:
-            st.error("URL inválida. Cole a URL da página do jogador no SofaScore.")
-            sf_id = None
+    # Campo de busca por nome
+    query = st.text_input("Buscar por nome", key="busca_nome_backup", placeholder="Digite o nome do jogador...")
 
-        if sf_id:
-            with st.spinner("Buscando dados do jogador..."):
-                perfil = _buscar_perfil(sf_id)
-            if perfil:
-                st.session_state["jogador_selecionado"] = {
-                    "sofascore_id": sf_id,
-                    "name": perfil.get("name", ""),
-                    "team": perfil.get("team", {}).get("name", ""),
-                    "team_country": perfil.get("team", {}).get("country", {}).get("name", ""),
-                    "position": POSICAO_SOFASCORE_MAP.get(perfil.get("position", ""), perfil.get("position", "")),
-                    "country": perfil.get("country", {}).get("name", ""),
-                }
-            else:
-                st.error("Não foi possível buscar dados do jogador. Tente novamente.")
+    if query:
+        query_lower = query.lower()
+        resultados = [j for j in todos_backup if query_lower in j.get("name", "").lower()]
+    else:
+        resultados = []
 
-    if "jogador_selecionado" in st.session_state:
-        _modal_adicionar(st.session_state["jogador_selecionado"])
+    # IDs já na nova watchlist (para marcar duplicatas)
+    ids_na_nova = set()
+    for pos, lista in jogadores.items():
+        for j in lista:
+            ids_na_nova.add(j.get("sofascore_id"))
+
+    if query and resultados:
+        st.caption(f"{len(resultados)} resultado(s)")
+        for i, r in enumerate(resultados):
+            ja_adicionado = r.get("sofascore_id") in ids_na_nova
+            with st.container(border=True):
+                col_info, col_btn = st.columns([4, 1])
+                with col_info:
+                    pos_traduzida = traduzir_posicao(r.get("position", ""))
+                    badge = " ✅" if ja_adicionado else ""
+                    st.markdown(
+                        f"**{r['name']}**{badge} | {r.get('club', 'N/A')}  \n"
+                        f"{pos_traduzida} | {r.get('height', '?')} cm | {formatar_valor(r.get('marketValue'))}"
+                    )
+                with col_btn:
+                    if ja_adicionado:
+                        st.caption("Já adicionado")
+                    elif st.button("Adicionar", key=f"add_backup_{r.get('sofascore_id', i)}_{i}", disabled=not modo_edicao):
+                        st.session_state["jogador_selecionado_backup"] = r
+    elif query:
+        st.warning("Nenhum jogador encontrado no backup com esse nome.")
+
+    # Modal de adição
+    if "jogador_selecionado_backup" in st.session_state:
+        _modal_adicionar_backup(st.session_state["jogador_selecionado_backup"])
 
     # --- Lista de jogadores já adicionados ---
     st.divider()
