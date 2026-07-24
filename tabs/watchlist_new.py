@@ -6,7 +6,7 @@ from github_api import get_watchlist_new, salvar_watchlist_new
 
 
 def _get_sofascore_base():
-    return st.secrets.get("SOFASCORE_PROXY_URL", "https://www.sofascore.com/api/v1")
+    return st.secrets.get("SOFASCORE_PROXY_URL", "https://api.sofascore.app/api/v1")
 
 
 SOFASCORE_HEADERS = {
